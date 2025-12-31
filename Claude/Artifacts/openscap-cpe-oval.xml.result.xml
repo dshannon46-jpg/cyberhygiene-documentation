@@ -1,0 +1,1861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oval_results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns="http://oval.mitre.org/XMLSchema/oval-results-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-results-5 oval-results-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+  <generator>
+    <oval:product_name>vim</oval:product_name>
+    <oval:product_version>1.3.12</oval:product_version>
+    <oval:schema_version>5.10.1</oval:schema_version>
+    <oval:timestamp>2025-12-07T08:36:02</oval:timestamp>
+  </generator>
+  <directives>
+    <definition_true reported="true" content="full"/>
+    <definition_false reported="true" content="full"/>
+    <definition_unknown reported="true" content="full"/>
+    <definition_error reported="true" content="full"/>
+    <definition_not_evaluated reported="true" content="full"/>
+    <definition_not_applicable reported="true" content="full"/>
+  </directives>
+  <oval_definitions xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:unix-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix" xmlns:ind-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#independent" xmlns:lin-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#linux" xmlns:win-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#windows" xmlns:mac-def="http://oval.mitre.org/XMLSchema/oval-definitions-5#macos" xmlns="http://oval.mitre.org/XMLSchema/oval-definitions-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#independent independent-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#unix unix-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#linux linux-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#windows windows-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5#macos macos-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-definitions-5 oval-definitions-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+    <generator>
+      <oval:product_name>vim</oval:product_name>
+      <oval:schema_version>5.10.1</oval:schema_version>
+      <oval:timestamp>2012-11-22T15:00:00+01:00</oval:timestamp>
+    </generator>
+    <definitions>
+      <definition id="oval:org.open-scap.cpelinux:def:9" version="1" class="inventory">
+        <metadata>
+          <title>Rocky Linux 9</title>
+          <affected family="unix">
+            <platform>Rocky Linux 9</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:rocky:rocky:9"/>
+          <description>The operating system installed on the system is Rocky Linux 9</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpelinux:tst:9" comment="Rocky Linux 9 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpelinux:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Rocky Linux 8</title>
+          <affected family="unix">
+            <platform>Rocky Linux 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:rocky:rocky:8"/>
+          <description>The operating system installed on the system is Rocky Linux 8</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpelinux:tst:8" comment="Rocky Linux 8 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.wrlinux:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Wind River Linux 8</title>
+          <affected family="unix">
+            <platform>Wind River Linux 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:windriver:wrlinux:8"/>
+          <description>The operating system installed on the system is Wind River Linux 8</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:8" comment="Wind River Linux version is 8."/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.wrlinux:def:1019" version="1" class="inventory">
+        <metadata>
+          <title>Wind River Linux 1019</title>
+          <affected family="unix">
+            <platform>Wind River Linux 1019</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:windriver:wrlinux:1019"/>
+          <description>The operating system installed on the system is Wind River Linux 1019</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:1019" comment="Wind River Linux version is 1019."/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.wrlinux:def:1" version="1" class="inventory">
+        <metadata>
+          <title>Wind River Linux</title>
+          <affected family="unix">
+            <platform>Wind River Linux</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:windriver:wrlinux"/>
+          <description>The operating system installed on the system is Wind River Linux</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:1" comment="Installed operating system is part of the unix family."/>
+          <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:2" comment="Wind River Linux is installed."/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:81" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows 8.1</title>
+          <affected family="windows">
+            <platform>Microsoft Windows 8.1</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_8.1"/>
+          <description>The operating system installed on the system is Microsoft Windows 8.1</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:81" comment="Microsoft Windows 8.1 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows 8</title>
+          <affected family="windows">
+            <platform>Microsoft Windows 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_8"/>
+          <description>The operating system installed on the system is Microsoft Windows 8</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:8" comment="Microsoft Windows 8 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:7" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows 7</title>
+          <affected family="windows">
+            <platform>Microsoft Windows 7</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_7"/>
+          <description>The operating system installed on the system is Microsoft Windows 7</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:7" comment="Microsoft Windows 7 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:2016" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows Server 2016</title>
+          <affected family="windows">
+            <platform>Microsoft Windows Server 2016</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_server_2016"/>
+          <description>The operating system installed on the system is Microsoft Windows Server 2016</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2016" comment="Microsoft Windows Server 2016 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:2012" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows Server 2012</title>
+          <affected family="windows">
+            <platform>Microsoft Windows Server 2012</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_server_2012"/>
+          <description>The operating system installed on the system is Microsoft Windows Server 2012</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2012" comment="Microsoft Windows Server 2012 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:2008" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows Server 2008</title>
+          <affected family="windows">
+            <platform>Microsoft Windows Server 2008</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_server_2008"/>
+          <description>The operating system installed on the system is Microsoft Windows Server 2008</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2008" comment="Microsoft Windows Server 2008 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.windows:def:10" version="1" class="inventory">
+        <metadata>
+          <title>Microsoft Windows 10</title>
+          <affected family="windows">
+            <platform>Microsoft Windows 10</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:microsoft:windows_10"/>
+          <description>The operating system installed on the system is Microsoft Windows 10</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.windows:tst:10" comment="Microsoft Windows 10 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sles:def:12" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise Server 12</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise Server 12</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:sles:12"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise Server 12</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.sles:tst:12" comment="SLES 12 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sles:def:10" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise Server 10</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise Server 10</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:sles:10"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise Server 10</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.sles:tst:10" comment="SLES 10 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sled:def:12" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise Desktop 12</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise Desktop 12</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:sled:12"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise Desktop 12</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.sled:tst:12" comment="SLED 12 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sled:def:10" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise Desktop 10</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise Desktop 10</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:sled:10"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise Desktop 10</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.sled:tst:10" comment="SLED 10 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sle:def:11" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise 11</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise Server 11</platform>
+            <platform>SUSE Linux Enterprise Desktop 11</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:linux_enterprise_server:11"/>
+          <reference source="CPE" ref_id="cpe:/o:suse:linux_enterprise_desktop:11"/>
+          <reference source="galford" ref_id="20160920" ref_url="test_attestation"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise 11.</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.sle:tst:1" comment="Installed operating system is part of the unix family"/>
+          <criteria operator="OR">
+            <criterion test_ref="oval:org.open-scap.cpe.sled:tst:11" comment="SLE 11 Desktop is installed"/>
+            <criterion test_ref="oval:org.open-scap.cpe.sles:tst:11" comment="SLE 11 Server is installed"/>
+          </criteria>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.sle:def:1" version="1" class="inventory">
+        <metadata>
+          <title>SUSE Linux Enterprise All Platforms</title>
+          <affected family="unix">
+            <platform>SUSE Linux Enterprise All Platforms</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:suse:sle"/>
+          <description>The operating system installed on the system is SUSE Linux Enterprise</description>
+        </metadata>
+        <criteria>
+          <criteria operator="OR">
+            <criterion test_ref="oval:org.open-scap.cpe.sles:tst:1" comment="SLES is installed"/>
+            <criterion test_ref="oval:org.open-scap.cpe.sled:tst:1" comment="SLED is installed"/>
+          </criteria>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.scientific:def:7" version="1" class="inventory">
+        <metadata>
+          <title>Scientific Linux 7</title>
+          <affected family="unix">
+            <platform>Scientific Linux 7</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:scientificlinux:scientificlinux:7"/>
+          <description>The operating system installed on the system is Scientific Linux 7</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:7" comment="Scientific Linux 7 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.scientific:def:6" version="1" class="inventory">
+        <metadata>
+          <title>Scientific Linux 6</title>
+          <affected family="unix">
+            <platform>Scientific Linux 6</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:scientificlinux:scientificlinux:6"/>
+          <description>The operating system installed on the system is Scientific Linux 6</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:6" comment="Scientific Linux 6 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.scientific:def:5" version="1" class="inventory">
+        <metadata>
+          <title>Scientific Linux 5</title>
+          <affected family="unix">
+            <platform>Scientific Linux 5</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:scientificlinux:scientificlinux:5"/>
+          <description>The operating system installed on the system is Scientific Linux 5</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:5" comment="Scientific Linux 5 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Red Hat Enterprise Linux 8</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:8"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 8</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:8" comment="Red Hat Enterprise Linux 8 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:7" version="1" class="inventory">
+        <metadata>
+          <title>Red Hat Enterprise Linux 7</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 7</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:7"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 7</description>
+        </metadata>
+        <criteria operator="OR">
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:7" comment="Red Hat Enterprise Linux 7 is installed"/>
+          <criteria comment="Red Hat Enterpise Virtualization Host is installed">
+            <criterion test_ref="oval:org.open-scap.cpe.rhevh:tst:1" comment="redhat-release-virtualization-host RPM package is installed"/>
+            <criterion test_ref="oval:org.open-scap.cpe.rhevh:tst:2" comment="Red Hat Enterpise Virtualization Host is based on RHEL 7"/>
+          </criteria>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:6" version="1" class="inventory">
+        <metadata>
+          <title>Red Hat Enterprise Linux 6</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 6</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:6"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 6</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:6" comment="Red Hat Enterprise Linux 6 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:5" version="1" class="inventory">
+        <metadata>
+          <title>Red Hat Enterprise Linux 5</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux 5</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux:5"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux 5</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:5" comment="Red Hat Enterprise Linux 5 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:1007" version="1" class="inventory">
+        <metadata>
+          <title>Community Enterprise Operating System 7</title>
+          <affected family="unix">
+            <platform>Community Enterprise Operating System 7</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:7"/>
+          <description>The operating system installed on the system is Community Enterprise Operating System 7</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1007" comment="Community Enterprise Operating System 7 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:1006" version="1" class="inventory">
+        <metadata>
+          <title>Community Enterprise Operating System 6</title>
+          <affected family="unix">
+            <platform>Community Enterprise Operating System 6</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:6"/>
+          <description>The operating system installed on the system is Community Enterprise Operating System 6</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1006" comment="Community Enterprise Operating System 6 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:1005" version="1" class="inventory">
+        <metadata>
+          <title>Community Enterprise Operating System 5</title>
+          <affected family="unix">
+            <platform>Community Enterprise Operating System 5</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:5"/>
+          <description>The operating system installed on the system is Community Enterprise Operating System 5</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1005" comment="Community Enterprise Operating System 5 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.rhel:def:1" version="1" class="inventory">
+        <metadata>
+          <title>Red Hat Enterprise Linux</title>
+          <affected family="unix">
+            <platform>Red Hat Enterprise Linux</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:redhat:enterprise_linux"/>
+          <description>The operating system installed on the system is Red Hat Enterprise Linux</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:2" comment="Red Hat Enterprise Linux is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:423" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE Leap 42.3</title>
+          <affected family="unix">
+            <platform>openSUSE Leap 42.3</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:leap:42.3"/>
+          <description>The operating system installed on the system is openSUSE Leap 42.3</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:423" comment="openSUSE Leap 42.3 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:422" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE Leap 42.2</title>
+          <affected family="unix">
+            <platform>openSUSE Leap 42.2</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:novell:leap:42.2"/>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:leap:42.2"/>
+          <description>The operating system installed on the system is openSUSE Leap 42.2</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:422" comment="openSUSE Leap 42.2 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:421" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE Leap 42.1</title>
+          <affected family="unix">
+            <platform>openSUSE Leap 42.1</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:novell:leap:42.1"/>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:leap:42.1"/>
+          <description>The operating system installed on the system is openSUSE Leap 42.1</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:421" comment="openSUSE Leap 42.1 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:150" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE Leap 15.0</title>
+          <affected family="unix">
+            <platform>openSUSE Leap 15.0</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:leap:15.0"/>
+          <description>The operating system installed on the system is openSUSE Leap 15.0</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:150" comment="openSUSE Leap 15.0 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:132" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE 13.2</title>
+          <affected family="unix">
+            <platform>openSUSE 13.2</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:opensuse:13.2"/>
+          <description>The operating system installed on the system is openSUSE 13.2</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:132" comment="openSUSE 13.2 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:131" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE 13.1</title>
+          <affected family="unix">
+            <platform>openSUSE 13.1</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:opensuse:13.1"/>
+          <description>The operating system installed on the system is openSUSE 13.1</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:131" comment="openSUSE 13.1 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:114" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE 11.4</title>
+          <affected family="unix">
+            <platform>openSUSE 11.4</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:opensuse:11.4"/>
+          <description>The operating system installed on the system is openSUSE 11.4</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:114" comment="openSUSE 11.4 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.opensuse:def:1" version="1" class="inventory">
+        <metadata>
+          <title>openSUSE All Versions</title>
+          <affected family="unix">
+            <platform>openSUSE</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:opensuse:opensuse"/>
+          <description>The operating system installed on the system is openSUSE</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:1" comment="openSUSE is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.ol:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Oracle Linux 8</title>
+          <affected family="unix">
+            <platform>Oracle Linux 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:oracle:linux:8"/>
+          <description>The operating system installed on the system is Oracle Linux 8</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.ol:tst:8" comment="Oracle Linux 8 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.ol:def:7" version="1" class="inventory">
+        <metadata>
+          <title>Oracle Linux 7</title>
+          <affected family="unix">
+            <platform>Oracle Linux 7</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:oracle:linux:7"/>
+          <description>The operating system installed on the system is Oracle Linux 7</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.ol:tst:7" comment="Oracle Linux 7 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.ol:def:6" version="1" class="inventory">
+        <metadata>
+          <title>Oracle Linux 6</title>
+          <affected family="unix">
+            <platform>Oracle Linux 6</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:oracle:linux:6"/>
+          <description>The operating system installed on the system is Oracle Linux 6</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.ol:tst:6" comment="Oracle Linux 6 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.ol:def:5" version="1" class="inventory">
+        <metadata>
+          <title>Oracle Linux 5</title>
+          <affected family="unix">
+            <platform>Oracle Linux 5</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:oracle:linux:5"/>
+          <description>The operating system installed on the system is Oracle Linux 5</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.ol:tst:5" comment="Oracle Linux 5 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:35" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 35</title>
+          <affected family="unix">
+            <platform>Fedora 35</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:35"/>
+          <description>The operating system installed on the system is Fedora 35</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:35" comment="Fedora 35 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:34" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 34</title>
+          <affected family="unix">
+            <platform>Fedora 34</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:34"/>
+          <description>The operating system installed on the system is Fedora 34</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:34" comment="Fedora 34 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:33" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 33</title>
+          <affected family="unix">
+            <platform>Fedora 33</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:33"/>
+          <description>The operating system installed on the system is Fedora 33</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:33" comment="Fedora 33 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:32" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 32</title>
+          <affected family="unix">
+            <platform>Fedora 32</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:32"/>
+          <description>The operating system installed on the system is Fedora 32</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:32" comment="Fedora 32 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:31" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 31</title>
+          <affected family="unix">
+            <platform>Fedora 31</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:31"/>
+          <description>The operating system installed on the system is Fedora 31</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:31" comment="Fedora 31 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:30" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 30</title>
+          <affected family="unix">
+            <platform>Fedora 30</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:30"/>
+          <description>The operating system installed on the system is Fedora 30</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:30" comment="Fedora 30 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:29" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 29</title>
+          <affected family="unix">
+            <platform>Fedora 29</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:29"/>
+          <description>The operating system installed on the system is Fedora 29</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:29" comment="Fedora 29 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:28" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 28</title>
+          <affected family="unix">
+            <platform>Fedora 28</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:28"/>
+          <description>The operating system installed on the system is Fedora 28</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:28" comment="Fedora 28 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:27" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 27</title>
+          <affected family="unix">
+            <platform>Fedora 27</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:27"/>
+          <description>The operating system installed on the system is Fedora 27</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:27" comment="Fedora 27 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:26" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 26</title>
+          <affected family="unix">
+            <platform>Fedora 26</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:26"/>
+          <description>The operating system installed on the system is Fedora 26</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:26" comment="Fedora 26 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:25" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 25</title>
+          <affected family="unix">
+            <platform>Fedora 25</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:25"/>
+          <description>The operating system installed on the system is Fedora 25</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:25" comment="Fedora 25 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:24" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 24</title>
+          <affected family="unix">
+            <platform>Fedora 24</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:24"/>
+          <description>The operating system installed on the system is Fedora 24</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:24" comment="Fedora 24 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:23" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 23</title>
+          <affected family="unix">
+            <platform>Fedora 23</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:23"/>
+          <description>The operating system installed on the system is Fedora 23</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:23" comment="Fedora 23 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:22" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 22</title>
+          <affected family="unix">
+            <platform>Fedora 22</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:22"/>
+          <description>The operating system installed on the system is Fedora 22</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:22" comment="Fedora 22 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:21" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 21</title>
+          <affected family="unix">
+            <platform>Fedora 21</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:21"/>
+          <description>The operating system installed on the system is Fedora 21</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:21" comment="Fedora 21 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:20" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 20</title>
+          <affected family="unix">
+            <platform>Fedora 20</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:20"/>
+          <description>The operating system installed on the system is Fedora 20</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:20" comment="Fedora 20 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:19" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 19</title>
+          <affected family="unix">
+            <platform>Fedora 19</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:19"/>
+          <description>The operating system installed on the system is Fedora 19</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:19" comment="Fedora 19 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:18" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 18</title>
+          <affected family="unix">
+            <platform>Fedora 18</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:18"/>
+          <description>The operating system installed on the system is Fedora 18</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:18" comment="Fedora 18 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:17" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 17</title>
+          <affected family="unix">
+            <platform>Fedora 17</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:17"/>
+          <description>The operating system installed on the system is Fedora 17</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:17" comment="Fedora 17 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.fedora:def:16" version="1" class="inventory">
+        <metadata>
+          <title>Fedora 16</title>
+          <affected family="unix">
+            <platform>Fedora 16</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:fedoraproject:fedora:16"/>
+          <description>The operating system installed on the system is Fedora 16</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:16" comment="Fedora 16 is installed"/>
+        </criteria>
+      </definition>
+      <definition id="oval:org.open-scap.cpe.centos:def:8" version="1" class="inventory">
+        <metadata>
+          <title>Community Enterprise Operating System 8</title>
+          <affected family="unix">
+            <platform>Community Enterprise Operating System 8</platform>
+          </affected>
+          <reference source="CPE" ref_id="cpe:/o:centos:centos:8"/>
+          <description>The operating system installed on the system is Community Enterprise Operating System 8</description>
+        </metadata>
+        <criteria>
+          <criterion test_ref="oval:org.open-scap.cpe.centos:tst:8" comment="Community Enterprise Operating System is installed"/>
+          <criterion test_ref="oval:org.open-scap.cpe.centos:tst:8000" comment="Community Enterprise Operating System version is 8"/>
+        </criteria>
+      </definition>
+    </definitions>
+    <tests>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpelinux:tst:9" version="1" check="at least one" comment="rocky-release is version 9">
+        <lin-def:object object_ref="oval:org.open-scap.cpelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpelinux:ste:9"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpelinux:tst:8" version="1" check="at least one" comment="rocky-release is version 8">
+        <lin-def:object object_ref="oval:org.open-scap.cpelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpelinux:ste:8"/>
+      </lin-def:rpminfo_test>
+      <ind-def:textfilecontent54_test id="oval:org.open-scap.cpe.wrlinux:tst:8" version="1" check_existence="all_exist" check="all" comment="Check /etc/wrlinux-release for VERSION 8 specification.">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.wrlinux-release:obj:2"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.wrlinux-release:ste:8"/>
+      </ind-def:textfilecontent54_test>
+      <unix-def:file_test id="oval:org.open-scap.cpe.wrlinux:tst:2" version="1" check="all" comment="Test presence of /etc/wrlinux-release.">
+        <unix-def:object object_ref="oval:org.open-scap.cpe.wrlinux-release:obj:1"/>
+      </unix-def:file_test>
+      <ind-def:textfilecontent54_test id="oval:org.open-scap.cpe.wrlinux:tst:1019" version="1" check_existence="all_exist" check="all" comment="Check /etc/os-release for VERSION 1019 specification.">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.wrlinux-release:obj:3"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.wrlinux-release:ste:10"/>
+      </ind-def:textfilecontent54_test>
+      <ind-def:family_test id="oval:org.open-scap.cpe.wrlinux:tst:1" version="1" check="only one" comment="Installed operating system is part of the Unix family.">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.unix:obj:1"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.unix:ste:1"/>
+      </ind-def:family_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:81" version="1" check="at least one" comment="Windows 8.1 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:81"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:8" version="1" check="at least one" comment="Windows 8 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:8"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:7" version="1" check="at least one" comment="Windows 7 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:7"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:2016" version="1" check="at least one" comment="Windows Server 2016 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:2016"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:2012" version="1" check="at least one" comment="Windows Server 2012 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:2012"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:2008" version="1" check="at least one" comment="Windows Server 2008 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:2008"/>
+      </win-def:registry_test>
+      <win-def:registry_test id="oval:org.open-scap.cpe.windows:tst:10" version="1" check="at least one" comment="Windows 10 is installed">
+        <win-def:object object_ref="oval:org.open-scap.cpe.windows:obj:1"/>
+        <win-def:state state_ref="oval:org.open-scap.cpe.windows:ste:10"/>
+      </win-def:registry_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sles:tst:12" version="1" check="at least one" comment="sles-release is version 12">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sles-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sles:ste:12"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sles:tst:11" version="1" check="at least one" comment="sles-release is version 11">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sles-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sles:ste:11"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sles:tst:10" version="1" check="at least one" comment="sles-release is version 10">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sles-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sles:ste:10"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sles:tst:1" version="1" check="at least one" comment="/etc/sles-release is provided by sles-release package">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sles-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sles:ste:1"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sled:tst:12" version="1" check="at least one" comment="sled-release is version 12">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sled-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sled:ste:12"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sled:tst:11" version="1" check="at least one" comment="sled-release is version 11">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sled-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sled:ste:11"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sled:tst:10" version="1" check="at least one" comment="sled-release is version 10">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sled-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sled:ste:10"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.sled:tst:1" version="1" check="at least one" comment="/etc/sled-release is provided by sled-release package">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.sled-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.sled:ste:1"/>
+      </lin-def:rpminfo_test>
+      <ind-def:family_test id="oval:org.open-scap.cpe.sle:tst:1" version="1" check="only one" comment="Installed operating system is part of the Unix family.">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.unix:obj:1"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.unix:ste:1"/>
+      </ind-def:family_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.scientific:tst:7" version="1" check="at least one" comment="sl-release is version 7">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.scientific:ste:7"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.scientific:tst:6" version="1" check="at least one" comment="sl-release is version 6">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.scientific:ste:6"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.scientific:tst:5" version="1" check="at least one" comment="sl-release is version 5">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.scientific:ste:5"/>
+      </lin-def:rpmverifyfile_test>
+      <ind-def:textfilecontent54_test id="oval:org.open-scap.cpe.rhevh:tst:2" version="1" check="all" comment="RHEVH base RHEL is version 7">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.rhevh:obj:2"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.rhevh:ste:2"/>
+      </ind-def:textfilecontent54_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.rhevh:tst:1" version="1" check_existence="only_one_exists" check="all" comment="redhat-release-virtualization-host RPM package is installed">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.rhevh:obj:1"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:8" version="1" check="at least one" comment="redhat-release is version 8">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:8"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:7" version="1" check="at least one" comment="redhat-release is version 7">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:7"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:6" version="1" check="at least one" comment="redhat-release is version 6">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:6"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.rhel:tst:5" version="1" check="at least one" comment="redhat-release is version 5">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:5"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:2" version="1" check="at least one" comment="/etc/redhat-release is provided by redhat-release package">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:2"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:1007" version="1" check="at least one" comment="centos-release is version 7">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:1007"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:1006" version="1" check="at least one" comment="centos-release is version 6">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:1006"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpmverifyfile_test id="oval:org.open-scap.cpe.rhel:tst:1005" version="1" check="at least one" comment="centos-release is version 5">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.redhat-release:obj:3"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.rhel:ste:1005"/>
+      </lin-def:rpmverifyfile_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:423" version="2" check="at least one" comment="openSUSE-release is version 42.3">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:423"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:422" version="2" check="at least one" comment="openSUSE-release is version 42.2">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:422"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:421" version="1" check="at least one" comment="openSUSE-release is version 42.1">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:421"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:150" version="2" check="at least one" comment="openSUSE-release is version 15.0">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:150"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:132" version="1" check="at least one" comment="openSUSE-release is version 13.2">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:132"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:131" version="1" check="at least one" comment="openSUSE-release is version 13.1">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:131"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:114" version="1" check="at least one" comment="openSUSE-release is version 11.4">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:114"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.opensuse:tst:1" version="1" check="at least one" comment="openSUSE-release is version 11.4">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.openSUSE-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.opensuse:ste:2"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.ol:tst:8" version="1" check="at least one" comment="oraclelinux-release is version 8">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.oraclelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.ol:ste:8"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.ol:tst:7" version="1" check="at least one" comment="oraclelinux-release is version 7">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.oraclelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.ol:ste:7"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.ol:tst:6" version="1" check="at least one" comment="oraclelinux-release is version 6">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.oraclelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.ol:ste:6"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.ol:tst:5" version="1" check="at least one" comment="oraclelinux-release is version 5">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.oraclelinux-release:obj:1"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.ol:ste:5"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:35" version="1" check="at least one" comment="fedora-release is version Fedora 35">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:35"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:34" version="1" check="at least one" comment="fedora-release is version Fedora 34">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:34"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:33" version="1" check="at least one" comment="fedora-release is version Fedora 33">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:33"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:32" version="1" check="at least one" comment="fedora-release is version Fedora 32">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:32"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:31" version="1" check="at least one" comment="fedora-release is version Fedora 31">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:31"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:30" version="1" check="at least one" comment="fedora-release is version Fedora 30">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:30"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:29" version="1" check="at least one" comment="fedora-release is version Fedora 29">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:29"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:28" version="1" check="at least one" comment="fedora-release is version Fedora 28">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:28"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:27" version="1" check="at least one" comment="fedora-release is version Fedora 27">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:27"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:26" version="1" check="at least one" comment="fedora-release is version Fedora 26">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:26"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:25" version="1" check="at least one" comment="fedora-release is version Fedora 25">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:25"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:24" version="1" check="at least one" comment="fedora-release is version Fedora 24">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:24"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:23" version="1" check="at least one" comment="fedora-release is version Fedora 23">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:23"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:22" version="1" check="at least one" comment="fedora-release is version Fedora 22">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:22"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:21" version="1" check="at least one" comment="fedora-release is version Fedora 21">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:21"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:20" version="1" check="at least one" comment="fedora-release is version Fedora 20">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:20"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:19" version="1" check="at least one" comment="fedora-release is version Fedora 19">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:19"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:18" version="1" check="at least one" comment="fedora-release is version Fedora 18">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:18"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:17" version="1" check="at least one" comment="fedora-release is version Fedora 17">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:17"/>
+      </lin-def:rpminfo_test>
+      <lin-def:rpminfo_test id="oval:org.open-scap.cpe.fedora:tst:16" version="1" check="at least one" comment="fedora-release is version Fedora 16">
+        <lin-def:object object_ref="oval:org.open-scap.cpe.fedora-release:obj:2"/>
+        <lin-def:state state_ref="oval:org.open-scap.cpe.fedora:ste:16"/>
+      </lin-def:rpminfo_test>
+      <ind-def:textfilecontent54_test id="oval:org.open-scap.cpe.centos:tst:8000" version="1" check="all" comment="Check /etc/os-release VERSION_ID is 8">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.centos:obj:8000"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.centos:ste:8000"/>
+      </ind-def:textfilecontent54_test>
+      <ind-def:textfilecontent54_test id="oval:org.open-scap.cpe.centos:tst:8" version="1" check="all" comment="Check /etc/os-release ID is centos">
+        <ind-def:object object_ref="oval:org.open-scap.cpe.centos:obj:8"/>
+        <ind-def:state state_ref="oval:org.open-scap.cpe.centos:ste:8"/>
+      </ind-def:textfilecontent54_test>
+    </tests>
+    <objects>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpelinux-release:obj:1" version="1">
+        <lin-def:name>rocky-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <ind-def:textfilecontent54_object id="oval:org.open-scap.cpe.wrlinux-release:obj:3" version="1" comment="Check VERSION specification in /etc/os-release.">
+        <ind-def:path>/etc</ind-def:path>
+        <ind-def:filename>os-release</ind-def:filename>
+        <ind-def:pattern operation="pattern match">^VERSION=.(\d*.\d*)</ind-def:pattern>
+        <ind-def:instance operation="greater than or equal" datatype="int">1</ind-def:instance>
+      </ind-def:textfilecontent54_object>
+      <ind-def:textfilecontent54_object id="oval:org.open-scap.cpe.wrlinux-release:obj:2" version="1" comment="Check VERSION specification in /etc/wrlinux-release.">
+        <ind-def:path>/etc</ind-def:path>
+        <ind-def:filename>wrlinux-release</ind-def:filename>
+        <ind-def:pattern operation="pattern match">^VERSION=.([[:digit:]]*)</ind-def:pattern>
+        <ind-def:instance operation="greater than or equal" datatype="int">1</ind-def:instance>
+      </ind-def:textfilecontent54_object>
+      <unix-def:file_object id="oval:org.open-scap.cpe.wrlinux-release:obj:1" version="1">
+        <unix-def:filepath>/etc/wrlinux-release</unix-def:filepath>
+      </unix-def:file_object>
+      <win-def:registry_object id="oval:org.open-scap.cpe.windows:obj:1" version="1">
+        <win-def:hive>HKEY_LOCAL_MACHINE</win-def:hive>
+        <win-def:key>SOFTWARE\Microsoft\Windows NT\CurrentVersion</win-def:key>
+        <win-def:name>ProductName</win-def:name>
+      </win-def:registry_object>
+      <ind-def:family_object id="oval:org.open-scap.cpe.unix:obj:1" version="1"/>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.sles-release:obj:1" version="1">
+        <lin-def:name>sles-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.sled-release:obj:1" version="1">
+        <lin-def:name>sled-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <ind-def:textfilecontent54_object id="oval:org.open-scap.cpe.rhevh:obj:2" version="1">
+        <ind-def:filepath>/etc/redhat-release</ind-def:filepath>
+        <ind-def:pattern operation="pattern match">^Red Hat Enterprise Linux release (\d)\.\d+$</ind-def:pattern>
+        <ind-def:instance operation="greater than or equal" datatype="int">1</ind-def:instance>
+      </ind-def:textfilecontent54_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.rhevh:obj:1" version="1">
+        <lin-def:name>redhat-release-virtualization-host</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpmverifyfile_object id="oval:org.open-scap.cpe.redhat-release:obj:3" version="1">
+        <lin-def:behaviors nolinkto="true" nomd5="true" nosize="true" nouser="true" nogroup="true" nomtime="true" nomode="true" nordev="true" noconfigfiles="true" noghostfiles="true"/>
+        <lin-def:name operation="pattern match"></lin-def:name>
+        <lin-def:epoch operation="pattern match"></lin-def:epoch>
+        <lin-def:version operation="pattern match"></lin-def:version>
+        <lin-def:release operation="pattern match"></lin-def:release>
+        <lin-def:arch operation="pattern match"></lin-def:arch>
+        <lin-def:filepath>/etc/redhat-release</lin-def:filepath>
+      </lin-def:rpmverifyfile_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.redhat-release:obj:1" version="1">
+        <lin-def:name>redhat-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.oraclelinux-release:obj:1" version="1">
+        <lin-def:name>oraclelinux-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.openSUSE-release:obj:1" version="1">
+        <lin-def:name>openSUSE-release</lin-def:name>
+      </lin-def:rpminfo_object>
+      <lin-def:rpminfo_object id="oval:org.open-scap.cpe.fedora-release:obj:2" version="1">
+        <lin-def:name operation="pattern match">^fedora-release.*</lin-def:name>
+      </lin-def:rpminfo_object>
+      <ind-def:textfilecontent54_object id="oval:org.open-scap.cpe.centos:obj:8000" version="1" comment="Check os-release VERSION_ID">
+        <ind-def:filepath>/etc/os-release</ind-def:filepath>
+        <ind-def:pattern operation="pattern match">^VERSION_ID="(\d)"$</ind-def:pattern>
+        <ind-def:instance datatype="int">1</ind-def:instance>
+      </ind-def:textfilecontent54_object>
+      <ind-def:textfilecontent54_object id="oval:org.open-scap.cpe.centos:obj:8" version="1" comment="Check os-release ID">
+        <ind-def:filepath>/etc/os-release</ind-def:filepath>
+        <ind-def:pattern operation="pattern match">^ID="(\w+)"$</ind-def:pattern>
+        <ind-def:instance datatype="int">1</ind-def:instance>
+      </ind-def:textfilecontent54_object>
+    </objects>
+    <states>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpelinux:ste:9" version="1">
+        <lin-def:name operation="pattern match">^rocky-release</lin-def:name>
+        <lin-def:version operation="pattern match">^9</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpelinux:ste:8" version="1">
+        <lin-def:name operation="pattern match">^rocky-release</lin-def:name>
+        <lin-def:version operation="pattern match">^8</lin-def:version>
+      </lin-def:rpminfo_state>
+      <ind-def:textfilecontent54_state id="oval:org.open-scap.cpe.wrlinux-release:ste:8" version="1" comment="Check the /etc/wrlinux-release file for VERSION 8 specification.">
+        <ind-def:subexpression operation="pattern match">8</ind-def:subexpression>
+      </ind-def:textfilecontent54_state>
+      <ind-def:textfilecontent54_state id="oval:org.open-scap.cpe.wrlinux-release:ste:10" version="1" comment="Check the /etc/os-release file for VERSION 1019 specification.">
+        <ind-def:subexpression operation="pattern match">10.19</ind-def:subexpression>
+      </ind-def:textfilecontent54_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:81" version="1">
+        <win-def:value operation="pattern match">^Windows 8\.1.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:8" version="1">
+        <win-def:value operation="pattern match">^Windows 8.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:7" version="1">
+        <win-def:value operation="pattern match">^Windows 7.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:2016" version="1">
+        <win-def:value operation="pattern match">^.*2016.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:2012" version="1">
+        <win-def:value operation="pattern match">^.*2012.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:2008" version="1">
+        <win-def:value operation="pattern match">^.*2008.*$</win-def:value>
+      </win-def:registry_state>
+      <win-def:registry_state id="oval:org.open-scap.cpe.windows:ste:10" version="1">
+        <win-def:value operation="pattern match">^Windows 10.*$</win-def:value>
+      </win-def:registry_state>
+      <ind-def:family_state id="oval:org.open-scap.cpe.unix:ste:1" version="1">
+        <ind-def:family>unix</ind-def:family>
+      </ind-def:family_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sles:ste:12" version="1">
+        <lin-def:version operation="pattern match">^12($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sles:ste:11" version="1">
+        <lin-def:version operation="pattern match">^11($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sles:ste:10" version="1">
+        <lin-def:version operation="pattern match">^10($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sles:ste:1" version="1">
+        <lin-def:name operation="pattern match">^sles-release</lin-def:name>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sled:ste:12" version="1">
+        <lin-def:version operation="pattern match">^12($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sled:ste:11" version="1">
+        <lin-def:version operation="pattern match">^11($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sled:ste:10" version="1">
+        <lin-def:version operation="pattern match">^10($|[^\d])</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.sled:ste:1" version="1">
+        <lin-def:name operation="pattern match">^sled-release</lin-def:name>
+      </lin-def:rpminfo_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.scientific:ste:7" version="1">
+        <lin-def:name operation="pattern match">^sl-release</lin-def:name>
+        <lin-def:version operation="pattern match">^7</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.scientific:ste:6" version="1">
+        <lin-def:name operation="pattern match">^sl-release</lin-def:name>
+        <lin-def:version operation="pattern match">^6</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.scientific:ste:5" version="1">
+        <lin-def:name operation="pattern match">^sl-release</lin-def:name>
+        <lin-def:version operation="pattern match">^5</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <ind-def:textfilecontent54_state id="oval:org.open-scap.cpe.rhevh:ste:2" version="1">
+        <ind-def:subexpression operation="pattern match">7</ind-def:subexpression>
+      </ind-def:textfilecontent54_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:8" version="1">
+        <lin-def:name operation="pattern match">^redhat-release</lin-def:name>
+        <lin-def:version operation="pattern match">^8[^\d]</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:7" version="1">
+        <lin-def:name operation="pattern match">^redhat-release</lin-def:name>
+        <lin-def:version operation="pattern match">^7[^\d]</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:6" version="1">
+        <lin-def:name operation="pattern match">^redhat-release</lin-def:name>
+        <lin-def:version operation="pattern match">^6[^\d]</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.rhel:ste:5" version="1">
+        <lin-def:version operation="pattern match">^5[^\d]</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:2" version="1">
+        <lin-def:name operation="pattern match">^redhat-release</lin-def:name>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:1007" version="1">
+        <lin-def:name operation="pattern match">^centos-release</lin-def:name>
+        <lin-def:version operation="pattern match">^7</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:1006" version="1">
+        <lin-def:name operation="pattern match">^centos-release</lin-def:name>
+        <lin-def:version operation="pattern match">^6</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpmverifyfile_state id="oval:org.open-scap.cpe.rhel:ste:1005" version="1">
+        <lin-def:name operation="pattern match">^centos-release</lin-def:name>
+        <lin-def:version operation="pattern match">^5</lin-def:version>
+      </lin-def:rpmverifyfile_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:423" version="1">
+        <lin-def:version operation="pattern match">^42.3$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:422" version="1">
+        <lin-def:version operation="pattern match">^42.2$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:421" version="1">
+        <lin-def:version operation="pattern match">^42.1$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:2" version="1">
+        <lin-def:name operation="pattern match">^openSUSE-release</lin-def:name>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:150" version="1">
+        <lin-def:version operation="pattern match">^15.0$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:132" version="1">
+        <lin-def:version operation="pattern match">^13.2$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:131" version="1">
+        <lin-def:version operation="pattern match">^13.1$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.opensuse:ste:114" version="1">
+        <lin-def:version operation="pattern match">^11.4$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.ol:ste:8" version="1">
+        <lin-def:name operation="pattern match">^oraclelinux-release</lin-def:name>
+        <lin-def:version operation="pattern match">^8</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.ol:ste:7" version="1">
+        <lin-def:name operation="pattern match">^oraclelinux-release</lin-def:name>
+        <lin-def:version operation="pattern match">^7</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.ol:ste:6" version="1">
+        <lin-def:name operation="pattern match">^oraclelinux-release</lin-def:name>
+        <lin-def:version operation="pattern match">^6</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.ol:ste:5" version="1">
+        <lin-def:name operation="pattern match">^oraclelinux-release</lin-def:name>
+        <lin-def:version operation="pattern match">^5</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:35" version="1">
+        <lin-def:version operation="pattern match">^35$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:34" version="1">
+        <lin-def:version operation="pattern match">^34$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:33" version="1">
+        <lin-def:version operation="pattern match">^33$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:32" version="1">
+        <lin-def:version operation="pattern match">^32$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:31" version="1">
+        <lin-def:version operation="pattern match">^31$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:30" version="1">
+        <lin-def:version operation="pattern match">^30$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:29" version="1">
+        <lin-def:version operation="pattern match">^29$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:28" version="1">
+        <lin-def:version operation="pattern match">^28$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:27" version="1">
+        <lin-def:version operation="pattern match">^27$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:26" version="1">
+        <lin-def:version operation="pattern match">^26$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:25" version="1">
+        <lin-def:version operation="pattern match">^25$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:24" version="1">
+        <lin-def:version operation="pattern match">^24$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:23" version="1">
+        <lin-def:version operation="pattern match">^23$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:22" version="1">
+        <lin-def:version operation="pattern match">^22$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:21" version="1">
+        <lin-def:version operation="pattern match">^21$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:20" version="1">
+        <lin-def:version operation="pattern match">^20$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:19" version="1">
+        <lin-def:version operation="pattern match">^19$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:18" version="1">
+        <lin-def:version operation="pattern match">^18$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:17" version="1">
+        <lin-def:version operation="pattern match">^17$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <lin-def:rpminfo_state id="oval:org.open-scap.cpe.fedora:ste:16" version="1">
+        <lin-def:version operation="pattern match">^16$</lin-def:version>
+      </lin-def:rpminfo_state>
+      <ind-def:textfilecontent54_state id="oval:org.open-scap.cpe.centos:ste:8000" version="1">
+        <ind-def:subexpression>8</ind-def:subexpression>
+      </ind-def:textfilecontent54_state>
+      <ind-def:textfilecontent54_state id="oval:org.open-scap.cpe.centos:ste:8" version="1">
+        <ind-def:subexpression>centos</ind-def:subexpression>
+      </ind-def:textfilecontent54_state>
+    </states>
+  </oval_definitions>
+  <results>
+    <system>
+      <definitions>
+        <definition definition_id="oval:org.open-scap.cpelinux:def:9" result="true" version="1">
+          <criteria operator="AND" result="true">
+            <criterion test_ref="oval:org.open-scap.cpelinux:tst:9" version="1" result="true"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpelinux:def:8" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpelinux:tst:8" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.wrlinux:def:8" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:8" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.wrlinux:def:1019" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:1019" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.wrlinux:def:1" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:1" version="1" result="not evaluated"/>
+            <criterion test_ref="oval:org.open-scap.cpe.wrlinux:tst:2" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:81" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:81" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:8" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:8" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:7" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:7" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:2016" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2016" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:2012" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2012" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:2008" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:2008" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.windows:def:10" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.windows:tst:10" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sles:def:12" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.sles:tst:12" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sles:def:10" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.sles:tst:10" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sled:def:12" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.sled:tst:12" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sled:def:10" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.sled:tst:10" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sle:def:11" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.sle:tst:1" version="1" result="not evaluated"/>
+            <criteria operator="OR" result="not evaluated">
+              <criterion test_ref="oval:org.open-scap.cpe.sled:tst:11" version="1" result="not evaluated"/>
+              <criterion test_ref="oval:org.open-scap.cpe.sles:tst:11" version="1" result="not evaluated"/>
+            </criteria>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.sle:def:1" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criteria operator="OR" result="not evaluated">
+              <criterion test_ref="oval:org.open-scap.cpe.sles:tst:1" version="1" result="not evaluated"/>
+              <criterion test_ref="oval:org.open-scap.cpe.sled:tst:1" version="1" result="not evaluated"/>
+            </criteria>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.scientific:def:7" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:7" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.scientific:def:6" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:6" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.scientific:def:5" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.scientific:tst:5" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:8" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:8" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:7" result="not evaluated" version="1">
+          <criteria operator="OR" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:7" version="1" result="not evaluated"/>
+            <criteria operator="AND" result="not evaluated">
+              <criterion test_ref="oval:org.open-scap.cpe.rhevh:tst:1" version="1" result="not evaluated"/>
+              <criterion test_ref="oval:org.open-scap.cpe.rhevh:tst:2" version="1" result="not evaluated"/>
+            </criteria>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:6" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:6" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:5" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:5" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:1007" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1007" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:1006" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1006" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:1005" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:1005" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.rhel:def:1" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.rhel:tst:2" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:423" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:423" version="2" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:422" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:422" version="2" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:421" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:421" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:150" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:150" version="2" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:132" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:132" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:131" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:131" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:114" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:114" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.opensuse:def:1" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.opensuse:tst:1" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.ol:def:8" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.ol:tst:8" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.ol:def:7" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.ol:tst:7" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.ol:def:6" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.ol:tst:6" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.ol:def:5" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.ol:tst:5" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:35" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:35" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:34" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:34" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:33" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:33" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:32" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:32" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:31" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:31" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:30" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:30" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:29" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:29" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:28" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:28" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:27" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:27" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:26" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:26" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:25" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:25" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:24" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:24" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:23" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:23" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:22" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:22" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:21" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:21" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:20" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:20" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:19" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:19" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:18" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:18" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:17" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:17" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.fedora:def:16" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.fedora:tst:16" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+        <definition definition_id="oval:org.open-scap.cpe.centos:def:8" result="not evaluated" version="1">
+          <criteria operator="AND" result="not evaluated">
+            <criterion test_ref="oval:org.open-scap.cpe.centos:tst:8" version="1" result="not evaluated"/>
+            <criterion test_ref="oval:org.open-scap.cpe.centos:tst:8000" version="1" result="not evaluated"/>
+          </criteria>
+        </definition>
+      </definitions>
+      <tests>
+        <test test_id="oval:org.open-scap.cpe.centos:tst:8" version="1" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.centos:tst:8000" version="1" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:16" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:17" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:18" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:19" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:20" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:21" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:22" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:23" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:24" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:25" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:26" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:27" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:28" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:29" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:30" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:31" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:32" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:33" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:34" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.fedora:tst:35" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.ol:tst:5" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.ol:tst:6" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.ol:tst:7" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.ol:tst:8" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:1" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:114" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:131" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:132" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:150" version="2" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:421" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:422" version="2" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.opensuse:tst:423" version="2" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:1005" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:1006" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:1007" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:2" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:5" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:6" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:7" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhel:tst:8" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhevh:tst:1" version="1" check_existence="only_one_exists" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.rhevh:tst:2" version="1" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.scientific:tst:5" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.scientific:tst:6" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.scientific:tst:7" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sle:tst:1" version="1" check="only one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sled:tst:1" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sled:tst:10" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sled:tst:11" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sled:tst:12" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sles:tst:1" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sles:tst:10" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sles:tst:11" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.sles:tst:12" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:10" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:2008" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:2012" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:2016" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:7" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:8" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.windows:tst:81" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.wrlinux:tst:1" version="1" check="only one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.wrlinux:tst:1019" version="1" check_existence="all_exist" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.wrlinux:tst:2" version="1" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpe.wrlinux:tst:8" version="1" check_existence="all_exist" check="all" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpelinux:tst:8" version="1" check="at least one" result="not evaluated"/>
+        <test test_id="oval:org.open-scap.cpelinux:tst:9" version="1" check="at least one" result="true">
+          <tested_item item_id="11321473" result="true"/>
+        </test>
+      </tests>
+      <oval_system_characteristics xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:unix-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#unix" xmlns:ind-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:lin-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux" xmlns:win-sys="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#unix unix-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux linux-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#macos macos-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd">
+        <generator>
+          <oval:product_name>vim</oval:product_name>
+          <oval:schema_version>5.10.1</oval:schema_version>
+          <oval:timestamp>2025-12-07T08:36:02</oval:timestamp>
+        </generator>
+        <system_info>
+          <os_name>Rocky Linux</os_name>
+          <os_version>9.6 (Blue Onyx)</os_version>
+          <architecture>x86_64</architecture>
+          <primary_host_name>dc1.cyberinabox.net</primary_host_name>
+          <interfaces>
+            <interface>
+              <interface_name>lo</interface_name>
+              <ip_address>127.0.0.1</ip_address>
+              <mac_address>00:00:00:00:00:00</mac_address>
+            </interface>
+            <interface>
+              <interface_name>eno1</interface_name>
+              <ip_address>192.168.1.10</ip_address>
+              <mac_address>94:40:C9:EF:F4:B0</mac_address>
+            </interface>
+            <interface>
+              <interface_name>lo</interface_name>
+              <ip_address>::1</ip_address>
+              <mac_address>00:00:00:00:00:00</mac_address>
+            </interface>
+          </interfaces>
+        </system_info>
+        <collected_objects>
+          <object id="oval:org.open-scap.cpelinux-release:obj:1" version="1" flag="complete">
+            <reference item_ref="11321473"/>
+          </object>
+        </collected_objects>
+        <system_data>
+          <lin-sys:rpminfo_item id="11321473" status="exists">
+            <lin-sys:name>rocky-release</lin-sys:name>
+            <lin-sys:arch>noarch</lin-sys:arch>
+            <lin-sys:epoch>(none)</lin-sys:epoch>
+            <lin-sys:release>1.3.el9</lin-sys:release>
+            <lin-sys:version>9.6</lin-sys:version>
+            <lin-sys:evr datatype="evr_string">0:9.6-1.3.el9</lin-sys:evr>
+            <lin-sys:signature_keyid>702d426d350d275d</lin-sys:signature_keyid>
+            <lin-sys:extended_name>rocky-release-0:9.6-1.3.el9.noarch</lin-sys:extended_name>
+          </lin-sys:rpminfo_item>
+        </system_data>
+      </oval_system_characteristics>
+    </system>
+  </results>
+</oval_results>

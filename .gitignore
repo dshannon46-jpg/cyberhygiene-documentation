@@ -1,0 +1,53 @@
+# Sensitive Files - Credentials and Keys
+*.key
+*.pem
+*.p12
+*.pfx
+**/private/
+*password*
+*secret*
+*credential*
+
+# SSL/TLS Certificates (keep documentation, exclude actual certs)
+*.crt
+*.cer
+*.csr
+!**/SSL_Certificate_Reference/*.md
+
+# Backup Files
+*.backup
+*.bak
+*~
+*.swp
+*.swo
+
+# Temporary Files
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Log Files
+*.log
+
+# Compiled Files
+*.pyc
+*.pyo
+__pycache__/
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
+
+# Office Temporary Files
+~$*
+*.tmp
+
+# Exclude specific sensitive directories
+.ssh/
+.gnupg/
+
+# But include all markdown and documentation files
+!*.md
+!*.docx
+!*.pdf

@@ -1,0 +1,21 @@
+FreeIPA OTP Token - dshannon
+=============================
+Created: November 17, 2025
+Token ID: e8bb6935-7416-4856-bc7c-d0f094000743
+Type: TOTP (Time-based One-Time Password)
+
+Configuration:
+- Algorithm: SHA1
+- Digits: 6
+- Interval: 30 seconds
+- Owner: dshannon
+
+Secret Key (Base32): 4E4UI533OQ2OEW5NIPIJRR7HY6TOALX76SU5J7CTPOHK3UAZJDLGV6EH
+
+URI: otpauth://totp/dshannon@CYBERINABOX.NET:e8bb6935-7416-4856-bc7c-d0f094000743?issuer=dshannon%40CYBERINABOX.NET&secret=4E4UI533OQ2OEW5NIPIJRR7HY6TOALX76SU5J7CTPOHK3UAZJDLGV6EH&digits=6&algorithm=SHA1&period=30
+
+Instructions:
+1. Install an authenticator app (Google Authenticator, FreeOTP, Microsoft Authenticator, Authy)
+2. Add account using QR code or manual entry with secret key above
+3. App will generate 6-digit codes every 30 seconds
+4. Use format: password+OTP (e.g., YourPassword123456)

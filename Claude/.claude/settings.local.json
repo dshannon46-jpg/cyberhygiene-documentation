@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grub2-mkstandalone:*)",
+      "Bash(sudo rear:*)",
+      "Read(//var/lib/rear/output/**)",
+      "Read(//etc/ssh/**)",
+      "Read(//etc/clamd.d/**)",
+      "Bash(sudo systemctl reset-failed:*)",
+      "Bash(sudo systemctl start:*)",
+      "Bash(sudo systemctl status:*)",
+      "Bash(sudo journalctl:*)",
+      "Read(//var/lib/clamav/**)",
+      "Bash(sudo ausearch:*)",
+      "Bash(openssl x509:*)",
+      "Bash(openssl md5:*)",
+      "Bash(openssl rsa:*)",
+      "Bash(openssl sha256:*)",
+      "Bash(sudo ls:*)",
+      "Bash(sudo grep:*)",
+      "Bash(sudo httpd:*)",
+      "Bash(sudo systemctl restart:*)",
+      "Bash(curl:*)",
+      "Bash(chmod:*)",
+      "Bash(bash wazuh-install.sh:*)",
+      "Read(//var/log/**)",
+      "Bash(sudo cat:*)",
+      "Bash(tee:*)",
+      "Bash(sudo WAZUH_MANAGER='127.0.0.1' WAZUH_AGENT_NAME='dc1.cyberinabox.net' rpm:*)",
+      "Read(//var/ossec/etc/**)",
+      "Bash(sudo cp:*)",
+      "Bash(sudo /var/ossec/bin/wazuh-logtest:*)",
+      "Bash(sudo systemctl show:*)",
+      "Bash(pandoc:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

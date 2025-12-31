@@ -1,0 +1,8 @@
+ Perfect! Last copy/paste - Run this single command ON Lab Rat:
+
+  echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCqtVYYm0hmh7HlqumRsyAc2fuwXGqXKpI4SQSRMLfulryPv92O3vpNO71nN/dIZqvMX87EqEPjXBs7BbPLOGy+/r5vigUHWpLdsa5sp1TNG9A+sMyZrv2/5D6dUhKrq4
+  YGelkn8Y5GVJgbJpGPn0EWQ+96iPDQAKJMWs2LCG47JkCLaHNQXk3VH6P8lT8HcJAHY1lFHTTp9oElU7N2PzDZATzENNTfo+m47UuBGI6xTOQJfLkzWwAYuah6bL+5V56ml0KNXcV6NA0oT6T8IqcZ2Z7RZIs7kL76I+L+dErrCw
+  jl+Ll1Eio9h7B6q1ieTjlv/V8+H4lyFl31Lh+uLnMaQwyKetzcN2hiW/I28+70PZMLRNgLOJJMKNgRCIwiCfJwucuq8MOC7RsfajHot59eSF5hunJE58w6rgkIK6BvXBZraj2ehZnU3idMwlZyjBrvEk5vEHV3NGr609i9CwYOm2
+  n2Lk6Ya+eC94PcVbt++6ItwPkGf7J8poFh2ei54kRU50nF0As8PyUZceht7pwtgmB505hoF89aQjFXc23daJ2O+obpY42iiAXgG2+x84/qGm2/DfIyV2gwSwDl/oQ8QIQRkVSfT9tSM9dKET4gwm2WGpyoWcge3yYh+RYlIy9xc/
+  wMB7DbXAJ5Plp4aLwQYyqamI0IMVIpvhl4x8/gkw== root@dc1.cyberinabox.net" >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && echo "SSH key added successfully"
+

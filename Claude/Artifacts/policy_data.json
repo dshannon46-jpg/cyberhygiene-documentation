@@ -1,0 +1,18 @@
+{
+  "lastUpdated": "December 23, 2025",
+  "ssp": {
+    "version": "1.5",
+    "date": "December 2, 2025",
+    "implementation": "99%"
+  },
+  "poam": {
+    "version": "2.4",
+    "date": "December 17, 2025",
+    "total": 34,
+    "completed": 30,
+    "inProgress": 1,
+    "onTrack": 1,
+    "planned": 2,
+    "completionPercent": "88%"
+  }
+}

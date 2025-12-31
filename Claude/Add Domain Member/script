@@ -1,0 +1,403 @@
+!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!"
+#!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!" 
+
+  # 3. Verify Security
+  echo "=== Secur!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo !/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!"
+#!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!" mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!"
+#!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!" ity Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!"
+#!/bin/bash
+  echo "=== Applying NIST 800-171 Security Baseline to Lab Rat ==="
+
+  # 1. Session Lock
+  sudo mkdir -p /etc/dconf/db/local.d/locks
+  sudo tee /etc/dconf/db/local.d/00-screensaver <<'EOF'
+  [org/gnome/desktop/session]
+  idle-delay=uint32 900
+  [org/gnome/desktop/screensaver]
+  lock-enabled=true
+  lock-delay=uint32 0
+  EOF
+  sudo tee /etc/dconf/db/local.d/locks/screensaver <<'EOF'
+  /org/gnome/desktop/session/idle-delay
+  /org/gnome/desktop/screensaver/lock-enabled
+  /org/gnome/desktop/screensaver/lock-delay
+  EOF
+  sudo dconf update
+  echo "✅ Session lock configured"
+
+  # 2. Login Banners
+  sudo tee /etc/issue <<'EOF'
+  ********************************************************************************
+                            AUTHORIZED ACCESS ONLY
+  This system processes CUI/FCI. Unauthorized access is prohibited.
+  CyberHygiene Production Network - labrat.cyberinabox.net
+  ********************************************************************************
+  EOF
+  sudo tee /etc/ssh/sshd-banner <<'EOF'
+  ********************************************************************************
+  AUTHORIZED ACCESS ONLY - All activity monitored
+  System processes CUI/FCI - NIST SP 800-171 compliant
+  ********************************************************************************
+  EOF
+  sudo sed -i 's|^#\?Banner.*|Banner /etc/ssh/sshd-banner|' /etc/ssh/sshd_config
+  sudo tee /etc/motd <<'EOF'
+  Lab Rat - Developer Workstation (donald.shannon)
+  FIPS 140-2: ENABLED | SELinux: ENFORCING
+  Handle CUI/FCI appropriately
+  EOF
+  sudo systemctl restart sshd
+  echo "✅ Login banners configured"
+
+  # 3. Verify Security
+  echo "=== Security Status ==="
+  echo "FIPS: $(cat /proc/sys/crypto/fips_enabled)"
+  echo "SELinux: $(getenforce)"
+  sudo systemctl is-active auditd && echo "Audit: RUNNING"
+  echo "✅ Security baseline applied successfully"
+  echo ""
+  echo "Lab Rat is now NIST 800-171 compliant and domain-joined!" 

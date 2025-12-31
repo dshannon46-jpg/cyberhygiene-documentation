@@ -1,0 +1,253 @@
+<h1 id="the-contract-coach---project-task-list">The Contract Coach - Project Task List</h1>
+<p><strong>Domain:</strong> cyberinabox.net <strong>Date:</strong> November 1, 2025 <strong>Overall Progress:</strong> 94% Complete</p>
+<hr />
+<h2 id="completed-today-november-1-2025">COMPLETED TODAY ✓ (November 1, 2025)</h2>
+<h3 id="freeipa-authentication-troubleshooting-resolution">FreeIPA Authentication Troubleshooting &amp; Resolution</h3>
+<ol type="1">
+<li><strong>✓ SSL Certificate Trust Chain</strong>
+<ul>
+<li>Identified SSL.com certificate verification issues</li>
+<li>Installed SSL.com root and intermediate CA certificates</li>
+<li>Updated system trust store at /etc/pki/ca-trust/</li>
+<li>Modified Apache WSGI configuration for SSL environment variables</li>
+</ul></li>
+<li><strong>✓ Time Synchronization Verification</strong>
+<ul>
+<li>Verified chronyd NTP service operational</li>
+<li>System time accuracy: 19.7 microseconds (excellent)</li>
+<li>Fixed RTC timezone warning (now using UTC)</li>
+<li>Confirmed Kerberos clock skew tolerance (5 minutes)</li>
+</ul></li>
+<li><strong>✓ FreeIPA Web UI Backend Configuration</strong>
+<ul>
+<li>Modified /usr/share/ipa/wsgi.py to pass SSL certificates</li>
+<li>Created systemd service override for httpd SSL environment</li>
+<li>Cleared Python bytecode cache to force reload</li>
+<li>Configured IPA password sync plugin for LDAP/Kerberos synchronization</li>
+</ul></li>
+<li><strong>⚠️ Admin Password Reset - PENDING</strong>
+<ul>
+<li>Issue: Kerberos minimum password life restriction (24 hours)</li>
+<li>Resolution: Wait until Nov 2, 2025 08:43 MDT for password change</li>
+<li>Prepared LDIF scripts for proper password synchronization</li>
+<li>Documented procedure for password reset after cooldown</li>
+</ul></li>
+</ol>
+<h3 id="technical-details">Technical Details</h3>
+<ul>
+<li><strong>SSL Issue Root Cause:</strong> Self-signed certificate in SSL.com chain</li>
+<li><strong>Resolution:</strong> System-wide CA trust + WSGI environment configuration</li>
+<li><strong>Time Sync Status:</strong> 0.00002 seconds drift (well within Kerberos limits)</li>
+<li><strong>Services Status:</strong> All FreeIPA services running and operational</li>
+</ul>
+<hr />
+<h2 id="completed-previously-october-28-2025">COMPLETED PREVIOUSLY ✓ (October 28, 2025)</h2>
+<h3 id="major-accomplishments">Major Accomplishments</h3>
+<ol type="1">
+<li><strong>✓ Wazuh Security Platform Installation</strong>
+<ul>
+<li>Wazuh Manager v4.9.2</li>
+<li>Wazuh Indexer v4.9.2</li>
+<li>Filebeat v7.10.2</li>
+<li>Vulnerability detection enabled</li>
+<li>File Integrity Monitoring operational</li>
+<li>Security Configuration Assessment running</li>
+<li>FIPS-compliant configuration (no dashboard)</li>
+</ul></li>
+<li><strong>✓ Automated Backup System</strong>
+<ul>
+<li>ReaR installed for weekly full system backups</li>
+<li>Daily critical files backup script operational</li>
+<li>Systemd timers configured and tested</li>
+<li>Backup retention policies implemented</li>
+<li>Recovery capability verified</li>
+</ul></li>
+<li><strong>✓ OpenSCAP 100% Compliance</strong>
+<ul>
+<li>All 105 CUI profile checks passing</li>
+<li>SSH banner configuration fixed</li>
+<li>Full compliance verified on dc1</li>
+</ul></li>
+<li><strong>✓ SSL Certificate Installation</strong>
+<ul>
+<li>Wildcard certificate for *.cyberinabox.net</li>
+<li>Installed on FreeIPA/Apache</li>
+<li>Certificates copied to ./certs directory</li>
+</ul></li>
+<li><strong>✓ SSP/POAM Documentation Updated</strong>
+<ul>
+<li>Implementation status updated to 94%</li>
+<li>POA&amp;M-003 (Backups) marked complete</li>
+<li>POA&amp;M-008 (IDS/IPS) marked complete (exceeded with Wazuh)</li>
+<li>POA&amp;M-009 (FIM) marked complete</li>
+<li>New version 1.2 created</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="high-priority-tasks">HIGH PRIORITY TASKS</h2>
+<h3 id="freeipa-admin-password-reset">1. FreeIPA Admin Password Reset ⚠️</h3>
+<p><strong>Status:</strong> PENDING (24-hour cooldown) <strong>Target Date:</strong> November 2, 2025 08:43 MDT <strong>Priority:</strong> HIGH</p>
+<p><strong>Current Status:</strong> - ✓ SSL certificate trust issues resolved - ✓ Time synchronization verified (excellent) - ✓ WSGI backend configuration completed - ⏳ Password reset blocked by Kerberos minimum life policy</p>
+<p><strong>Action Items:</strong> - [ ] Wait for 24-hour password cooldown to expire (Nov 2, 08:43 MDT) - [ ] Execute password reset using IPA LDAP plugin - [ ] Test kinit authentication from command line - [ ] Test web UI login at https://dc1.cyberinabox.net/ipa/ui - [ ] Verify password synchronization between LDAP and Kerberos - [ ] Document final resolution</p>
+<p><strong>Reset Command (after cooldown):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ldapmodify <span class="at">-Y</span> EXTERNAL <span class="at">-H</span> ldapi://%2fvar%2frun%2fslapd-CYBERINABOX-NET.socket <span class="op">&lt;&lt; &#39;EOF&#39;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">dn: uid=admin,cn=users,cn=accounts,dc=cyberinabox,dc=net</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">changetype: modify</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">replace: userPassword</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">userPassword: YOUR_PASSWORD_HERE</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div>
+<hr />
+<h3 id="ssl-certificate-upgrade">2. SSL Certificate Upgrade ⚠️</h3>
+<p><strong>Status:</strong> IN PROGRESS (POA&amp;M-010) <strong>Target Date:</strong> December 31, 2025 <strong>Current Issue:</strong> Certificate needs reissue with proper SANs for all services</p>
+<p><strong>Current Certificate:</strong> - Issuer: SSL.com - Subject: *.cyberinabox.net (wildcard) - Valid: Oct 28, 2025 - Oct 28, 2026 - Installed: /var/lib/ipa/certs/httpd.crt</p>
+<p><strong>Requirements:</strong> - Wildcard OR multiple SANs for: - dc1.cyberinabox.net - mail.cyberinabox.net - *.cyberinabox.net - SSL.com reissue process - Update across all services</p>
+<p><strong>Action Items:</strong> - [ ] Contact SSL.com for certificate reissue with proper SANs - [ ] Specify all required FQDNs in certificate request - [ ] Test certificate with all services - [ ] Install on Apache, mail server (when deployed) - [ ] Update SSP documentation</p>
+<hr />
+<h3 id="clamav-scanner-service-restart">3. ClamAV Scanner Service Restart</h3>
+<p><strong>Status:</strong> COMPLETED (October 28) <strong>Priority:</strong> MEDIUM <strong>Estimated Time:</strong> 5 minutes</p>
+<p><strong>Current Status:</strong> - ✓ Databases updated (27,673 signatures) - ⚠️ Service failed (rate-limit cooldown) - Cooldown expires: 6:32 PM tonight</p>
+<p><strong>Action Items:</strong> - [ ] Wait for cooldown to expire (18:32 PM) - [ ] Restart clamd@scan service - [ ] Verify service is running - [ ] Test scan functionality - [ ] Update POA&amp;M documentation</p>
+<p><strong>Commands:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl reset-failed clamd@scan</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start clamd@scan</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl status clamd@scan</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">clamscan</span> <span class="at">-r</span> /tmp  <span class="co"># Test scan</span></span></code></pre></div>
+<hr />
+<h3 id="greyfiles-configuration-new">4. Greyfiles Configuration 📝 NEW</h3>
+<p><strong>Status:</strong> NOT STARTED <strong>Priority:</strong> TBD <strong>Target Date:</strong> TBD</p>
+<p><strong>Description:</strong> [To be defined by user]</p>
+<p><strong>Questions to Address:</strong> - What is Greyfiles? (File sharing? Backup? Data classification?) - Integration requirements? - Security requirements (FIPS, CUI handling)? - Deployment timeline?</p>
+<p><strong>Action Items:</strong> - [ ] Define Greyfiles requirements and scope - [ ] Determine integration with existing infrastructure - [ ] Assess security and compliance implications - [ ] Create implementation plan - [ ] Add to POA&amp;M with target date</p>
+<hr />
+<h2 id="medium-priority-tasks-december-2025">MEDIUM PRIORITY TASKS (December 2025)</h2>
+<h3 id="email-server-deployment-poam-002">5. Email Server Deployment (POA&amp;M-002)</h3>
+<p><strong>Target Date:</strong> December 20, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Components:</strong> - [ ] Postfix SMTP server with TLS - [ ] Dovecot IMAP/POP3 with encryption - [ ] Rspamd anti-spam - [ ] ClamAV anti-virus integration - [ ] SPF, DKIM, DMARC configuration - [ ] Webmail interface (Roundcube/SOGo) - [ ] LDAP authentication via FreeIPA - [ ] SSL certificate installation</p>
+<h3 id="file-sharing-solution-poam-001">6. File Sharing Solution (POA&amp;M-001)</h3>
+<p><strong>Target Date:</strong> December 15, 2025 <strong>Status:</strong> ON TRACK <strong>Issue:</strong> Samba FIPS incompatibility</p>
+<p><strong>Options Under Evaluation:</strong> - NFS with Kerberos authentication - NextCloud with LDAP integration - Alternative FIPS-compliant file sharing</p>
+<p><strong>Requirements:</strong> - FIPS 140-2 compliant - FreeIPA/LDAP authentication - Encryption at rest and in transit - CUI data handling capability - Cross-platform access (Linux workstations)</p>
+<h3 id="multi-factor-authentication-poam-004">7. Multi-Factor Authentication (POA&amp;M-004)</h3>
+<p><strong>Target Date:</strong> December 22, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Implementation Options:</strong> - FreeIPA OTP (Time-based One-Time Password) - RADIUS integration with hardware tokens - SMS-based (less preferred)</p>
+<p><strong>Requirements:</strong> - IA-2(1): Multi-factor for privileged access - IA-2(2): Multi-factor for network access - FIPS-compliant token generation</p>
+<hr />
+<h2 id="documentation-tasks">DOCUMENTATION TASKS</h2>
+<h3 id="incident-response-plan-poam-005">8. Incident Response Plan (POA&amp;M-005)</h3>
+<p><strong>Target Date:</strong> December 5, 2025 <strong>Status:</strong> ON TRACK <strong>Priority:</strong> HIGH (Compliance requirement)</p>
+<p><strong>Components:</strong> - [ ] Incident identification procedures - [ ] Escalation procedures - [ ] Incident response team roles - [ ] Communication plan - [ ] Evidence preservation procedures - [ ] Lessons learned process - [ ] Annual testing requirement</p>
+<h3 id="security-awareness-training-program-poam-006">9. Security Awareness Training Program (POA&amp;M-006)</h3>
+<p><strong>Target Date:</strong> December 10, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Requirements:</strong> - [ ] Select training provider/platform - [ ] Schedule annual training - [ ] Document training completion - [ ] Topics: Phishing, social engineering, CUI handling, incident reporting - [ ] AT-2, AT-3 compliance</p>
+<h3 id="quarterly-ssp-review-process-poam-011">10. Quarterly SSP Review Process (POA&amp;M-011)</h3>
+<p><strong>Target Date:</strong> December 31, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Deliverables:</strong> - [ ] Create review checklist - [ ] Establish review schedule (quarterly) - [ ] Document review procedures - [ ] Schedule Q1 2026 review (January 31, 2026)</p>
+<hr />
+<h2 id="technical-enhancements">TECHNICAL ENHANCEMENTS</h2>
+<h3 id="usb-device-controls-poam-007">11. USB Device Controls (POA&amp;M-007)</h3>
+<p><strong>Target Date:</strong> December 15, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Implementation:</strong> - [ ] Install USBGuard on all systems - [ ] Create device whitelist - [ ] Configure policies - [ ] Test enforcement - [ ] Document procedures - [ ] AC-19, AC-20 compliance</p>
+<h3 id="disaster-recovery-testing-poam-012">12. Disaster Recovery Testing (POA&amp;M-012)</h3>
+<p><strong>Target Date:</strong> December 28, 2025 <strong>Status:</strong> ON TRACK</p>
+<p><strong>Test Plan:</strong> - [ ] Develop DR test procedures - [ ] Schedule test window - [ ] Test ReaR ISO boot and restore - [ ] Test critical files restoration - [ ] Verify RAID reconstruction - [ ] Verify LUKS encryption recreation - [ ] Document lessons learned - [ ] Update procedures based on findings</p>
+<h3 id="wazuh-alert-tuning-and-optimization">13. Wazuh Alert Tuning and Optimization</h3>
+<p><strong>Target Date:</strong> Ongoing through December 2025 <strong>Status:</strong> PLANNED</p>
+<p><strong>Tasks:</strong> - [ ] Review default alerting rules - [ ] Configure email notifications - [ ] Tune false positive alerts - [ ] Create custom correlation rules - [ ] Document alert response procedures - [ ] Train on Wazuh interface (alternative dashboard access) - [ ] Integrate with incident response plan</p>
+<hr />
+<h2 id="optional-enhancements-post-ato">OPTIONAL ENHANCEMENTS (Post-ATO)</h2>
+<h3 id="wazuh-dashboard-deployment-poam-013">14. Wazuh Dashboard Deployment (POA&amp;M-013)</h3>
+<p><strong>Target Date:</strong> January 15, 2026 <strong>Status:</strong> PLANNED (Non-critical) <strong>Priority:</strong> LOW</p>
+<p><strong>Reason for Delay:</strong> - FIPS incompatibility with Node.js - Core monitoring functional without dashboard - Dashboard requires separate non-FIPS VM</p>
+<p><strong>Implementation Plan:</strong> - [ ] Deploy Rocky Linux VM without FIPS mode - [ ] Install Wazuh Dashboard - [ ] Configure connection to dc1 Indexer - [ ] Set up secure access - [ ] Train users on dashboard</p>
+<h3 id="suricata-idsips-on-pfsense">15. Suricata IDS/IPS on pfSense</h3>
+<p><strong>Status:</strong> DEFERRED <strong>Note:</strong> Wazuh provides more comprehensive monitoring than originally planned Suricata deployment</p>
+<hr />
+<h2 id="ongoing-maintenance">ONGOING MAINTENANCE</h2>
+<h3 id="daily">Daily</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Check Wazuh alerts</li>
+<li><input type="checkbox" disabled="" />
+Review authentication logs</li>
+<li><input type="checkbox" disabled="" />
+Monitor backup completion</li>
+<li><input type="checkbox" disabled="" />
+Check ClamAV database updates</li>
+</ul>
+<h3 id="weekly">Weekly</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Review Wazuh vulnerability scan results</li>
+<li><input type="checkbox" disabled="" />
+Check FIM alerts for unauthorized changes</li>
+<li><input type="checkbox" disabled="" />
+Review Security Configuration Assessment results</li>
+<li><input type="checkbox" disabled="" />
+Verify backup restorability (sample test)</li>
+</ul>
+<h3 id="monthly">Monthly</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+Review POA&amp;M progress</li>
+<li><input type="checkbox" disabled="" />
+Update SSP documentation</li>
+<li><input type="checkbox" disabled="" />
+Security patch assessment</li>
+<li><input type="checkbox" disabled="" />
+User access review</li>
+</ul>
+<h3 id="quarterly">Quarterly</h3>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+SSP formal review (Next: January 31, 2026)</li>
+<li><input type="checkbox" disabled="" />
+Disaster recovery testing</li>
+<li><input type="checkbox" disabled="" />
+Security awareness training</li>
+<li><input type="checkbox" disabled="" />
+External vulnerability assessment</li>
+</ul>
+<hr />
+<h2 id="metrics-dashboard">METRICS DASHBOARD</h2>
+<h3 id="implementation-progress">Implementation Progress</h3>
+<ul>
+<li><strong>Overall Completion:</strong> 94%</li>
+<li><strong>Controls Implemented:</strong> 103 of 110 (94%)</li>
+<li><strong>POA&amp;M Completed:</strong> 3 of 13 (23%)</li>
+<li><strong>Days to Target:</strong> 64 days (until Dec 31, 2025)</li>
+</ul>
+<h3 id="current-status">Current Status</h3>
+<ul>
+<li><strong>FIPS 140-2:</strong> ✓ ENABLED</li>
+<li><strong>OpenSCAP CUI:</strong> ✓ 100% COMPLIANT</li>
+<li><strong>Workstations Deployed:</strong> ✓ 3 of 3</li>
+<li><strong>Backups:</strong> ✓ OPERATIONAL</li>
+<li><strong>SIEM/XDR:</strong> ✓ OPERATIONAL</li>
+<li><strong>Vulnerability Scanning:</strong> ✓ ACTIVE</li>
+<li><strong>File Integrity Monitoring:</strong> ✓ ACTIVE</li>
+<li><strong>Antivirus:</strong> ⚠️ PENDING RESTART</li>
+<li><strong>Email Server:</strong> ⏳ NOT STARTED</li>
+<li><strong>MFA:</strong> ⏳ NOT STARTED</li>
+<li><strong>File Sharing:</strong> ⏳ IN PROGRESS</li>
+</ul>
+<h3 id="poam-summary">POA&amp;M Summary</h3>
+<ul>
+<li><strong>On Track:</strong> 9 items</li>
+<li><strong>Completed:</strong> 3 items</li>
+<li><strong>At Risk:</strong> 0 items</li>
+<li><strong>Delayed:</strong> 0 items</li>
+</ul>
+<hr />
+<h2 id="next-immediate-actions">NEXT IMMEDIATE ACTIONS</h2>
+<p><strong>Today (November 1, 2025):</strong> 1. ✓ Troubleshoot FreeIPA login failures - DONE 2. ✓ Resolve SSL certificate trust issues - DONE 3. ✓ Verify time synchronization - DONE 4. ✓ Configure Apache WSGI for SSL - DONE</p>
+<p><strong>Tomorrow (November 2, 2025):</strong> 1. ⏳ Wait for password cooldown to expire (08:43 MDT) 2. Reset admin password using IPA LDAP plugin 3. Test FreeIPA web UI and CLI authentication 4. Verify password synchronization 5. Document final resolution</p>
+<p><strong>This Week:</strong> 1. Define Greyfiles requirements 2. Begin email server planning 3. Research file sharing alternatives 4. Start incident response plan draft 5. Review SSL certificate SANs requirements</p>
+<p><strong>Next Week:</strong> 1. Complete incident response plan 2. Select security awareness training provider 3. Begin MFA implementation planning 4. Schedule disaster recovery test</p>
+<hr />
+<h2 id="notes">NOTES</h2>
+<p><strong>Critical Path Items:</strong> - File sharing solution (impacts productivity) - Incident response plan (compliance requirement) - Email server (communication capability)</p>
+<p><strong>External Dependencies:</strong> - SSL.com certificate reissue - Security training provider selection - None currently blocking progress</p>
+<p><strong>Risks:</strong> - None identified at this time - All tasks on track for December 31, 2025 target</p>
+<p><strong>Questions/Decisions Needed:</strong> - Greyfiles scope and requirements - File sharing solution selection (NFS vs NextCloud) - MFA method preference (OTP vs hardware tokens)</p>
+<hr />
+<p><strong>Last Updated:</strong> November 1, 2025 <strong>Next Update:</strong> November 2, 2025 (after admin password reset) or upon significant milestones</p>

@@ -1,0 +1,755 @@
+Technical Specifications: NIST 800-171 Compliant Small Business Network
+Microsoft-Free Architecture for CUI/FCI Protection
+Version: 1.1
+Date: October 25, 2025
+Compliance Target: NIST SP 800-171 Rev 2, FAR 52.204-21, FIPS 140-2/140-3
+Target Organization: Very Small Business (<15 users)
+
+1. Executive Summary
+This document specifies a complete network architecture for organizations handling Controlled Unclassified Information (CUI) and Federal Contract Information (FCI) under government contracts subject to FAR 52.204-21 and NIST SP 800-171 requirements. The solution is built entirely on open-source technologies, eliminating Microsoft product dependencies while maintaining full FIPS 140-2 compliance and security hardening via OpenSCAP profiles.
+
+2. System Architecture Overview
+2.1 Network Topology
+Internet IP = 96.72.6.225 FQDN = cyberinabox.net
+    |
+[Netgate 2100 - pfSense + Suricata]
+    |
+    |--- DMZ VLAN (if needed for future services)
+    |
+[Internal Network Switch]
+    |
+    |--- Domain Controller/File Server (HP MicroServer)
+    |--- Mail Server (Rocky Linux)
+    |--- Client Workstations (Rocky Linux 9.6 - Hardened)
+    |--- Network Attached Backup Storage
+
+
+
+2.2 Core Components
+Component
+Role
+Quantity
+Netgate 2100 Router/Firewall
+Perimeter security, IDS/IPS
+1
+HP MicroServer Gen 10/11
+Domain Controller, File Server
+1
+Rocky Linux Server
+Email Server (separate or consolidated)
+1
+Rocky Linux Workstations
+End-user devices
+Up to 15
+Network Switch
+Internal connectivity
+1+
+Backup USB Drive
+Offline backup storage
+1+
+
+3. Hardware Specifications
+3.1 HP MicroServer Gen 10/11 (Domain Controller & File Server)
+Processor:
+? Intel Xeon E-2200 series (E-2224, E-2234, or E-2244G recommended)
+? Minimum 4 cores, supporting AES-NI for FIPS compliance
+? Must support Intel VT-x for potential virtualization
+
+Memory:
+? 32 GB DDR4 ECC RAM (2x 16GB modules)
+? ECC required for data integrity in CUI environment
+Storage:
+Boot Drive: 2TB SSD (Security-Hardened Partitioning)
+? /boot/efi: 1 GB (Unencrypted - EFI System Partition)
+? /boot: 8 GB (Unencrypted - Boot partition)
+? /: 96 GB (Unencrypted - Root filesystem)
+? /home: 256 GB (LUKS Encrypted)
+? swap: 32 GB (LUKS Encrypted)
+? /var: 32 GB (LUKS Encrypted)
+? /var/log: 16 GB (LUKS Encrypted)
+? /var/log/audit: 16 GB (LUKS Encrypted - Dedicated audit log partition)
+? /srv/tmp: 16 GB (LUKS Encrypted)
+? /tmp: 16 GB (LUKS Encrypted)
+? /data: 350 GB (LUKS Encrypted - Application data)
+? /backup: 1 TB (LUKS Encrypted - Local backup storage)
+
+FIPS Mode Enabled:
+? GRUB configuration modified with fips=1 parameter
+? FIPS 140-2 compliant encryption across all encrypted partitions
+? Cryptographic operations validated against FIPS standards
+
+Data Storage: RAID Array
+? 3x Enterprise-grade HDDs (minimum 3TB each recommended)
+? Western Digital Red Pro or Seagate IronWolf Pro
+? Software RAID Configuration: RAID 5 (recommended) or RAID 10
+? RAID controller: Use mdadm (Linux software RAID)
+? Mounted at /srv/samba for shared file storage
+
+Network:
+? Quad Gigabit Ethernet NICs (built-in or PCIe)
+? One for production, one for management/backup network
+? LiLo 5 Management Interface
+
+Backup:
+? USB 3.0/3.1 ports for external backup drives
+? Recommended: 2x large capacity USB drives (8TB+) for rotation
+
+FIPS Compliance:
+? BIOS/UEFI must support Secure Boot
+? TPM 2.0 module required for key storage
+
+3.2 Netgate 2100 Router/Firewall
+Hardware Specifications:
+? Dual-core ARM Cortex-A53 (or Intel Atom for 2100 MAX)
+? Minimum 4GB RAM
+? 8GB eMMC storage
+? 4x Gigabit Ethernet ports (2x WAN, 2x LAN or configurable)
+? AES-NI support for VPN encryption
+Software:
+? pfSense CE or pfSense Plus
+? Suricata IDS/IPS package
+? pfBlockerNG for threat intelligence feeds
+? OpenVPN or WireGuard for remote access
+
+3.3 Client Workstations
+Minimum Specifications:
+? Processor: Intel Core i5 (8th gen or newer) or AMD Ryzen 5
+? RAM: 16GB DDR4
+? Storage: 256GB SSD (NVMe preferred)
+? TPM 2.0 module
+? Network: Gigabit Ethernet (Wi-Fi disabled or secured per NIST 800-171)
+
+Operating System:
+? Rocky Linux 9.6
+? Hardened using OpenSCAP DISA STIG or NIST 800-171 profile
+? FIPS mode enabled
+
+4. Software Architecture
+4.1 Operating System Standards
+Base OS: Rocky Linux 9.6
+? RHEL binary-compatible
+? Long-term support (LTS) through 2032
+? FIPS 140-2 validated cryptographic modules available
+? OpenSCAP-compliant security profiles
+
+Hardening Profile:
+? OpenSCAP SCAP Security Guide (SSG)
+? Apply xccdf_org.ssgproject.content_profile_cui profile
+? Automated compliance scanning via OpenSCAP
+? Remediation scripts for non-compliant settings
+
+FIPS Mode Enablement:
+# Enable FIPS mode
+fips-mode-setup --enable
+
+# Edit GRUB configuration to add fips=1 parameter
+# Add 'fips=1' to GRUB_CMDLINE_LINUX in /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="fips=1 /' /etc/default/grub
+
+# Regenerate GRUB configuration
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Reboot to apply changes
+reboot
+
+# Verify FIPS mode is enabled
+fips-mode-setup --check
+cat /proc/sys/crypto/fips_enabled  # Should return 1
+
+4.2 Domain Controller & Authentication
+FreeIPA (Identity Management)
+? LDAP-based directory services (389 Directory Server)
+? Kerberos authentication (MIT Kerberos)
+? Integrated CA for certificate management
+? DNS server (BIND)
+? NTP server for time synchronization
+Installation on HP MicroServer:
+dnf module enable idm:DL1
+dnf install ipa-server ipa-server-dns
+ipa-server-install --setup-dns
+Key Features:
+? Centralized user authentication
+? Role-based access control (RBAC)
+? Password policy enforcement (complexity, expiration, history)
+? Multi-factor authentication support (OTP, smart cards)
+? Audit logging of authentication events
+
+NIST 800-171 Compliance Mapping:
+? AC-2: Account Management
+? AC-7: Unsuccessful Logon Attempts
+? IA-2: Identification and Authentication
+? IA-5: Authenticator Management
+
+4.3 File Sharing Services
+Samba File Server
+? SMB/CIFS protocol for file sharing
+? Integrated with FreeIPA for authentication
+? ACL support for granular permissions
+? Audit logging via VFS modules
+Configuration Highlights:
+[global]
+    workgroup = YOURDOMAIN
+    realm = YOURDOMAIN.LOCAL
+    security = ads
+    encrypt passwords = yes
+    server signing = mandatory
+    smb encrypt = required
+    
+[shared]
+    path = /srv/samba/shared
+    read only = no
+    valid users = @domain_users
+    audit:facility = local5
+    audit:priority = notice
+    vfs objects = full_audit
+
+Storage Configuration:
+? RAID 5 array mounted at /srv/samba
+? Filesystem: XFS or ext4 with ACL support
+? Daily snapshots using LVM snapshots or Btrfs
+? Quota management per user/group
+
+NIST 800-171 Compliance Mapping:
+? AC-3: Access Enforcement
+? AC-6: Least Privilege
+? AU-2: Audit Events
+? MP-4: Media Storage
+4.4 Email Server
+Postfix (SMTP Server)
+? MTA for sending/receiving email
+? TLS encryption enforced (STARTTLS)
+? SASL authentication via FreeIPA
+? SPF, DKIM, DMARC implementation
+
+Dovecot (IMAP/POP3 Server)
+? Secure mailbox access
+? Integration with FreeIPA LDAP
+? Encryption at rest for mailboxes
+? Mail filtering with Sieve
+
+Additional Components:
+? Rspamd or SpamAssassin for spam filtering
+? ClamAV for antivirus scanning
+? Roundcube or SOGo for webmail (optional)
+Security Configuration:
+? Force TLS 1.2+ with strong cipher suites
+? Disable plaintext authentication
+? Rate limiting and connection limits
+? DKIM signing for outbound mail
+
+NIST 800-171 Compliance Mapping:
+? SC-8: Transmission Confidentiality
+? SC-13: Cryptographic Protection
+? SI-3: Malicious Code Protection
+
+4.5 Backup Solution
+Bacula or Restic
+? Automated backup scheduling
+? Encryption of backup data (AES-256)
+? Incremental and differential backups
+? Backup verification and integrity checks
+Backup Architecture:
+1 Workstation to Server: Daily incremental backups via Samba
+2 Server to USB: Weekly full backups to external USB drive
+3 Offsite Rotation: Monthly USB drive rotation to secure offsite location
+
+Backup Schedule:
+? Workstations: Daily at 7 PM (incremental)
+? Server: Weekly full backup Sunday 2 AM
+? Retention: 30 days online, 90 days offline
+
+NIST 800-171 Compliance Mapping:
+? CP-9: System Backup
+? CP-10: System Recovery and Reconstitution
+? SC-28: Protection of Information at Rest
+
+5. Network Security Architecture
+5.1 Firewall Configuration (pfSense)
+Interface Configuration:
+? WAN: Public internet connection
+? LAN: Internal trusted network (192.168.1.0/24)
+? OPT1 (Optional): Management network (10.0.0.0/24)
+? OPT2 (Optional): DMZ for future public services
+
+Firewall Rules (Default Deny):
+? Block all inbound traffic from WAN except established/related
+? Allow outbound traffic from LAN (with logging)
+? Block traffic between VLANs unless explicitly allowed
+? Geo-blocking for high-risk countries
+NAT Configuration:
+? Outbound NAT for internal network
+? No port forwarding unless required (and heavily restricted)
+
+5.2 Intrusion Detection/Prevention (Suricata)
+Configuration:
+? Inline IPS mode on WAN interface
+? ET Open, ET Pro, or Abuse.ch rulesets
+? Custom rules for CUI/FCI environment
+? Alert and block mode for critical threats
+
+Rule Categories:
+? Malware detection
+? Command and control (C2) communication
+? Exploitation attempts
+? Data exfiltration patterns
+? Brute force attacks
+
+Integration:
+? Syslog forwarding to centralized logging
+? pfBlockerNG integration for IP reputation
+? Regular rule updates (daily)
+
+5.3 VPN for Remote Access
+OpenVPN or WireGuard:
+? Certificate-based authentication (FreeIPA CA)
+? MFA required (OTP via FreeIPA)
+? Split tunneling disabled (force all traffic through VPN)
+? Strong encryption: AES-256-GCM, SHA-256
+
+Configuration:
+? Maximum 10 concurrent connections
+? Session timeout after 8 hours
+? Audit logging of VPN connections
+? Per-user access control
+
+NIST 800-171 Compliance Mapping:
+? AC-17: Remote Access
+? SC-8: Transmission Confidentiality
+? SC-13: Cryptographic Protection
+
+
+
+6. Security Controls Implementation
+6.1 Access Control (AC)
+AC-2: Account Management
+? FreeIPA centralized account management
+? Automated account provisioning/deprovisioning
+? Account review every 90 days
+? Disabled accounts after 35 days of inactivity
+
+AC-3: Access Enforcement
+? Role-based access control (RBAC) in FreeIPA
+? SELinux enforcing mode on all systems
+? File system ACLs for granular permissions
+
+AC-7: Unsuccessful Logon Attempts
+? Faillock: 3 failed attempts = 15-minute lockout
+? Configuration via PAM and FreeIPA policy
+
+AC-17: Remote Access
+? VPN required for all remote access
+? MFA enforced for VPN connections
+? Remote sessions logged and monitored
+
+6.2 Audit and Accountability (AU)
+AU-2/AU-3: Audit Events
+? auditd configured on all systems
+? Events logged: logins, file access, command execution, configuration changes
+? Centralized logging to syslog server
+
+AU-4: Audit Storage Capacity
+? Minimum 30 days of audit logs retained
+? Automated alerts at 75% capacity
+? Log rotation configured
+AU-6: Audit Review
+? Weekly manual review of security logs
+? Automated analysis via fail2ban or OSSEC
+? IDS/IPS alerts reviewed daily
+
+AU-9: Protection of Audit Information
+? Logs stored on separate partition
+? Read-only permissions for audit files
+? Forward logs to write-once media for forensics
+
+6.3 Identification and Authentication (IA)
+IA-2: Identification and Authentication
+? Unique user IDs for all users
+? Kerberos authentication via FreeIPA
+? No shared accounts permitted
+
+IA-5: Authenticator Management
+? Password complexity: 14+ characters, mix of upper/lower/digits/special
+? Password expiration: 90 days
+? Password history: 24 previous passwords
+? MFA for privileged accounts and remote access
+
+IA-8: Identification and Authentication (Non-Org Users)
+? Guest accounts disabled
+? Contractor accounts tagged and reviewed monthly
+
+6.4 System and Communications Protection (SC)
+SC-7: Boundary Protection
+? pfSense firewall with default-deny
+? Network segmentation via VLANs
+? IDS/IPS monitoring all boundary traffic
+
+SC-8: Transmission Confidentiality
+? TLS 1.2+ for all network services
+? SSH for remote administration
+? VPN for remote access
+? Email encryption (TLS, S/MIME optional)
+
+SC-13: Cryptographic Protection
+? FIPS 140-2 validated cryptographic modules
+? AES-256 for data at rest
+? Strong key management via FreeIPA CA
+
+SC-28: Protection of Information at Rest
+? LUKS full-disk encryption on all workstations
+? Encrypted file shares via Samba
+? Encrypted backups
+
+6.5 System and Information Integrity (SI)
+SI-2: Flaw Remediation
+? Automated security updates via dnf-automatic
+? Patch testing in non-production before deployment
+? Critical patches applied within 30 days
+
+SI-3: Malicious Code Protection
+? ClamAV antivirus on mail server and file server
+? Daily signature updates
+? Regular scans of shared storage
+
+SI-4: System Monitoring
+? Suricata IDS/IPS
+? auditd for host-based monitoring
+? Centralized logging and SIEM (optional: Wazuh, OSSEC)
+
+SI-7: Software Integrity
+? RPM package verification
+? AIDE (Advanced Intrusion Detection Environment) for file integrity
+? Code signing verification for software installation
+
+7. FIPS 140-2 Compliance
+7.1 FIPS Mode Activation
+All Rocky Linux systems must operate in FIPS mode:
+# Enable FIPS mode
+fips-mode-setup --enable
+reboot
+
+# Verify FIPS mode
+fips-mode-setup --check
+cat /proc/sys/crypto/fips_enabled  # Should return 1
+
+7.2 FIPS-Validated Modules
+Rocky Linux 9.6 includes FIPS 140-2 validated cryptographic modules:
+? OpenSSL FIPS module
+? NSS (Network Security Services)
+? Libgcrypt
+? Kernel crypto API
+
+7.3 Cryptographic Standards
+Encryption Algorithms (Approved):
+? AES (128, 192, 256-bit)
+? Triple-DES (legacy, phase out)
+Hashing Algorithms (Approved):
+? SHA-256, SHA-384, SHA-512
+? SHA-1 (legacy, phase out)
+Key Exchange:
+? Diffie-Hellman (2048-bit minimum)
+? ECDH (P-256, P-384, P-521)
+Digital Signatures:
+? RSA (2048-bit minimum, 3072-bit recommended)
+? ECDSA (P-256, P-384, P-521)
+Deprecated/Forbidden:
+? MD5, SHA-1 (except for non-security purposes)
+? RC4, DES
+? RSA < 2048-bit
+
+8. Implementation Phases
+Phase 1: Infrastructure Setup (Week 1-2)
+1 Install and configure Netgate 2100 with pfSense
+2 Configure VLANs and basic firewall rules
+3 Deploy Suricata IDS/IPS
+4 Set up network switch and cabling
+
+Phase 2: Server Deployment (Week 2-4)
+1 Install Rocky Linux 9.6 on HP MicroServer
+2 Enable FIPS mode and apply OpenSCAP hardening
+3 Configure RAID 5 array for storage
+4 Install and configure FreeIPA
+5 Deploy Samba file server
+6 Set up email server (Postfix/Dovecot)
+
+Phase 3: Workstation Integration (Week 4-6)
+1 Join workstations to FreeIPA domain
+2 Configure centralized authentication
+3 Implement full-disk encryption (LUKS)
+4 Deploy backup agents
+5 User training on new systems
+
+Phase 4: Security Hardening (Week 6-8)
+1 Configure audit logging (auditd)
+2 Implement MFA for privileged accounts
+3 Deploy VPN for remote access
+4 Configure backup automation
+5 Implement monitoring and alerting
+
+Phase 5: Compliance Validation (Week 8-10)
+1 OpenSCAP compliance scanning
+2 Penetration testing (optional but recommended)
+3 Security control validation
+4 Documentation review
+5 System Security Plan (SSP) creation
+
+9. Operational Requirements
+9.1 Maintenance Schedule
+Daily:
+? Review IDS/IPS alerts
+? Monitor system logs for anomalies
+? Verify backup completion
+
+Weekly:
+? Review user access logs
+? Update IDS/IPS rules
+? Full server backup to USB
+
+Monthly:
+? Apply security patches
+? Review and update firewall rules
+? User account review
+? Rotate offsite backup media
+
+Quarterly:
+? OpenSCAP compliance scan
+? Password expiration review
+? Disaster recovery testing
+
+Annually:
+? Security assessment/audit
+? System Security Plan (SSP) review
+? Penetration testing
+
+9.2 Documentation Requirements
+Required Documentation:
+? System Security Plan (SSP)
+? Incident Response Plan
+? Disaster Recovery Plan
+? Configuration Management Plan
+? Network diagram
+? Data flow diagrams
+? User access matrix
+? Backup and recovery procedures
+? Change management procedures
+
+9.3 Training Requirements
+All Users:
+? Security awareness training (annual)
+? CUI/FCI handling procedures
+? Incident reporting procedures
+? Acceptable use policy
+
+System Administrators:
+? Rocky Linux administration
+? FreeIPA management
+? pfSense/Suricata configuration
+? Backup and recovery procedures
+? Incident response procedures
+
+
+
+
+10. Cost Estimates
+10.1 Hardware Costs
+Item
+Estimated Cost
+HP MicroServer Gen 10/11
+$800 - $1,200
+32GB DDR4 ECC RAM
+$150 - $250
+2TB SSD Boot Drive (NVMe or SATA)
+$120 - $200
+3x 4TB Enterprise HDDs
+$300 - $500
+Netgate 2100
+$400 - $600
+Network Switch (24-port managed)
+$200 - $400
+2x 8TB USB Backup Drives
+$300 - $400
+Total Hardware
+$
+10.2 Software Costs
+Item
+Cost
+Rocky Linux
+Free (open source)
+FreeIPA
+Free (open source)
+Samba
+Free (open source)
+Postfix/Dovecot
+Free (open source)
+pfSense CE
+Free (open source)
+Suricata
+Free (open source)
+OpenSCAP
+Free (open source)
+Total Software
+$0
+Optional Commercial Support:
+? pfSense Plus (includes support): $399/year
+? Red Hat support for Rocky Linux: Not applicable (community support)
+? Professional services (implementation): $5,000 - $15,000
+
+
+
+11. Compliance Mapping
+11.1 NIST 800-171 Control Families
+This architecture addresses all 14 control families:
+1 Access Control (AC): FreeIPA, RBAC, SELinux
+2 Awareness and Training (AT): Documentation provided
+3 Audit and Accountability (AU): auditd, centralized logging
+4 Configuration Management (CM): OpenSCAP, documentation
+5 Identification and Authentication (IA): FreeIPA, Kerberos, MFA
+6 Incident Response (IR): IDS/IPS, logging, procedures required
+7 Maintenance (MA): Scheduled maintenance, documentation
+8 Media Protection (MP): Encryption, backup procedures
+9 Personnel Security (PS): HR processes (external to system)
+10 Physical Protection (PE): Physical security (external to system)
+11 Risk Assessment (RA): Regular scanning, assessments
+12 Security Assessment (CA): OpenSCAP, annual audits
+13 System and Communications Protection (SC): Encryption, firewalls, VPN
+14 System and Information Integrity (SI): Patching, AV, IDS/IPS
+
+11.2 FAR 52.204-21 Safeguarding Requirements
+All seven safeguarding requirements are met:
+1 Identify and mark CUI: Samba share segregation, file tagging
+2 Protect CUI: Encryption at rest and in transit
+3 Limit access: RBAC, least privilege, MFA
+4 Monitor CUI systems: IDS/IPS, logging, auditing
+5 Encrypt CUI: LUKS, TLS, encrypted backups
+6 Train personnel: Security awareness program
+7 Report cyber incidents: Incident response procedures
+
+12. Known Limitations and Mitigations
+12.1 Limitations
+1 No native Microsoft interoperability: Users accustomed to Windows/Office may experience workflow changes
+2 Limited commercial support: Rocky Linux relies on community support
+3 Application compatibility: Some Windows-only applications may not run natively
+4 Initial learning curve: Linux-based systems require user training
+
+12.2 Mitigations
+1 OnlyOffice suite: Compatible with Microsoft Office formats
+2 Web-based applications: Prioritize browser-based tools for compatibility
+3 Wine/Virtualization: Windows applications highly discouraged. If absolutely necessary (evaluate security implications)
+4 Professional services: Engage consultants for initial setup and training
+5 Documentation: Comprehensive user guides and internal knowledge base
+
+13. Vendor and Resource Contacts
+13.1 Hardware Vendors
+? HP MicroServer: HP Enterprise (hpe.com)
+? Netgate Appliances: Netgate (netgate.com)
+? Network Equipment: Cisco, Ubiquiti, TP-Link
+
+13.2 Software Resources
+? Rocky Linux: rockylinux.org
+? FreeIPA: freeipa.org
+? Samba: samba.org
+? pfSense: pfsense.org
+? Suricata: suricata.io
+? OpenSCAP: open-scap.org
+
+13.3 Compliance Resources
+? NIST 800-171: csrc.nist.gov/publications/detail/sp/800-171/rev-2/final
+? CMMC Resources: cmmcab.org
+? FAR Clauses: acquisition.gov
+? FIPS 140-2: csrc.nist.gov/projects/cryptographic-module-validation-program
+
+
+
+14. Appendices
+
+
+Appendix A: Sample Configuration Files
+FreeIPA Password Policy:
+ipa pwpolicy-mod --minlength=14 --minclasses=3 --maxlife=90 --history=24
+Auditd Rules (Sample):
+# Monitor all authentication events
+-w /var/log/secure -p wa -k auth_log
+-w /var/log/audit/ -p wa -k audit_log
+
+# Monitor privileged commands
+-a always,exit -F arch=b64 -S execve -F euid=0 -k root_commands
+
+# Monitor file deletions
+-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -k delete
+Samba VFS Audit Module:
+vfs objects = full_audit
+full_audit:prefix = %u|%I|%m|%S
+full_audit:success = mkdir rmdir open read write rename unlink
+full_audit:failure = mkdir rmdir open
+full_audit:facility = local5
+full_audit:priority = notice
+
+
+
+Appendix B: OpenSCAP Remediation
+Automated Remediation:
+# Generate remediation script
+oscap xccdf generate fix \
+  --profile xccdf_org.ssgproject.content_profile_cui \
+  --output remediation.sh \
+  /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+
+# Review and execute
+chmod +x remediation.sh
+./remediation.sh
+
+
+
+Appendix C: Backup Verification Script
+#!/bin/bash
+# Verify backup integrity
+BACKUP_DIR="/mnt/backup"
+LOG_FILE="/var/log/backup_verification.log"
+
+for backup in $(find $BACKUP_DIR -name "*.tar.gz.gpg"); do
+    echo "Verifying: $backup" >> $LOG_FILE
+    gpg --decrypt $backup | tar -tzf - > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "PASS: $backup" >> $LOG_FILE
+    else
+        echo "FAIL: $backup" >> $LOG_FILE
+        # Send alert
+        mail -s "Backup Verification Failed" admin@domain.local < $LOG_FILE
+    fi
+done
+
+
+
+Document Control
+Revision History:
+Version
+Date
+Author
+Description
+1.0
+October 24, 2025
+Technical Team
+Initial release
+1.1
+October 25, 2025
+Technical Team
+Updated boot drive specifications: Changed from 240GB to 2TB SSD with security-hardened partitioning scheme. Added detailed partition layout with LUKS encryption on sensitive partitions. Updated FIPS mode enablement with GRUB fips=1 parameter configuration.
+Approval:
+Role
+Name
+Signature
+Date
+Project Manager
+
+
+
+Security Officer
+
+
+
+System Administrator
+
+
+
+
+END OF DOCUMENT
+

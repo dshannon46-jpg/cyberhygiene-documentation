@@ -1,0 +1,1008 @@
+# FreeIPA Domain Controller Setup Guide
+## HP MicroServer Gen 10+ Configuration for cyberinabox.net
+**Version:** 1.0  
+**Date:** October 25, 2025  
+**System:** Rocky Linux 9.6  
+**IP Address:** 192.168.1.10  
+**Domain:** cyberinabox.net  
+**DNS/DHCP:** Hosted externally on pfSense (Netgate 2100)
+
+---
+
+## Table of Contents
+1. [Pre-Installation Checklist](#pre-installation-checklist)
+2. [System Preparation](#system-preparation)
+3. [FIPS Mode Enablement](#fips-mode-enablement)
+4. [FreeIPA Installation](#freeipa-installation)
+5. [Post-Installation Configuration](#post-installation-configuration)
+6. [RAID Array Configuration](#raid-array-configuration)
+7. [Security Hardening](#security-hardening)
+8. [Testing and Verification](#testing-and-verification)
+9. [Troubleshooting](#troubleshooting)
+
+---
+
+## 1. Pre-Installation Checklist
+
+### Current System Status
+- ✓ Rocky Linux 9.6 installed on 2TB SSD
+- ✓ Partitioning scheme per Technical Specifications (LUKS encrypted partitions)
+- ✓ 3x 3TB HDDs installed (not yet configured)
+- ✓ Static IP configured: 192.168.1.10
+- ⚠ DNS hosted on pfSense (192.168.1.1 assumed)
+- ⚠ DHCP hosted on pfSense
+
+### DNS Prerequisites (CRITICAL)
+**Before proceeding, ensure pfSense DNS is configured with:**
+
+1. **Forward DNS Zone for cyberinabox.net:**
+   ```
+   dc1.cyberinabox.net    A    192.168.1.10
+   ipa.cyberinabox.net    A    192.168.1.10
+   ```
+
+2. **Reverse DNS Zone for 192.168.1.0/24:**
+   ```
+   10.1.168.192.in-addr.arpa    PTR    dc1.cyberinabox.net
+   ```
+
+3. **SRV Records (if pfSense supports):**
+   ```
+   _kerberos._tcp.cyberinabox.net    SRV    0 100 88 dc1.cyberinabox.net
+   _kerberos._udp.cyberinabox.net    SRV    0 100 88 dc1.cyberinabox.net
+   _kerberos-master._tcp.cyberinabox.net    SRV    0 100 88 dc1.cyberinabox.net
+   _kerberos-master._udp.cyberinabox.net    SRV    0 100 88 dc1.cyberinabox.net
+   _kpasswd._tcp.cyberinabox.net     SRV    0 100 464 dc1.cyberinabox.net
+   _kpasswd._udp.cyberinabox.net     SRV    0 100 464 dc1.cyberinabox.net
+   _ldap._tcp.cyberinabox.net        SRV    0 100 389 dc1.cyberinabox.net
+   ```
+
+4. **Verify DNS from the server:**
+   ```bash
+   # Test forward resolution
+   nslookup dc1.cyberinabox.net
+   
+   # Test reverse resolution
+   nslookup 192.168.1.10
+   
+   # Both should return consistent results
+   ```
+
+**IMPORTANT:** FreeIPA absolutely requires proper DNS configuration. If pfSense cannot support all required SRV records, you may need to reconsider the DNS architecture or enable FreeIPA's integrated DNS.
+
+---
+
+## 2. System Preparation
+
+### 2.1 Set Hostname
+```bash
+# Set the fully qualified domain name
+sudo hostnamectl set-hostname dc1.cyberinabox.net
+
+# Verify
+hostnamectl
+```
+
+### 2.2 Configure /etc/hosts
+```bash
+sudo vi /etc/hosts
+```
+
+Add/modify these entries:
+```
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.1.10   dc1.cyberinabox.net dc1
+```
+
+**CRITICAL:** Do NOT include the FQDN on the 127.0.0.1 line. This will cause FreeIPA installation to fail.
+
+### 2.3 Verify Network Configuration
+```bash
+# Check network configuration
+ip addr show
+nmcli connection show
+
+# Verify static IP is set correctly
+cat /etc/sysconfig/network-scripts/ifcfg-* 
+# OR for newer NetworkManager style:
+nmcli connection show <connection-name>
+
+# Ensure these settings:
+# BOOTPROTO=static (or none)
+# IPADDR=192.168.1.10
+# PREFIX=24 (or NETMASK=255.255.255.0)
+# GATEWAY=192.168.1.1 (pfSense)
+# DNS1=192.168.1.1 (pfSense)
+```
+
+### 2.4 Configure Name Resolution
+```bash
+sudo vi /etc/resolv.conf
+```
+
+Ensure it points to pfSense:
+```
+search cyberinabox.net
+nameserver 192.168.1.1
+```
+
+**Note:** If using NetworkManager, this file will be auto-generated. Configure DNS in NetworkManager instead:
+```bash
+sudo nmcli connection modify <connection-name> ipv4.dns "192.168.1.1"
+sudo nmcli connection modify <connection-name> ipv4.dns-search "cyberinabox.net"
+sudo nmcli connection up <connection-name>
+```
+
+### 2.5 System Update
+```bash
+# Update all packages
+sudo dnf update -y
+
+# Reboot if kernel was updated
+sudo reboot
+```
+
+### 2.6 Install Required Packages
+```bash
+# Install basic tools
+sudo dnf install -y \
+    vim \
+    wget \
+    curl \
+    bind-utils \
+    firewalld \
+    chrony \
+    policycoreutils-python-utils \
+    setroubleshoot-server
+```
+
+### 2.7 Configure Firewall (Before FreeIPA Installation)
+```bash
+# Start and enable firewall
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
+
+# Add FreeIPA services
+sudo firewall-cmd --permanent --add-service=freeipa-ldap
+sudo firewall-cmd --permanent --add-service=freeipa-ldaps
+sudo firewall-cmd --permanent --add-service=kerberos
+sudo firewall-cmd --permanent --add-service=kpasswd
+
+# Add individual ports for FreeIPA
+sudo firewall-cmd --permanent --add-port=80/tcp     # HTTP
+sudo firewall-cmd --permanent --add-port=443/tcp    # HTTPS
+sudo firewall-cmd --permanent --add-port=389/tcp    # LDAP
+sudo firewall-cmd --permanent --add-port=636/tcp    # LDAPS
+sudo firewall-cmd --permanent --add-port=88/tcp     # Kerberos
+sudo firewall-cmd --permanent --add-port=88/udp     # Kerberos
+sudo firewall-cmd --permanent --add-port=464/tcp    # Kpasswd
+sudo firewall-cmd --permanent --add-port=464/udp    # Kpasswd
+sudo firewall-cmd --permanent --add-port=123/udp    # NTP
+
+# Reload firewall
+sudo firewall-cmd --reload
+
+# Verify
+sudo firewall-cmd --list-all
+```
+
+### 2.8 Configure Time Synchronization
+```bash
+# Verify chronyd is running
+sudo systemctl status chronyd
+
+# Configure to use pfSense or upstream NTP
+sudo vi /etc/chrony.conf
+```
+
+Add/modify:
+```
+# Use pfSense as primary NTP source
+server 192.168.1.1 iburst
+
+# Or use public NTP servers
+pool 2.pool.ntp.org iburst
+
+# Allow other hosts to query (for NTP service to clients)
+allow 192.168.1.0/24
+```
+
+```bash
+# Restart chronyd
+sudo systemctl restart chronyd
+
+# Verify time sync
+chronyc sources
+chronyc tracking
+
+# Ensure timezone is correct
+timedatectl
+sudo timedatectl set-timezone America/Denver  # Adjust for Albuquerque
+```
+
+---
+
+## 3. FIPS Mode Enablement
+
+**CRITICAL FOR NIST 800-171 COMPLIANCE**
+
+### 3.1 Enable FIPS Mode
+```bash
+# Enable FIPS mode
+sudo fips-mode-setup --enable
+
+# Verify current status before reboot
+sudo fips-mode-setup --check
+```
+
+### 3.2 Configure GRUB for FIPS
+```bash
+# Edit GRUB configuration
+sudo vi /etc/default/grub
+```
+
+Find the line starting with `GRUB_CMDLINE_LINUX` and add `fips=1`:
+```
+GRUB_CMDLINE_LINUX="... fips=1"
+```
+
+Example:
+```
+GRUB_CMDLINE_LINUX="crashkernel=auto resume=/dev/mapper/rl-swap rd.lvm.lv=rl/root rd.lvm.lv=rl/swap rhgb quiet fips=1"
+```
+
+### 3.3 Regenerate GRUB Configuration
+```bash
+# For UEFI systems
+sudo grub2-mkconfig -o /boot/efi/EFI/rocky/grub.cfg
+
+# For BIOS systems
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Verify the grub.cfg contains fips=1
+sudo grep fips /boot/efi/EFI/rocky/grub.cfg
+# OR
+sudo grep fips /boot/grub2/grub.cfg
+```
+
+### 3.4 Reboot and Verify FIPS Mode
+```bash
+sudo reboot
+
+# After reboot, verify FIPS is enabled
+sudo fips-mode-setup --check
+
+# Check kernel parameter
+cat /proc/cmdline | grep fips
+
+# Verify FIPS enabled flag
+cat /proc/sys/crypto/fips_enabled  # Should return 1
+```
+
+**IMPORTANT:** Do not proceed with FreeIPA installation until FIPS mode is confirmed enabled.
+
+---
+
+## 4. FreeIPA Installation
+
+### 4.1 Enable IDM Module Stream
+```bash
+# Enable the Identity Management module
+sudo dnf module enable idm:DL1 -y
+
+# Verify module is enabled
+dnf module list idm
+```
+
+### 4.2 Install FreeIPA Server (WITHOUT DNS)
+```bash
+# Install FreeIPA server without DNS components
+sudo dnf install ipa-server -y
+```
+
+**Note:** We're NOT installing `ipa-server-dns` since DNS is handled by pfSense.
+
+### 4.3 Run FreeIPA Server Installation
+
+**Installation command WITHOUT integrated DNS:**
+```bash
+sudo ipa-server-install \
+    --realm CYBERINABOX.NET \
+    --domain cyberinabox.net \
+    --hostname dc1.cyberinabox.net \
+    --ip-address=192.168.1.10 \
+    --no-ntp \
+    --mkhomedir
+```
+
+**Installation Prompts and Recommended Answers:**
+
+1. **Configure integrated DNS?** → `no`
+2. **Server host name** → `dc1.cyberinabox.net` (should auto-detect)
+3. **Confirm domain name** → `cyberinabox.net` (should auto-detect)
+4. **Confirm Kerberos realm** → `CYBERINABOX.NET` (should auto-detect)
+5. **Directory Manager password:** → Enter a strong password (min 8 chars, store securely)
+6. **IPA admin password:** → Enter a strong password (min 8 chars, store securely)
+7. **Continue to configure?** → `yes`
+
+**IMPORTANT PASSWORD REQUIREMENTS:**
+- Minimum 8 characters
+- Mix of upper/lower case, numbers, special characters
+- Store in a secure password manager
+- Document separately for disaster recovery
+
+### 4.4 Monitor Installation
+The installation will take 5-15 minutes. Watch for any errors:
+
+```bash
+# If installation fails, check logs:
+sudo journalctl -xe
+sudo tail -f /var/log/ipaserver-install.log
+```
+
+### 4.5 Installation Success Verification
+Upon successful installation, you should see:
+```
+==============================================================================
+Setup complete
+
+Next steps:
+	1. You must make sure these network ports are open:
+		TCP Ports:
+		  * 80, 443: HTTP/HTTPS
+		  * 389, 636: LDAP/LDAPS
+		  * 88, 464: kerberos
+		UDP Ports:
+		  * 88, 464: kerberos
+		  * 123: ntp
+
+	2. You can now obtain a kerberos ticket using the command: 'kinit admin'
+	   This ticket will allow you to use the IPA tools (e.g., ipa user-add)
+	   and the web user interface.
+
+Be sure to back up the CA certificates stored in /root/cacert.p12
+These files are required to create replicas. The password for these
+files is the Directory Manager password
+==============================================================================
+```
+
+**IMMEDIATE POST-INSTALL ACTION:**
+```bash
+# Backup the CA certificate
+sudo cp /root/cacert.p12 /backup/cacert.p12.$(date +%Y%m%d)
+sudo chmod 600 /backup/cacert.p12.*
+```
+
+---
+
+## 5. Post-Installation Configuration
+
+### 5.1 Obtain Kerberos Ticket
+```bash
+# Get admin ticket
+kinit admin
+
+# Verify ticket
+klist
+
+# Should show:
+# Ticket cache: KCM:0
+# Default principal: admin@CYBERINABOX.NET
+```
+
+### 5.2 Access Web Interface
+Open a web browser and navigate to:
+```
+https://dc1.cyberinabox.net
+OR
+https://192.168.1.10
+```
+
+**Login credentials:**
+- Username: `admin`
+- Password: [IPA admin password from installation]
+
+**Note:** You may get a certificate warning since it's a self-signed cert. This is expected.
+
+### 5.3 Configure Password Policies (NIST 800-171 Compliant)
+```bash
+# Modify global password policy
+ipa pwpolicy-mod --minlength=14 \
+    --minclasses=3 \
+    --maxlife=90 \
+    --minlife=1 \
+    --history=24 \
+    --maxfail=5 \
+    --failinterval=900 \
+    --lockouttime=1800
+
+# Verify policy
+ipa pwpolicy-show
+```
+
+**Policy Explanation:**
+- `--minlength=14`: Minimum 14 characters (NIST 800-171 IA-5)
+- `--minclasses=3`: At least 3 character classes (upper, lower, number, special)
+- `--maxlife=90`: Passwords expire after 90 days (AC-2)
+- `--minlife=1`: Minimum 1 day before password can be changed
+- `--history=24`: Remember last 24 passwords (IA-5)
+- `--maxfail=5`: Lock after 5 failed attempts (AC-7)
+- `--failinterval=900`: 15-minute observation window for failures
+- `--lockouttime=1800`: 30-minute lockout period
+
+### 5.4 Create User Accounts
+```bash
+# Create first regular user
+ipa user-add jdoe \
+    --first=John \
+    --last=Doe \
+    --email=jdoe@cyberinabox.net \
+    --shell=/bin/bash \
+    --homedir=/home/jdoe
+
+# Set initial password (user will be forced to change)
+ipa passwd jdoe
+
+# Create additional users as needed
+```
+
+### 5.5 Create Groups
+```bash
+# Create security groups
+ipa group-add domain_admins --desc="Domain Administrators"
+ipa group-add cui_users --desc="Users with CUI Access"
+ipa group-add standard_users --desc="Standard Users"
+
+# Add users to groups
+ipa group-add-member domain_admins --users=admin
+ipa group-add-member standard_users --users=jdoe
+```
+
+### 5.6 Configure Home Directory Auto-Creation
+The `--mkhomedir` flag during installation should have configured this, but verify:
+
+```bash
+# Verify authselect configuration
+sudo authselect current
+
+# Should show mkhomedir is enabled
+# If not:
+sudo authselect enable-feature with-mkhomedir
+sudo systemctl enable oddjobd.service
+sudo systemctl start oddjobd.service
+```
+
+### 5.7 Configure Sudo Rules
+```bash
+# Create sudo rule for domain admins
+ipa sudorule-add --hostcat=all All_Admins
+ipa sudorule-add-user --groups=domain_admins All_Admins
+ipa sudorule-mod --cmdcat=all All_Admins
+ipa sudorule-add-option All_Admins --sudooption='!authenticate'
+
+# Verify
+ipa sudorule-show All_Admins
+```
+
+### 5.8 Enable Audit Logging
+FreeIPA automatically logs to:
+- `/var/log/dirsrv/slapd-CYBERINABOX-NET/access` - LDAP access logs
+- `/var/log/dirsrv/slapd-CYBERINABOX-NET/errors` - LDAP error logs
+- `/var/log/krb5kdc.log` - Kerberos authentication logs
+- `/var/log/httpd/error_log` - Web interface logs
+
+Configure audit forwarding:
+```bash
+# Ensure auditd is running
+sudo systemctl enable auditd
+sudo systemctl start auditd
+
+# Add custom audit rules
+sudo vi /etc/audit/rules.d/freeipa.rules
+```
+
+Add:
+```
+# Monitor FreeIPA authentication
+-w /var/log/krb5kdc.log -p wa -k kerberos_auth
+-w /var/log/dirsrv/ -p wa -k ldap_access
+
+# Monitor privileged actions
+-w /etc/ipa/ -p wa -k ipa_config_changes
+```
+
+```bash
+# Reload audit rules
+sudo augenrules --load
+```
+
+---
+
+## 6. RAID Array Configuration
+
+Now that FreeIPA is configured, let's set up your 3x 3TB drives as a RAID 5 array for file storage.
+
+### 6.1 Identify Drives
+```bash
+# List all drives
+lsblk
+
+# Identify your 3TB drives (likely /dev/sdb, /dev/sdc, /dev/sdd)
+sudo fdisk -l | grep "3 TB"
+```
+
+### 6.2 Install mdadm
+```bash
+sudo dnf install mdadm -y
+```
+
+### 6.3 Partition Drives (Optional but Recommended)
+```bash
+# For each drive (replace sdX with actual device)
+sudo parted /dev/sdb mklabel gpt
+sudo parted /dev/sdb mkpart primary 0% 100%
+sudo parted /dev/sdb set 1 raid on
+
+sudo parted /dev/sdc mklabel gpt
+sudo parted /dev/sdc mkpart primary 0% 100%
+sudo parted /dev/sdc set 1 raid on
+
+sudo parted /dev/sdd mklabel gpt
+sudo parted /dev/sdd mkpart primary 0% 100%
+sudo parted /dev/sdd set 1 raid on
+
+# Verify
+lsblk
+```
+
+### 6.4 Create RAID 5 Array
+```bash
+# Create RAID 5 array (adjust device names as needed)
+sudo mdadm --create /dev/md0 \
+    --level=5 \
+    --raid-devices=3 \
+    /dev/sdb1 /dev/sdc1 /dev/sdd1
+
+# Monitor creation progress (will take hours)
+watch cat /proc/mdstat
+
+# Check array status
+sudo mdadm --detail /dev/md0
+```
+
+### 6.5 Create Filesystem
+```bash
+# Create XFS filesystem (recommended for large files)
+sudo mkfs.xfs /dev/md0
+
+# OR use ext4 if preferred
+# sudo mkfs.ext4 /dev/md0
+```
+
+### 6.6 Create Mount Point and LUKS Encryption (CRITICAL FOR NIST 800-171)
+
+**For CUI/FCI compliance, the data partition MUST be encrypted:**
+
+```bash
+# Install cryptsetup if not already installed
+sudo dnf install cryptsetup -y
+
+# Encrypt the RAID array
+sudo cryptsetup luksFormat /dev/md0
+
+# You'll be prompted for a passphrase - store this securely!
+# WARNING: If you lose this passphrase, data is UNRECOVERABLE
+
+# Open the encrypted volume
+sudo cryptsetup luksOpen /dev/md0 samba_data
+
+# Create filesystem on encrypted volume
+sudo mkfs.xfs /dev/mapper/samba_data
+
+# Create mount point
+sudo mkdir -p /srv/samba
+
+# Mount the encrypted volume
+sudo mount /dev/mapper/samba_data /srv/samba
+
+# Verify
+df -h /srv/samba
+```
+
+### 6.7 Configure Automatic Mounting
+
+**Save RAID configuration:**
+```bash
+sudo mdadm --detail --scan | sudo tee -a /etc/mdadm.conf
+```
+
+**Configure encrypted volume auto-unlock:**
+
+**Option 1: Key file (automated but less secure)**
+```bash
+# Generate key file
+sudo dd if=/dev/urandom of=/root/samba-luks.key bs=1024 count=4
+sudo chmod 600 /root/samba-luks.key
+
+# Add key to LUKS
+sudo cryptsetup luksAddKey /dev/md0 /root/samba-luks.key
+
+# Add to crypttab
+echo "samba_data /dev/md0 /root/samba-luks.key luks" | sudo tee -a /etc/crypttab
+```
+
+**Option 2: Manual unlock on boot (more secure)**
+```bash
+# Add to crypttab without key file
+echo "samba_data /dev/md0 none luks" | sudo tee -a /etc/crypttab
+```
+
+**Add to fstab:**
+```bash
+# Get UUID
+sudo blkid /dev/mapper/samba_data
+
+# Add to fstab
+echo "UUID=<UUID-from-above> /srv/samba xfs defaults 0 0" | sudo tee -a /etc/fstab
+
+# Test mount
+sudo umount /srv/samba
+sudo mount -a
+df -h /srv/samba
+```
+
+### 6.8 Set Permissions
+```bash
+# Create Samba root directory
+sudo mkdir -p /srv/samba/shared
+
+# Set ownership (adjust after Samba is configured)
+sudo chown root:root /srv/samba
+sudo chmod 755 /srv/samba
+```
+
+### 6.9 Configure RAID Monitoring
+```bash
+# Edit mdadm configuration
+sudo vi /etc/mdadm.conf
+```
+
+Add:
+```
+MAILADDR admin@cyberinabox.net
+```
+
+```bash
+# Enable monitoring service
+sudo systemctl enable mdmonitor
+sudo systemctl start mdmonitor
+```
+
+---
+
+## 7. Security Hardening
+
+### 7.1 Apply OpenSCAP CUI Profile
+```bash
+# Install OpenSCAP tools
+sudo dnf install openscap-scanner scap-security-guide -y
+
+# Run compliance scan
+sudo oscap xccdf eval \
+    --profile xccdf_org.ssgproject.content_profile_cui \
+    --results /root/oscap-results-$(date +%Y%m%d).xml \
+    --report /root/oscap-report-$(date +%Y%m%d).html \
+    /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+
+# Generate remediation script
+sudo oscap xccdf generate fix \
+    --profile xccdf_org.ssgproject.content_profile_cui \
+    --output /root/remediation.sh \
+    /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+
+# Review remediation script before executing
+sudo vi /root/remediation.sh
+
+# Execute remediation (CAREFULLY - review first)
+sudo chmod +x /root/remediation.sh
+sudo /root/remediation.sh
+
+# Reboot after remediation
+sudo reboot
+```
+
+### 7.2 Configure SELinux
+```bash
+# Verify SELinux is in enforcing mode
+getenforce
+
+# Should return: Enforcing
+
+# If not:
+sudo setenforce 1
+sudo vi /etc/selinux/config
+# Set: SELINUX=enforcing
+```
+
+### 7.3 Configure Automatic Updates (Security Only)
+```bash
+# Install dnf-automatic
+sudo dnf install dnf-automatic -y
+
+# Configure for security updates only
+sudo vi /etc/dnf/automatic.conf
+```
+
+Set:
+```
+[commands]
+upgrade_type = security
+apply_updates = yes
+```
+
+```bash
+# Enable and start
+sudo systemctl enable --now dnf-automatic.timer
+```
+
+### 7.4 Configure rsyslog for Centralized Logging (Preparation)
+```bash
+# Configure rsyslog to accept logs from clients (future)
+sudo vi /etc/rsyslog.conf
+```
+
+Uncomment:
+```
+module(load="imudp")
+input(type="imudp" port="514")
+
+module(load="imtcp")
+input(type="imtcp" port="514")
+```
+
+```bash
+# Add firewall rules
+sudo firewall-cmd --permanent --add-port=514/tcp
+sudo firewall-cmd --permanent --add-port=514/udp
+sudo firewall-cmd --reload
+
+# Restart rsyslog
+sudo systemctl restart rsyslog
+```
+
+---
+
+## 8. Testing and Verification
+
+### 8.1 Test Kerberos Authentication
+```bash
+# Test as admin
+kinit admin
+klist
+
+# Test as regular user
+kinit jdoe
+klist
+
+# Destroy ticket
+kdestroy
+```
+
+### 8.2 Test LDAP Queries
+```bash
+# Search for users
+ldapsearch -x -H ldap://dc1.cyberinabox.net -b "dc=cyberinabox,dc=net" "(uid=jdoe)"
+
+# With Kerberos authentication
+kinit admin
+ldapsearch -H ldap://dc1.cyberinabox.net -b "dc=cyberinabox,dc=net" "(uid=*)"
+```
+
+### 8.3 Test Web Interface
+1. Open browser to https://dc1.cyberinabox.net
+2. Login as admin
+3. Navigate through:
+   - Identity → Users
+   - Identity → Groups
+   - Policy → Password Policies
+   - Policy → Sudo Rules
+
+### 8.4 Test Client Connection (from a client workstation)
+```bash
+# On client machine, install FreeIPA client
+sudo dnf install ipa-client -y
+
+# Join domain
+sudo ipa-client-install \
+    --domain=cyberinabox.net \
+    --realm=CYBERINABOX.NET \
+    --server=dc1.cyberinabox.net \
+    --mkhomedir
+
+# Test login
+ssh jdoe@localhost
+```
+
+### 8.5 Verify RAID Status
+```bash
+# Check RAID health
+sudo mdadm --detail /dev/md0
+
+# Check filesystem
+df -h /srv/samba
+
+# Verify encryption
+sudo cryptsetup status samba_data
+```
+
+### 8.6 Verify FIPS Mode
+```bash
+# Confirm FIPS is still enabled
+sudo fips-mode-setup --check
+cat /proc/sys/crypto/fips_enabled  # Should return 1
+```
+
+### 8.7 Check Service Status
+```bash
+# Check all FreeIPA services
+sudo ipactl status
+
+# Should show all services as RUNNING:
+# - Directory Service
+# - Certificate Authority
+# - HTTP Service
+# - Kerberos KDC
+# - Kerberos Admin Service
+```
+
+---
+
+## 9. Troubleshooting
+
+### 9.1 DNS Issues
+**Problem:** FreeIPA installation fails with DNS errors
+
+**Solution:**
+```bash
+# Verify DNS resolution
+nslookup dc1.cyberinabox.net
+nslookup 192.168.1.10
+
+# Check /etc/resolv.conf
+cat /etc/resolv.conf
+
+# Ensure pfSense DNS has proper A and PTR records
+# Test from pfSense or another machine:
+dig @192.168.1.1 dc1.cyberinabox.net
+dig @192.168.1.1 -x 192.168.1.10
+```
+
+### 9.2 Certificate Issues
+**Problem:** Web interface shows certificate errors
+
+**Solution:**
+- This is expected with self-signed certificates
+- To fix: Import CA certificate from FreeIPA into client browsers
+- Download from: http://dc1.cyberinabox.net/ipa/config/ca.crt
+
+### 9.3 Kerberos Ticket Issues
+**Problem:** `kinit` fails with clock skew errors
+
+**Solution:**
+```bash
+# Verify time synchronization
+chronyc sources
+chronyc tracking
+
+# Ensure time is within 5 minutes of KDC
+# Fix time if needed:
+sudo chronyd -q 'server 192.168.1.1 iburst'
+```
+
+### 9.4 RAID Rebuild After Reboot
+**Problem:** RAID array not assembling after reboot
+
+**Solution:**
+```bash
+# Manually assemble
+sudo mdadm --assemble /dev/md0 /dev/sdb1 /dev/sdc1 /dev/sdd1
+
+# Check mdadm.conf
+cat /etc/mdadm.conf
+
+# Regenerate if needed
+sudo mdadm --detail --scan | sudo tee /etc/mdadm.conf
+
+# Update initramfs
+sudo dracut -f
+```
+
+### 9.5 Service Won't Start
+**Problem:** IPA services fail to start
+
+**Solution:**
+```bash
+# Check individual services
+sudo systemctl status ipa
+sudo journalctl -xe -u ipa
+
+# Check disk space
+df -h
+
+# Check SELinux denials
+sudo ausearch -m avc -ts recent
+sudo sealert -a /var/log/audit/audit.log
+
+# Restart all IPA services
+sudo ipactl restart
+```
+
+### 9.6 Forgotten Admin Password
+**Problem:** Lost FreeIPA admin password
+
+**Solution:**
+```bash
+# Reset using Directory Manager password
+# (the password you set during installation)
+
+sudo kinit admin
+# This will fail, but that's OK
+
+# Reset password
+sudo ldappasswd -H ldapi://%2frun%2fslapd-CYBERINABOX-NET.socket \
+    -D "cn=Directory Manager" -W \
+    "uid=admin,cn=users,cn=accounts,dc=cyberinabox,dc=net"
+
+# You'll be prompted for Directory Manager password, then new admin password
+```
+
+---
+
+## Next Steps
+
+1. ✓ FreeIPA Domain Controller configured
+2. ✓ RAID 5 array created and encrypted
+3. ✓ FIPS mode enabled
+4. ⏭ **Configure Samba File Server** (next document)
+5. ⏭ Configure Email Server (Postfix/Dovecot)
+6. ⏭ Enroll client workstations
+7. ⏭ Implement backup solution
+8. ⏭ Complete OpenSCAP compliance validation
+
+---
+
+## Important Notes
+
+### Security Considerations
+- **Passwords:** Store Directory Manager and admin passwords in secure password manager
+- **CA Certificate:** Backup `/root/cacert.p12` to secure offline location
+- **LUKS Keys:** Backup encryption keys/passphrases securely
+- **Physical Security:** Ensure server room has proper physical access controls
+
+### Backup Requirements
+- Configuration: `/etc/ipa/`, `/etc/dirsrv/`, `/etc/krb5.conf`
+- Data: Regular backup of LDAP database (use `ipa-backup`)
+- Certificates: `/root/cacert.p12`
+- RAID configuration: `/etc/mdadm.conf`
+
+### Compliance Notes
+This configuration addresses the following NIST 800-171 requirements:
+- **AC-2:** Account Management via FreeIPA
+- **AC-7:** Unsuccessful Logon Attempts (5 failed attempts, lockout)
+- **IA-2:** Identification and Authentication (Kerberos)
+- **IA-5:** Authenticator Management (password policies)
+- **SC-28:** Protection of Information at Rest (LUKS encryption)
+- **AU-2:** Audit Events (comprehensive logging)
+
+---
+
+## Document Control
+**Author:** System Administrator  
+**Version:** 1.0  
+**Last Updated:** October 25, 2025  
+**Next Review:** November 25, 2025
+
+---
+
+**END OF DOCUMENT**

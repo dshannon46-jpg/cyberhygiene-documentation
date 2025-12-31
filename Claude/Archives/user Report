@@ -1,0 +1,182 @@
+================================================================================ 
+FreeIPA User Management Setup Report
+Generated: $(date)
+Server: dc1.cyberinabox.net
+================================================================================ 
+
+EOF
+
+echo "" >> ~/freeipa_setup_report.txt
+echo "=== USER DETAILS AND GROUP MEMBERSHIPS ===" >> ~/freeipa_setup_report.txt
+
+for user in ceo sysadmin1 engineer1 user1 contractor1; do
+    echo "" >> ~/freeipa_setup_report.txt
+    echo "----------------------------------------" >> ~/freeipa_setup_report.txt
+    ipa user-show $user >> ~/freeipa_setup_report.txt
+    echo "----------------------------------------" >> ~/freeipa_setup_report.txt
+cat ~/freeipa_setup_report.txtpa_setup_report.txt"t.txt
+Generating detailed user report...
+Report saved to: ~/freeipa_setup_report.txt
+================================================================================
+FreeIPA User Management Setup Report
+Generated: $(date)
+Server: dc1.cyberinabox.net
+================================================================================
+
+
+=== USER DETAILS AND GROUP MEMBERSHIPS ===
+
+----------------------------------------
+  User login: ceo
+  First name: Jane
+  Last name: Smith
+  Home directory: /home/ceo
+  Login shell: /bin/sh
+  Principal name: ceo@CYBERINABOX.NET
+  Principal alias: ceo@CYBERINABOX.NET
+  Email address: jane.smith@cyberinabox.net
+  UID: 1588600023
+  GID: 1588600023
+  Job Title: Chief Executive Officer
+  Account disabled: False
+  Password: True
+  Member of groups: file_share_rw, executives, cui_authorized, fci_authorized, remote_access, users, vpn_users, ipausers, management
+  Indirect Member of HBAC rule: users_ssh_access
+  Kerberos keys available: True
+----------------------------------------
+
+----------------------------------------
+  User login: sysadmin1
+  First name: John
+  Last name: Anderson
+  Home directory: /home/sysadmin1
+  Login shell: /bin/sh
+  Principal name: sysadmin1@CYBERINABOX.NET
+  Principal alias: sysadmin1@CYBERINABOX.NET
+  Email address: john.anderson@cyberinabox.net
+  UID: 1588600024
+  GID: 1588600024
+  Job Title: System Administrator
+  Account disabled: False
+  Password: True
+  Member of groups: file_share_rw, users, admins, cui_authorized, vpn_users, remote_access, backup_operators, ipausers, fci_authorized, security_team
+  Indirect Member of Sudo rule: backup_ops, admins_all
+  Indirect Member of HBAC rule: admins_access, users_ssh_access
+  Kerberos keys available: True
+----------------------------------------
+
+----------------------------------------
+  User login: engineer1
+  First name: Sarah
+  Last name: Johnson
+  Home directory: /home/engineer1
+  Login shell: /bin/sh
+  Principal name: engineer1@CYBERINABOX.NET
+  Principal alias: engineer1@CYBERINABOX.NET
+  Email address: sarah.johnson@cyberinabox.net
+  UID: 1588600025
+  GID: 1588600025
+  Job Title: Senior Engineer
+  Account disabled: False
+  Password: True
+  Member of groups: cui_authorized, file_share_rw, ipausers, developers, vpn_users, users, engineering
+  Indirect Member of HBAC rule: users_ssh_access
+  Kerberos keys available: True
+----------------------------------------
+
+----------------------------------------
+  User login: user1
+  First name: Michael
+  Last name: Brown
+  Home directory: /home/user1
+  Login shell: /bin/sh
+  Principal name: user1@CYBERINABOX.NET
+  Principal alias: user1@CYBERINABOX.NET
+  Email address: michael.brown@cyberinabox.net
+  UID: 1588600026
+  GID: 1588600026
+  Job Title: Operations Specialist
+  Account disabled: False
+  Password: True
+  Member of groups: ipausers, cui_authorized, operations, users, file_share_rw
+  Indirect Member of HBAC rule: users_ssh_access
+  Kerberos keys available: True
+----------------------------------------
+
+----------------------------------------
+  User login: contractor1
+  First name: David
+  Last name: Wilson
+  Home directory: /home/contractor1
+  Login shell: /bin/sh
+  Principal name: contractor1@CYBERINABOX.NET
+  Principal alias: contractor1@CYBERINABOX.NET
+  Email address: david.wilson@contractor.com
+  UID: 1588600027
+  GID: 1588600027
+  Job Title: External Consultant
+  Account disabled: False
+  Password: True
+  Member of groups: contractors, ipausers, users, file_share_ro
+  Indirect Member of HBAC rule: users_ssh_access, contractors_limited
+  Kerberos keys available: True
+----------------------------------------
+
+=== SUDO RULES ===
+--------------------
+3 Sudo Rules matched
+--------------------
+  Rule name: admins_all
+  Description: Full sudo access for administrators
+  Enabled: True
+  Host category: all
+
+  Rule name: backup_ops
+  Description: Backup operations sudo access
+  Enabled: True
+  Host category: all
+
+  Rule name: helpdesk_limited
+  Description: Limited sudo for helpdesk staff
+  Enabled: True
+  Host category: all
+----------------------------
+Number of entries returned 3
+----------------------------
+
+=== HBAC RULES ===
+--------------------
+5 HBAC rules matched
+--------------------
+  Rule name: admins_access
+  Host category: all
+  Service category: all
+  Description: Allow administrators access to all systems
+  Enabled: True
+
+  Rule name: allow_all
+  User category: all
+  Host category: all
+  Service category: all
+  Description: Allow all users to access any host from any host
+  Enabled: True
+
+  Rule name: allow_systemd-user
+  User category: all
+  Host category: all
+  Description: Allow pam_systemd to run user@.service to create a system user session
+  Enabled: True
+
+  Rule name: contractors_limited
+  Host category: all
+  Description: Limited access for contractors
+  Enabled: True
+
+  Rule name: users_ssh_access
+  Host category: all
+  Description: Allow standard users SSH access to workstations
+  Enabled: True
+----------------------------
+Number of entries returned 5
+----------------------------
+
