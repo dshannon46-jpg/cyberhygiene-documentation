@@ -993,7 +993,607 @@ if __name__ == "__main__":
     print(f"  {count.get('count', 0):,} messages")
 ```
 
-## 37.6 Integration Patterns
+## 37.6 Ollama AI API (Code Llama)
+
+### API Overview
+
+**Ollama REST API:**
+```
+Endpoint: http://192.168.1.7:11434/api/
+Protocol: HTTP (JSON)
+Authentication: None (local network only, air-gapped)
+Port: 11434
+Documentation: https://github.com/ollama/ollama/blob/main/docs/api.md
+
+API Version: Ollama v0.1.x
+Models Available:
+  - codellama:7b (default)
+  - codellama:13b
+  - codellama:34b
+Network: Local only (192.168.1.0/24, air-gapped)
+Security: No internet access, NIST 800-171 compliant
+```
+
+### Generate Completion
+
+**Generate API Endpoint:**
+```bash
+# Generate completion (streaming)
+curl -X POST http://192.168.1.7:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "codellama:7b",
+    "prompt": "Write a Python function to check if a number is prime",
+    "stream": false
+  }'
+
+# With system context
+curl -X POST http://192.168.1.7:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "codellama:7b",
+    "prompt": "How do I reset my password in FreeIPA?",
+    "system": "You are a helpful system administrator assistant for CyberHygiene Production Network.",
+    "stream": false
+  }'
+
+# Response format:
+{
+  "model": "codellama:7b",
+  "created_at": "2026-01-01T12:00:00Z",
+  "response": "To check if a number is prime in Python:\n\ndef is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True",
+  "done": true
+}
+```
+
+### Chat Completion
+
+**Chat API Endpoint:**
+```bash
+# Chat with conversation history
+curl -X POST http://192.168.1.7:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "codellama:7b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant for the CyberHygiene Production Network. Provide concise, accurate answers about system administration."
+      },
+      {
+        "role": "user",
+        "content": "How do I check disk usage on Rocky Linux?"
+      }
+    ],
+    "stream": false
+  }'
+
+# Multi-turn conversation
+curl -X POST http://192.168.1.7:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "codellama:7b",
+    "messages": [
+      {"role": "user", "content": "What is FreeIPA?"},
+      {"role": "assistant", "content": "FreeIPA is an integrated security information management solution..."},
+      {"role": "user", "content": "How do I add a user?"}
+    ],
+    "stream": false
+  }'
+```
+
+### Model Management
+
+**List Available Models:**
+```bash
+# List all models
+curl http://192.168.1.7:11434/api/tags
+
+# Response:
+{
+  "models": [
+    {
+      "name": "codellama:7b",
+      "modified_at": "2025-12-01T10:00:00Z",
+      "size": 3791811617
+    },
+    {
+      "name": "codellama:13b",
+      "modified_at": "2025-12-01T10:30:00Z",
+      "size": 7323277312
+    }
+  ]
+}
+```
+
+**Show Model Information:**
+```bash
+# Get model details
+curl -X POST http://192.168.1.7:11434/api/show \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "codellama:7b"
+  }'
+```
+
+### Python Integration
+
+**Python Example - Simple Query:**
+```python
+#!/usr/bin/env python3
+"""
+Ollama API - Simple query example
+"""
+import requests
+import json
+
+OLLAMA_URL = "http://192.168.1.7:11434"
+
+def ask_ai(prompt, model="codellama:7b", system=None):
+    """Send a query to the AI assistant"""
+    payload = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False
+    }
+
+    if system:
+        payload["system"] = system
+
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json=payload
+    )
+
+    if response.status_code == 200:
+        return response.json()['response']
+    else:
+        return f"Error: {response.status_code}"
+
+if __name__ == "__main__":
+    # System administration context
+    system_context = (
+        "You are a helpful system administrator assistant for the "
+        "CyberHygiene Production Network running Rocky Linux 9.5 with "
+        "FreeIPA, Wazuh, and other security tools."
+    )
+
+    # Example queries
+    queries = [
+        "How do I check if Kerberos tickets are valid?",
+        "What command shows FreeIPA service status?",
+        "How do I search Wazuh alerts?"
+    ]
+
+    for query in queries:
+        print(f"\nQ: {query}")
+        answer = ask_ai(query, system=system_context)
+        print(f"A: {answer}\n")
+        print("-" * 80)
+```
+
+**Python Example - Chat Session:**
+```python
+#!/usr/bin/env python3
+"""
+Ollama API - Interactive chat session
+"""
+import requests
+import json
+
+OLLAMA_URL = "http://192.168.1.7:11434"
+
+class AIChat:
+    def __init__(self, model="codellama:7b", system_prompt=None):
+        self.model = model
+        self.messages = []
+
+        if system_prompt:
+            self.messages.append({
+                "role": "system",
+                "content": system_prompt
+            })
+
+    def send_message(self, message):
+        """Send message and get response"""
+        # Add user message to history
+        self.messages.append({
+            "role": "user",
+            "content": message
+        })
+
+        # Call API
+        response = requests.post(
+            f"{OLLAMA_URL}/api/chat",
+            json={
+                "model": self.model,
+                "messages": self.messages,
+                "stream": False
+            }
+        )
+
+        if response.status_code == 200:
+            assistant_message = response.json()['message']['content']
+
+            # Add assistant response to history
+            self.messages.append({
+                "role": "assistant",
+                "content": assistant_message
+            })
+
+            return assistant_message
+        else:
+            return f"Error: {response.status_code}"
+
+    def clear_history(self):
+        """Clear conversation history (keep system prompt)"""
+        self.messages = [msg for msg in self.messages if msg['role'] == 'system']
+
+if __name__ == "__main__":
+    # Initialize chat with system context
+    chat = AIChat(
+        model="codellama:7b",
+        system_prompt=(
+            "You are a system administrator assistant for CyberHygiene "
+            "Production Network. Provide accurate, concise answers about "
+            "Rocky Linux, FreeIPA, Wazuh, and system security."
+        )
+    )
+
+    # Interactive conversation
+    print("AI Chat Session (type 'quit' to exit)\n")
+
+    while True:
+        user_input = input("You: ").strip()
+
+        if user_input.lower() in ['quit', 'exit', 'q']:
+            break
+
+        if user_input.lower() == 'clear':
+            chat.clear_history()
+            print("Chat history cleared.\n")
+            continue
+
+        if not user_input:
+            continue
+
+        response = chat.send_message(user_input)
+        print(f"\nAI: {response}\n")
+```
+
+**Python Example - Log Analysis:**
+```python
+#!/usr/bin/env python3
+"""
+Ollama API - Automated log analysis
+"""
+import requests
+import json
+
+OLLAMA_URL = "http://192.168.1.7:11434"
+
+def analyze_log_entries(log_lines, context=""):
+    """Analyze log entries for anomalies or issues"""
+    prompt = f"""Analyze the following log entries and identify any security issues,
+errors, or anomalies. Provide a brief summary and recommended actions.
+
+{context}
+
+Log entries:
+{chr(10).join(log_lines)}
+
+Analysis:"""
+
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "codellama:7b",
+            "prompt": prompt,
+            "stream": False
+        }
+    )
+
+    if response.status_code == 200:
+        return response.json()['response']
+    else:
+        return f"Error: {response.status_code}"
+
+def analyze_wazuh_alert(alert_json):
+    """Analyze a Wazuh alert and provide context"""
+    prompt = f"""Analyze this Wazuh security alert and explain:
+1. What the alert means
+2. Severity and risk level
+3. Recommended actions
+
+Alert:
+{json.dumps(alert_json, indent=2)}
+
+Analysis:"""
+
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "codellama:7b",
+            "prompt": prompt,
+            "system": "You are a cybersecurity analyst for CyberHygiene Production Network.",
+            "stream": False
+        }
+    )
+
+    if response.status_code == 200:
+        return response.json()['response']
+    else:
+        return f"Error: {response.status_code}"
+
+if __name__ == "__main__":
+    # Example log analysis
+    sample_logs = [
+        "Jan 01 10:23:45 dc1 sshd[1234]: Failed password for invalid user admin from 203.0.113.45",
+        "Jan 01 10:23:47 dc1 sshd[1235]: Failed password for invalid user root from 203.0.113.45",
+        "Jan 01 10:23:49 dc1 sshd[1236]: Failed password for invalid user admin from 203.0.113.45",
+        "Jan 01 10:23:51 dc1 sshd[1237]: Connection closed by 203.0.113.45 port 54321 [preauth]"
+    ]
+
+    print("Log Analysis:\n")
+    analysis = analyze_log_entries(
+        sample_logs,
+        context="These are SSH authentication logs from the domain controller."
+    )
+    print(analysis)
+
+    # Example Wazuh alert analysis
+    sample_alert = {
+        "rule": {
+            "id": "5503",
+            "level": 10,
+            "description": "Multiple failed login attempts"
+        },
+        "agent": {
+            "name": "dc1.cyberinabox.net",
+            "ip": "192.168.1.10"
+        },
+        "data": {
+            "srcip": "203.0.113.45",
+            "srcuser": "admin"
+        }
+    }
+
+    print("\n\nWazuh Alert Analysis:\n")
+    alert_analysis = analyze_wazuh_alert(sample_alert)
+    print(alert_analysis)
+```
+
+### Streaming Responses
+
+**Server-Sent Events (SSE):**
+```python
+#!/usr/bin/env python3
+"""
+Ollama API - Streaming response example
+"""
+import requests
+import json
+
+OLLAMA_URL = "http://192.168.1.7:11434"
+
+def stream_generate(prompt, model="codellama:7b"):
+    """Stream AI response in real-time"""
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": model,
+            "prompt": prompt,
+            "stream": True
+        },
+        stream=True
+    )
+
+    for line in response.iter_lines():
+        if line:
+            chunk = json.loads(line)
+            if 'response' in chunk:
+                print(chunk['response'], end='', flush=True)
+            if chunk.get('done', False):
+                print()  # New line at end
+                break
+
+if __name__ == "__main__":
+    prompt = "Explain how to configure fail2ban on Rocky Linux"
+    print(f"Q: {prompt}\n\nA: ", end='')
+    stream_generate(prompt)
+```
+
+### Integration with System Tools
+
+**Wrapper Script for CLI Tools:**
+```python
+#!/usr/bin/env python3
+"""
+AI-enhanced system administration tool
+"""
+import requests
+import subprocess
+import sys
+
+OLLAMA_URL = "http://192.168.1.7:11434"
+
+def ai_suggest_command(description):
+    """Get AI suggestion for command based on description"""
+    prompt = f"""Given this system administration task, provide the exact command(s)
+needed on Rocky Linux 9.5 with FreeIPA. Only output the command, no explanation.
+
+Task: {description}
+
+Command:"""
+
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "codellama:7b",
+            "prompt": prompt,
+            "system": "You are a Rocky Linux system administrator. Provide only exact commands.",
+            "stream": False
+        }
+    )
+
+    if response.status_code == 200:
+        return response.json()['response'].strip()
+    return None
+
+def ai_explain_error(error_message, command):
+    """Get AI explanation for error message"""
+    prompt = f"""Explain this error and suggest how to fix it.
+
+Command executed: {command}
+
+Error:
+{error_message}
+
+Explanation and fix:"""
+
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "codellama:7b",
+            "prompt": prompt,
+            "stream": False
+        }
+    )
+
+    if response.status_code == 200:
+        return response.json()['response']
+    return "Unable to get AI explanation"
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: ai-admin 'describe what you want to do'")
+        sys.exit(1)
+
+    task = ' '.join(sys.argv[1:])
+
+    # Get AI suggestion
+    print(f"Task: {task}\n")
+    suggested_command = ai_suggest_command(task)
+    print(f"Suggested command: {suggested_command}\n")
+
+    # Ask user to confirm
+    confirm = input("Execute this command? (y/n): ")
+
+    if confirm.lower() == 'y':
+        # Execute command
+        result = subprocess.run(
+            suggested_command,
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+
+        print(f"\nOutput:\n{result.stdout}")
+
+        if result.returncode != 0:
+            print(f"\nError occurred (exit code {result.returncode}):")
+            print(result.stderr)
+
+            # Get AI explanation
+            print("\nAI Analysis:")
+            explanation = ai_explain_error(result.stderr, suggested_command)
+            print(explanation)
+```
+
+### API Security Considerations
+
+**Air-Gapped Architecture:**
+```
+Security Features:
+  ✓ No internet connectivity (air-gapped)
+  ✓ Local network only (192.168.1.0/24)
+  ✓ No authentication required (trusted internal network)
+  ✓ No CUI/FCI data access
+  ✓ Human-in-the-loop required for all actions
+  ✓ Read-only queries only (no system modifications)
+
+NIST 800-171 Compliance:
+  ✓ SC-7: Boundary Protection (air-gapped)
+  ✓ AC-3: Access Enforcement (local network only)
+  ✓ SC-13: Cryptographic Protection (no data transmission)
+  ✓ AU-2: Audit Events (admin actions logged, not AI queries)
+
+Important Notes:
+  ⚠ AI server has NO access to CUI/FCI data
+  ⚠ AI provides suggestions only - humans must execute
+  ⚠ All administrative actions are audited separately
+  ⚠ AI queries themselves are not logged for compliance
+```
+
+**Best Practices:**
+```python
+# Always validate AI suggestions before execution
+def safe_execute(ai_suggestion):
+    """Safely execute AI-suggested command with validation"""
+    # Never execute directly - always review first
+    print(f"AI Suggestion: {ai_suggestion}")
+    confirm = input("Review and confirm (y/n): ")
+
+    if confirm.lower() != 'y':
+        print("Command cancelled")
+        return
+
+    # Execute with proper error handling
+    try:
+        result = subprocess.run(
+            ai_suggestion,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        return result
+    except subprocess.TimeoutExpired:
+        print("Command timed out")
+    except Exception as e:
+        print(f"Execution error: {e}")
+
+# Rate limiting for automated scripts
+import time
+
+def rate_limited_query(prompt, min_interval=1.0):
+    """Rate limit API queries to prevent overload"""
+    time.sleep(min_interval)
+    # Make API call
+    response = requests.post(...)
+    return response
+```
+
+---
+
+**Ollama API Quick Reference:**
+
+**Endpoints:**
+- Generate: `POST http://192.168.1.7:11434/api/generate`
+- Chat: `POST http://192.168.1.7:11434/api/chat`
+- List Models: `GET http://192.168.1.7:11434/api/tags`
+- Show Model: `POST http://192.168.1.7:11434/api/show`
+
+**Available Models:**
+- codellama:7b (default, fastest)
+- codellama:13b (better quality)
+- codellama:34b (best quality, slower)
+
+**Common Parameters:**
+- `model`: Model name (default: codellama:7b)
+- `prompt`: User query or instruction
+- `system`: System context/instructions
+- `stream`: Boolean (true for SSE, false for single response)
+
+**Authentication:** None (local network, air-gapped)
+
+**Network:** Local only (192.168.1.0/24), no internet
+
+**Security:** NIST 800-171 compliant, human-in-the-loop required
+
+---
+
+## 37.7 Integration Patterns
 
 ### Service-to-Service Integrations
 
@@ -1152,7 +1752,7 @@ if __name__ == "__main__":
     api.Backend.rpcclient.disconnect()
 ```
 
-## 37.7 API Security Best Practices
+## 37.8 API Security Best Practices
 
 ### Authentication Security
 
@@ -1279,6 +1879,12 @@ except requests.exceptions.RequestException as e:
 - Endpoint: https://graylog.cyberinabox.net/api
 - Auth: Basic Auth or token
 - Operations: Search, streams, inputs
+
+**Ollama AI API:**
+- Endpoint: http://192.168.1.7:11434/api/
+- Auth: None (local network, air-gapped)
+- Models: codellama:7b, 13b, 34b
+- Operations: Generate, chat, model management
 
 **Integration Points:**
 - Wazuh → Graylog (filebeat)
