@@ -1,0 +1,565 @@
+﻿root@dc1 dshannon]# sudo oscap xccdf eval --profile cui --results-arf /backup/compliance-scans/post-banner-results.arf --report /backup/compliance-scans/post-banner-report.html /usr/share/xml/scap/ssg/content/ssg-rl9-ds.xml
+--- Starting Evaluation ---
+
+Title   Enable Dracut FIPS Module
+Rule    xccdf_org.ssgproject.content_rule_enable_dracut_fips_module
+Result  pass
+
+Title   Enable FIPS Mode
+Rule    xccdf_org.ssgproject.content_rule_enable_fips_mode
+Result  pass
+
+Title   Install crypto-policies package
+Rule    xccdf_org.ssgproject.content_rule_package_crypto-policies_installed
+Result  pass
+
+Title   Configure System Cryptography Policy
+Rule    xccdf_org.ssgproject.content_rule_configure_crypto_policy
+Result  pass
+
+Title   Configure OpenSSL library to use System Crypto Policy
+Rule    xccdf_org.ssgproject.content_rule_configure_openssl_crypto_policy
+Result  pass
+
+Title   Configure SSH to use System Crypto Policy
+Rule    xccdf_org.ssgproject.content_rule_configure_ssh_crypto_policy
+Result  pass
+
+Title   Ensure /var/log/audit Located On Separate Partition
+Rule    xccdf_org.ssgproject.content_rule_partition_for_var_log_audit
+Result  pass
+
+Title   Install sudo Package
+Rule    xccdf_org.ssgproject.content_rule_package_sudo_installed
+Result  pass
+
+Title   Ensure gnutls-utils is installed
+Rule    xccdf_org.ssgproject.content_rule_package_gnutls-utils_installed
+Result  pass
+
+Title   Install openscap-scanner Package
+Rule    xccdf_org.ssgproject.content_rule_package_openscap-scanner_installed
+Result  pass
+
+Title   Install scap-security-guide Package
+Rule    xccdf_org.ssgproject.content_rule_package_scap-security-guide_installed
+Result  pass
+
+Title   Install subscription-manager Package
+Rule    xccdf_org.ssgproject.content_rule_package_subscription-manager_installed
+Result  pass
+
+Title   Install dnf-automatic Package
+Rule    xccdf_org.ssgproject.content_rule_package_dnf-automatic_installed
+Result  pass
+
+Title   Configure dnf-automatic to Install Available Updates Automatically
+Rule    xccdf_org.ssgproject.content_rule_dnf-automatic_apply_updates
+Result  pass
+
+Title   Ensure gpgcheck Enabled In Main dnf Configuration
+Rule    xccdf_org.ssgproject.content_rule_ensure_gpgcheck_globally_activated
+Result  pass
+
+Title   Ensure gpgcheck Enabled for Local Packages
+Rule    xccdf_org.ssgproject.content_rule_ensure_gpgcheck_local_packages
+Result  pass
+
+Title   Ensure gpgcheck Enabled for All dnf Package Repositories
+Rule    xccdf_org.ssgproject.content_rule_ensure_gpgcheck_never_disabled
+Result  pass
+
+Title   Ensure Red Hat GPG Key Installed
+Rule    xccdf_org.ssgproject.content_rule_ensure_redhat_gpgkey_installed
+Result  pass
+
+Title   Enable dnf-automatic Timer
+Rule    xccdf_org.ssgproject.content_rule_timer_dnf-automatic_enabled
+Result  pass
+
+Title   Enable authselect
+Rule    xccdf_org.ssgproject.content_rule_enable_authselect
+Result  pass
+
+Title   Lock Accounts After Failed Password Attempts
+Rule    xccdf_org.ssgproject.content_rule_accounts_passwords_pam_faillock_deny
+Result  pass
+
+Title   Set Interval For Counting Failed Password Attempts
+Rule    xccdf_org.ssgproject.content_rule_accounts_passwords_pam_faillock_interval
+Result  pass
+
+Title   Set Lockout Time for Failed Password Attempts
+Rule    xccdf_org.ssgproject.content_rule_accounts_passwords_pam_faillock_unlock_time
+Result  pass
+
+Title   Ensure PAM Enforces Password Requirements - Minimum Digit Characters
+Rule    xccdf_org.ssgproject.content_rule_accounts_password_pam_dcredit
+Result  pass
+
+Title   Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters
+Rule    xccdf_org.ssgproject.content_rule_accounts_password_pam_lcredit
+Result  pass
+
+Title   Ensure PAM Enforces Password Requirements - Minimum Length
+Rule    xccdf_org.ssgproject.content_rule_accounts_password_pam_minlen
+Result  pass
+
+Title   Ensure PAM Enforces Password Requirements - Minimum Special Characters
+Rule    xccdf_org.ssgproject.content_rule_accounts_password_pam_ocredit
+Result  pass
+
+Title   Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters
+Rule    xccdf_org.ssgproject.content_rule_accounts_password_pam_ucredit
+Result  pass
+
+Title   Disable debug-shell SystemD Service
+Rule    xccdf_org.ssgproject.content_rule_service_debug-shell_disabled
+Result  pass
+
+Title   Disable Ctrl-Alt-Del Burst Action
+Rule    xccdf_org.ssgproject.content_rule_disable_ctrlaltdel_burstaction
+Result  pass
+
+Title   Disable Ctrl-Alt-Del Reboot Activation
+Rule    xccdf_org.ssgproject.content_rule_disable_ctrlaltdel_reboot
+Result  pass
+
+Title   Configure Logind to terminate idle sessions after certain time of inactivity
+Rule    xccdf_org.ssgproject.content_rule_logind_session_timeout
+Result  notapplicable
+
+Title   Require Authentication for Single User Mode
+Rule    xccdf_org.ssgproject.content_rule_require_singleuser_auth
+Result  pass
+
+Title   Prevent Login to Accounts With Empty Password
+Rule    xccdf_org.ssgproject.content_rule_no_empty_passwords
+Result  pass
+
+Title   Enforce usage of pam_wheel for su authentication
+Rule    xccdf_org.ssgproject.content_rule_use_pam_wheel_for_su
+Result  pass
+
+Title   Disable Recovery Booting
+Rule    xccdf_org.ssgproject.content_rule_grub2_disable_recovery
+Result  pass
+
+Title   Configure kernel to zero out memory before allocation
+Rule    xccdf_org.ssgproject.content_rule_grub2_init_on_alloc_argument
+Result  pass
+
+Title   Enable randomization of the page allocator
+Rule    xccdf_org.ssgproject.content_rule_grub2_page_alloc_shuffle_argument
+Result  pass
+
+Title   Ensure debug-shell service is not enabled during boot
+Rule    xccdf_org.ssgproject.content_rule_grub2_systemd_debug-shell_argument_absent
+Result  pass
+
+Title   Disable vsyscalls
+Rule    xccdf_org.ssgproject.content_rule_grub2_vsyscall_argument
+Result  pass
+
+Title   Set Boot Loader Password in grub2
+Rule    xccdf_org.ssgproject.content_rule_grub2_password
+Result  pass
+
+Title   Enable Auditing to Start Prior to the Audit Daemon in zIPL
+Rule    xccdf_org.ssgproject.content_rule_zipl_audit_argument
+Result  notapplicable
+
+Title   Extend Audit Backlog Limit for the Audit Daemon in zIPL
+Rule    xccdf_org.ssgproject.content_rule_zipl_audit_backlog_limit_argument
+Result  notapplicable
+
+Title   Configure kernel to zero out memory before allocation in zIPL
+Rule    xccdf_org.ssgproject.content_rule_zipl_init_on_alloc_argument
+Result  notapplicable
+
+Title   Enable randomization of the page allocator in zIPL
+Rule    xccdf_org.ssgproject.content_rule_zipl_page_alloc_shuffle_argument
+Result  notapplicable
+
+Title   Ensure debug-shell service is not enabled in zIPL
+Rule    xccdf_org.ssgproject.content_rule_zipl_systemd_debug-shell_argument_absent
+Result  notapplicable
+
+Title   Ensure all zIPL boot entries are BLS compliant
+Rule    xccdf_org.ssgproject.content_rule_zipl_bls_entries_only
+Result  notapplicable
+
+Title   Ensure zIPL bootmap is up to date
+Rule    xccdf_org.ssgproject.content_rule_zipl_bootmap_is_up_to_date
+Result  notapplicable
+
+Title   Install firewalld Package
+Rule    xccdf_org.ssgproject.content_rule_package_firewalld_installed
+Result  pass
+
+Title   Verify firewalld Enabled
+Rule    xccdf_org.ssgproject.content_rule_service_firewalld_enabled
+Result  pass
+
+Title   Disable CAN Support
+Rule    xccdf_org.ssgproject.content_rule_kernel_module_can_disabled
+Result  pass
+
+Title   Disable SCTP Support
+Rule    xccdf_org.ssgproject.content_rule_kernel_module_sctp_disabled
+Result  pass
+
+Title   Disable TIPC Support
+Rule    xccdf_org.ssgproject.content_rule_kernel_module_tipc_disabled
+Result  pass
+
+Title   Disable Bluetooth Kernel Module
+Rule    xccdf_org.ssgproject.content_rule_kernel_module_bluetooth_disabled
+Result  pass
+
+Title   Add nodev Option to /var/log/audit
+Rule    xccdf_org.ssgproject.content_rule_mount_option_var_log_audit_nodev
+Result  pass
+
+Title   Add noexec Option to /var/log/audit
+Rule    xccdf_org.ssgproject.content_rule_mount_option_var_log_audit_noexec
+Result  pass
+
+Title   Add nosuid Option to /var/log/audit
+Rule    xccdf_org.ssgproject.content_rule_mount_option_var_log_audit_nosuid
+Result  pass
+
+Title   Disable storing core dumps
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_core_pattern_empty_string
+Result  pass
+
+Title   Configure file name of core dumps
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_core_uses_pid
+Result  pass
+
+Title   Restrict Access to Kernel Message Buffer
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_dmesg_restrict
+Result  pass
+
+Title   Disable Kernel Image Loading
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_kexec_load_disabled
+Result  pass
+
+Title   Disallow kernel profiling by unprivileged users
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_perf_event_paranoid
+Result  pass
+
+Title   Disable Access to Network bpf() Syscall From Unprivileged Processes
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_unprivileged_bpf_disabled_accept_default
+Result  pass
+
+Title   Restrict usage of ptrace to descendant processes
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_yama_ptrace_scope
+Result  pass
+
+Title   Disable the use of user namespaces
+Rule    xccdf_org.ssgproject.content_rule_sysctl_user_max_user_namespaces
+Result  pass
+
+Title   Disable acquiring, saving, and processing core dumps
+Rule    xccdf_org.ssgproject.content_rule_service_systemd-coredump_disabled
+Result  pass
+
+Title   Restrict Exposed Kernel Pointer Addresses Access
+Rule    xccdf_org.ssgproject.content_rule_sysctl_kernel_kptr_restrict
+Result  pass
+
+Title   Configure SELinux Policy
+Rule    xccdf_org.ssgproject.content_rule_selinux_policytype
+Result  pass
+
+Title   Ensure SELinux State is Enforcing
+Rule    xccdf_org.ssgproject.content_rule_selinux_state
+Result  pass
+
+Title   Disable KDump Kernel Crash Analyzer (kdump)
+Rule    xccdf_org.ssgproject.content_rule_service_kdump_disabled
+Result  pass
+
+Title   Install fapolicyd Package
+Rule    xccdf_org.ssgproject.content_rule_package_fapolicyd_installed
+Result  pass
+
+Title   Enable the File Access Policy Service
+Rule    xccdf_org.ssgproject.content_rule_service_fapolicyd_enabled
+Result  pass
+
+Title   The Chrony package is installed
+Rule    xccdf_org.ssgproject.content_rule_package_chrony_installed
+Result  pass
+
+Title   Disable chrony daemon from acting as server
+Rule    xccdf_org.ssgproject.content_rule_chronyd_client_only
+Result  pass
+
+Title   Install OpenSSH client software
+Rule    xccdf_org.ssgproject.content_rule_package_openssh-clients_installed
+Result  pass
+
+Title   Install the OpenSSH Server Package
+Rule    xccdf_org.ssgproject.content_rule_package_openssh-server_installed
+Result  pass
+
+Title   Configure session renegotiation for SSH client
+Rule    xccdf_org.ssgproject.content_rule_ssh_client_rekey_limit
+Result  pass
+
+Title   Disable Host-Based Authentication
+Rule    xccdf_org.ssgproject.content_rule_disable_host_auth
+Result  pass
+
+Title   Disable SSH Access via Empty Passwords
+Rule    xccdf_org.ssgproject.content_rule_sshd_disable_empty_passwords
+Result  pass
+
+Title   Disable GSSAPI Authentication
+Rule    xccdf_org.ssgproject.content_rule_sshd_disable_gssapi_auth
+Result  pass
+
+Title   Disable Kerberos Authentication
+Rule    xccdf_org.ssgproject.content_rule_sshd_disable_kerb_auth
+Result  pass
+
+Title   Disable SSH Root Login
+Rule    xccdf_org.ssgproject.content_rule_sshd_disable_root_login
+Result  pass
+
+Title   Enable SSH Warning Banner
+Rule    xccdf_org.ssgproject.content_rule_sshd_enable_warning_banner
+Result  pass
+
+Title   Force frequent session key renegotiation
+Rule    xccdf_org.ssgproject.content_rule_sshd_rekey_limit
+Result  pass
+
+Title   Distribute the SSH Server configuration to multiple files in a config directory.
+Rule    xccdf_org.ssgproject.content_rule_sshd_use_directory_configuration
+Result  pass
+
+Title   Install usbguard Package
+Rule    xccdf_org.ssgproject.content_rule_package_usbguard_installed
+Result  pass
+
+Title   Enable the USBGuard Service
+Rule    xccdf_org.ssgproject.content_rule_service_usbguard_enabled
+Result  pass
+
+Title   Log USBGuard daemon audit events using Linux Audit
+Rule    xccdf_org.ssgproject.content_rule_configure_usbguard_auditbackend
+Result  pass
+
+Title   Authorize Human Interface Devices and USB hubs in USBGuard daemon
+Rule    xccdf_org.ssgproject.content_rule_usbguard_allow_hid_and_hub
+Result  pass
+
+Title   Ensure the audit Subsystem is Installed
+Rule    xccdf_org.ssgproject.content_rule_package_audit_installed
+Result  pass
+
+Title   Enable auditd Service
+Rule    xccdf_org.ssgproject.content_rule_service_auditd_enabled
+Result  pass
+
+Title   Enable Auditing for Processes Which Start Prior to the Audit Daemon
+Rule    xccdf_org.ssgproject.content_rule_grub2_audit_argument
+Result  pass
+
+Title   Extend Audit Backlog Limit for the Audit Daemon
+Rule    xccdf_org.ssgproject.content_rule_grub2_audit_backlog_limit_argument
+Result  pass
+
+Title   Configure auditd flush priority
+Rule    xccdf_org.ssgproject.content_rule_auditd_data_retention_flush
+Result  pass
+
+Title   Set number of records to cause an explicit flush to audit logs
+Rule    xccdf_org.ssgproject.content_rule_auditd_freq
+Result  pass
+
+Title   Resolve information before writing to audit logs
+Rule    xccdf_org.ssgproject.content_rule_auditd_log_format
+Result  pass
+
+Title   Set type of computer node name logging in audit logs
+Rule    xccdf_org.ssgproject.content_rule_auditd_name_format
+Result  pass
+
+Title   Configure auditing of unsuccessful file accesses
+Rule    xccdf_org.ssgproject.content_rule_audit_access_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful file accesses (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_access_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful file accesses (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_access_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful file accesses
+Rule    xccdf_org.ssgproject.content_rule_audit_access_success
+Result  informational
+
+Title   Configure auditing of successful file accesses (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_access_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful file accesses (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_access_success_ppc64le
+Result  notapplicable
+
+Title   Configure basic parameters of Audit system
+Rule    xccdf_org.ssgproject.content_rule_audit_basic_configuration
+Result  pass
+
+Title   Configure auditing of unsuccessful file creations
+Rule    xccdf_org.ssgproject.content_rule_audit_create_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful file creations (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_create_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful file creations (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_create_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful file creations
+Rule    xccdf_org.ssgproject.content_rule_audit_create_success
+Result  pass
+
+Title   Configure auditing of successful file creations (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_create_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful file creations (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_create_success_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful file deletions
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful file deletions (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful file deletions (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful file deletions
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_success
+Result  pass
+
+Title   Configure auditing of successful file deletions (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful file deletions (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_delete_success_ppc64le
+Result  notapplicable
+
+Title   Configure immutable Audit login UIDs
+Rule    xccdf_org.ssgproject.content_rule_audit_immutable_login_uids
+Result  pass
+
+Title   Configure auditing of unsuccessful file modifications
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful file modifications (AARch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful file modifications (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful file modifications
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_success
+Result  pass
+
+Title   Configure auditing of successful file modifications (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful file modifications (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_modify_success_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of loading and unloading of kernel modules
+Rule    xccdf_org.ssgproject.content_rule_audit_module_load
+Result  pass
+
+Title   Configure auditing of loading and unloading of kernel modules (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_module_load_ppc64le
+Result  notapplicable
+
+Title   Perform general configuration of Audit for OSPP
+Rule    xccdf_org.ssgproject.content_rule_audit_ospp_general
+Result  pass
+
+Title   Perform general configuration of Audit for OSPP (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_ospp_general_aarch64
+Result  notapplicable
+
+Title   Perform general configuration of Audit for OSPP (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_ospp_general_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful ownership changes
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful ownership changes (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful ownership changes (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful ownership changes
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_success
+Result  pass
+
+Title   Configure auditing of successful ownership changes (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful ownership changes (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_owner_change_success_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful permission changes
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_failed
+Result  pass
+
+Title   Configure auditing of unsuccessful permission changes (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_failed_aarch64
+Result  notapplicable
+
+Title   Configure auditing of unsuccessful permission changes (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_failed_ppc64le
+Result  notapplicable
+
+Title   Configure auditing of successful permission changes
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_success
+Result  pass
+
+Title   Configure auditing of successful permission changes (AArch64)
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_success_aarch64
+Result  notapplicable
+
+Title   Configure auditing of successful permission changes (ppc64le)
+Rule    xccdf_org.ssgproject.content_rule_audit_perm_change_success_ppc64le
+Result  notapplicable
+
+OpenSCAP Error: Could not open output file '/backup/compliance-scans/post-banner-report.html': No such file or directory [/builddir/build/BUILD/openscap-1.3.12/src/common/util.c:437]
+Could not open output file '/backup/compliance-scans/post-banner-results.arf': No such file or directory [/builddir/build/BUILD/openscap-1.3.12/src/common/util.c:437]

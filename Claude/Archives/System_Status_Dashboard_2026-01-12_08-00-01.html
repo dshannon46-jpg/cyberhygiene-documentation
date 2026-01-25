@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3; url=http://192.168.1.10:5500">
+    <title>CPN System Status Dashboard - Redirecting...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .emoji {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .upgrade-note {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .upgrade-note h2 {
+            color: #155724;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .upgrade-note ul {
+            margin-left: 20px;
+            color: #155724;
+        }
+
+        .upgrade-note li {
+            margin: 10px 0;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .countdown {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+
+        .archive-note {
+            margin-top: 30px;
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🚀</div>
+        <h1>Dashboard Upgraded!</h1>
+
+        <p>The static reference dashboard has been replaced with the new <strong>AI-Enhanced Interactive Dashboard</strong>.</p>
+
+        <div class="upgrade-note">
+            <h2>✨ What's New:</h2>
+            <ul>
+                <li><strong>🤖 AI Assistant</strong> - Chat with AI to run commands and get system information</li>
+                <li><strong>📊 Live Metrics</strong> - Real-time CPU, memory, disk, and uptime (auto-updates)</li>
+                <li><strong>⚡ Quick Commands</strong> - One-click buttons for common tasks</li>
+                <li><strong>🔒 Approval System</strong> - Explicit authorization before any command execution</li>
+                <li><strong>📝 Audit Trail</strong> - Complete logging of all AI interactions</li>
+                <li><strong>💬 Natural Language</strong> - Ask questions instead of remembering commands</li>
+            </ul>
+        </div>
+
+        <p><strong>Redirecting to AI Dashboard in <span id="countdown">3</span> seconds...</strong></p>
+
+        <a href="http://192.168.1.10:5500" class="button">Go to AI Dashboard Now →</a>
+
+        <div class="archive-note">
+            <strong>Note:</strong> The old static dashboard has been archived to:<br>
+            <code>/home/dshannon/Documents/Archives/2025/Superseded_Documents/</code>
+        </div>
+
+        <p class="countdown">
+            <strong>Dashboard URL:</strong> <a href="http://192.168.1.10:5500">http://192.168.1.10:5500</a><br>
+            <strong>Documentation:</strong> ~/cyberhygiene-ai-admin/README.md
+        </p>
+    </div>
+
+    <script>
+        let seconds = 3;
+        const countdownEl = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+
+            if (seconds <= 0) {
+                clearInterval(interval);
+                window.location.href = 'http://192.168.1.10:5500';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
