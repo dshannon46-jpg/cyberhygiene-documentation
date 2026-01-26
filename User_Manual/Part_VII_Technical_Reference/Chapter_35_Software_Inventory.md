@@ -6,7 +6,7 @@
 
 **Identity and Access Management:**
 ```
-FreeIPA Server: 4.11.0
+FreeIPA Server: 4.11.1
   Components:
     - 389-ds-base: 2.4.5 (Directory Server)
     - krb5-server: 1.21.1 (Kerberos KDC)
@@ -24,34 +24,34 @@ FreeIPA Server: 4.11.0
 
 **Security Monitoring:**
 ```
-Wazuh Manager: 4.8.0
+Wazuh Manager: 4.14.2
   Components:
-    - wazuh-manager: 4.8.0
-    - wazuh-api: 4.8.0
+    - wazuh-manager: 4.9.2
+    - wazuh-api: 4.9.2
     - filebeat: 8.11.3
     - opensearch: 2.11.1
-    - wazuh-dashboard: 4.8.0
+    - wazuh-dashboard: 4.9.2
 
   Purpose: SIEM, threat detection, compliance monitoring
   License: GPL v2 (Wazuh), Apache 2.0 (OpenSearch)
   Vendor: Wazuh Inc.
 
-Wazuh Agent: 4.8.0 (deployed on all 6 systems)
+Wazuh Agent: 4.9.2 (deployed on all 6 systems)
   Purpose: Endpoint monitoring, log collection
 
-Suricata: 7.0.2
+Suricata: 7.0.7
   Purpose: Network IDS/IPS
   License: GPL v2
   Vendor: OISF (Open Information Security Foundation)
   Rule Sets: Emerging Threats (ET Open)
 
-ClamAV: 1.3.0
+ClamAV: 1.4.3
   Purpose: Antivirus scanning
   License: GPL v2
   Vendor: Cisco Talos
   Database Version: Updated daily
 
-YARA: 4.5.0
+YARA: 4.5.2
   Purpose: Malware pattern matching
   License: BSD 3-Clause
   Vendor: VirusTotal
@@ -63,11 +63,11 @@ AIDE: 0.18.6
 
 **Logging and Monitoring:**
 ```
-Graylog Server: 5.2.3
+Graylog Server: 6.1.3
   Components:
-    - graylog-server: 5.2.3
-    - elasticsearch: 7.17.16 (OpenSearch alternative)
-    - mongodb: 6.0.13
+    - graylog-server: 6.1.3
+    - elasticsearch: 7.10.2
+    - mongodb: 7.0.15
 
   Purpose: Centralized log management
   License: Server Side Public License (SSPL)
@@ -78,7 +78,7 @@ Prometheus: 2.48.1
   License: Apache 2.0
   Vendor: Prometheus Authors / CNCF
 
-Grafana: 10.2.3
+Grafana: 11.4.0
   Purpose: Metrics visualization
   License: AGPL v3
   Vendor: Grafana Labs
@@ -114,11 +114,11 @@ Postfix: 3.5.9
 
 **Databases:**
 ```
-PostgreSQL: 15.5
-  Purpose: Wazuh database, Grafana database
+PostgreSQL: 13.18
+  Purpose: NextCloud database
   License: PostgreSQL License (similar to MIT)
 
-MongoDB: 6.0.13
+MongoDB: 7.0.15
   Purpose: Graylog configuration storage
   License: Server Side Public License (SSPL)
 
@@ -152,9 +152,9 @@ Samba: 4.19.4
 
 ### Base System
 
-**Core Rocky Linux 9.5 Packages:**
+**Core Rocky Linux 9.7 Packages:**
 ```
-Kernel: kernel-5.14.0-611.16.1.el9_7.x86_64
+Kernel: kernel-5.14.0-611.24.1.el9_7.x86_64
   - FIPS mode enabled
   - SELinux support
   - Auditd integration
@@ -447,19 +447,19 @@ Unpinned (auto-update allowed):
 **Software Inventory Quick Reference:**
 
 **Core Infrastructure:**
-- FreeIPA: 4.11.0 (Identity Management)
-- Wazuh: 4.8.0 (SIEM)
-- Suricata: 7.0.2 (IDS/IPS)
-- Graylog: 5.2.3 (Logging)
+- FreeIPA: 4.11.1 (Identity Management)
+- Wazuh: 4.14.2 (SIEM)
+- Suricata: 7.0.7 (IDS/IPS)
+- Graylog: 6.1.3 (Logging)
 - Prometheus: 2.48.1 (Metrics)
-- Grafana: 10.2.3 (Visualization)
+- Grafana: 11.4.0 (Visualization)
 
 **Operating System:**
-- Rocky Linux: 9.5
-- Kernel: 5.14.0-611.16.1
-- Python: 3.9.18
-- PostgreSQL: 15.5
-- MongoDB: 6.0.13
+- Rocky Linux: 9.7
+- Kernel: 5.14.0-611.24.1
+- Python: 3.9.21
+- PostgreSQL: 13.18
+- MongoDB: 7.0.15
 
 **Total Packages:**
 - Per system: 800-1200 packages

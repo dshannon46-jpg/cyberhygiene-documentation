@@ -1,7 +1,7 @@
 # CyberHygiene Production Network
 ## User Manual - Complete Table of Contents
 
-**Version 1.0 | January 2026**
+**Version 1.0.2 | January 2026**
 
 ---
 
@@ -113,7 +113,7 @@
 - 14.4 Service Catalog
 - 14.5 Custom Applications
 
-### Chapter 15: AI Assistant (Local Code Llama)
+### Chapter 15: AI Assistant (Local Llama 3.3 70B)
 - 15.1 AI Assistant Overview
 - 15.2 Using the Interactive AI (llama / ai)
 - 15.3 Quick Query Commands

@@ -1,8 +1,8 @@
 # Software Bill of Materials (SBOM)
 ## CyberInABox - NIST 800-171 Compliance System
 
-**Document Version:** 2.0
-**Last Updated:** December 30, 2025
+**Document Version:** 2.1
+**Last Updated:** January 26, 2026
 **System:** dc1.cyberinabox.net (192.168.1.10)
 **Classification:** INTERNAL USE ONLY
 
@@ -20,9 +20,9 @@ This Software Bill of Materials documents all software components deployed in th
 
 ## Operating System & Base Platform
 
-### Rocky Linux 9.6 (Blue Onyx)
-- **Version:** 9.6
-- **Kernel:** 5.14.0-611.16.1.el9_7.x86_64
+### Rocky Linux 9.7 (Blue Onyx)
+- **Version:** 9.7
+- **Kernel:** 5.14.0-611.24.1.el9_7.x86_64
 - **License:** BSD-like
 - **Purpose:** RHEL-compatible base operating system
 - **FIPS 140-2:** Enabled
@@ -54,7 +54,7 @@ This Software Bill of Materials documents all software components deployed in th
 
 ## Security Information & Event Management (SIEM)
 
-### Wazuh 4.9.2
+### Wazuh 4.14.2
 - **Version:** 4.9.2
 - **License:** GPLv2
 - **Purpose:** SIEM, XDR, File Integrity Monitoring, Vulnerability Detection
@@ -327,12 +327,13 @@ This Software Bill of Materials documents all software components deployed in th
 
 ## AI/ML Components
 
-### Code Llama 7B (AI Model)
-- **Version:** 7B parameter model
-- **License:** Llama 2 Community License
-- **Purpose:** Local AI assistant for security documentation
-- **Deployment:** On-premises, no external cloud dependency
-- **NIST Controls:** SC-7 (data locality)
+### Llama 3.3 70B Instruct (AI Model)
+- **Version:** 70B parameter model (llama3.3:70b-instruct-q5_K_M)
+- **License:** Llama 3.3 Community License
+- **Purpose:** Local AI assistant for SysAdmin Dashboard and security operations
+- **Deployment:** On-premises via Ollama (http://192.168.1.7:11434), no external cloud dependency
+- **Features:** Natural language queries, system administration assistance, log analysis
+- **NIST Controls:** SC-7 (data locality), AU-6 (audit review assistance)
 - **Source:** Meta AI
 
 ### Flask 3.0.0
@@ -432,7 +433,7 @@ This SBOM is updated:
 **Prepared By:** AI Assistant (Claude)
 **Reviewed By:** D. Shannon
 **Approved By:** [Pending]
-**Date:** December 30, 2025
+**Date:** January 26, 2026
 
 ---
 

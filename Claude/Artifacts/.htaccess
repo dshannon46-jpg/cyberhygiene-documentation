@@ -1,0 +1,32 @@
+# CyberHygiene Production Network - Access Control
+# Restricts Business Confidential documents to local network only
+
+# Custom error page for access denied
+ErrorDocument 403 /error_403.html
+
+# Restrict access to sensitive document types
+<FilesMatch "\.(docx|doc|xlsx|xls|pdf|p12|pem|key)$">
+    # Deny all by default
+    Require all denied
+
+    # Allow local network (adjust IP ranges as needed)
+    Require ip 192.168.1.0/24
+    Require ip 127.0.0.1
+    Require ip ::1
+
+    # Allow VPN network (if applicable - adjust as needed)
+    # Require ip 10.0.0.0/8
+</FilesMatch>
+
+# Also restrict the Certification and Compliance Evidence directory
+<DirectoryMatch "Certification and Compliance Evidence">
+    Require all denied
+    Require ip 192.168.1.0/24
+    Require ip 127.0.0.1
+    Require ip ::1
+</DirectoryMatch>
+
+# Allow HTML, CSS, JS, and images from anywhere (public website)
+<FilesMatch "\.(html|css|js|png|jpg|jpeg|gif|svg|ico)$">
+    Require all granted
+</FilesMatch>

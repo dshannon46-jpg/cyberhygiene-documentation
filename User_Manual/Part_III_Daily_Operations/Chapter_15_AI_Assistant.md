@@ -1,10 +1,10 @@
-# Chapter 15: AI Assistant (Local Code Llama)
+# Chapter 15: AI Assistant (Local Llama 3.3 70B)
 
 ## 15.1 AI Assistant Overview
 
 ### What is the AI Assistant?
 
-The CyberHygiene Production Network includes a **local AI assistant** powered by Code Llama running on a dedicated Mac Mini M4. This AI provides 24/7 support, guidance, and assistance to users and administrators without requiring internet connectivity.
+The CyberHygiene Production Network includes a **local AI assistant** powered by Llama 3.3 70B Instruct running on a dedicated Mac Mini M4 Pro. This AI provides 24/7 support, guidance, and assistance to users and administrators without requiring internet connectivity.
 
 **Key Features:**
 - **Air-Gapped Security**: Runs entirely on local network (192.168.1.7)
@@ -15,9 +15,9 @@ The CyberHygiene Production Network includes a **local AI assistant** powered by
 
 **Hardware:**
 ```
-System: Mac Mini M4
+System: Mac Mini M4 Pro
 IP Address: 192.168.1.7
-RAM: 16GB (supports Code Llama 7B)
+RAM: 64GB (supports Llama 3.3 70B Instruct)
 Purpose: Dedicated AI inference server
 Network: Air-gapped (local network only, no internet)
 ```
@@ -26,7 +26,7 @@ Network: Air-gapped (local network only, no internet)
 ```
 Ollama Service:
   Port: 11434
-  Models: Code Llama 7B (default), 13B, 34B available
+  Models: Llama 3.3 70B Instruct (default, quantized q5_K_M)
   Purpose: AI model inference engine
 
 AnythingLLM:
@@ -49,8 +49,8 @@ CLI Tools:
 │  Mac Mini M4 (192.168.1.7) - AI Server              │
 │  ┌────────────────────────────────────────────┐     │
 │  │ Ollama Service (Port 11434)                │     │
-│  │ - Code Llama 7B                            │     │
-│  │ - AnythingLLM UI                           │     │
+│  │ - Llama 3.3 70B Instruct                   │     │
+│  │ - SysAdmin Agent Dashboard                 │     │
 │  │ - Air-gapped (no CUI access)               │     │
 │  └────────────────────────────────────────────┘     │
 └────────────────┬────────────────────────────────────┘
@@ -132,7 +132,7 @@ codellama
 ╚═══════════════════════════════════════════════════════════╝
 
 Server: http://192.168.1.7:11434
-Model:  codellama:7b
+Model:  llama3.3:70b-instruct-q5_K_M
 Type /help for commands or /exit to quit
 
 You > [your question here]
@@ -702,16 +702,16 @@ How do I fix this?
 
 **Response Times:**
 ```
-Code Llama 7B:  10-30 seconds (normal)
-Code Llama 13B: 20-60 seconds
-Code Llama 34B: 60-120 seconds (if available)
+Llama 3.3 70B Instruct: 15-45 seconds (normal)
+Complex queries: 30-90 seconds
+Code generation: 20-60 seconds
 ```
 
-**Quality vs Speed:**
+**Quality:**
 ```
-7B Model:  Fastest, good for most tasks
-13B Model: Slower, better accuracy and reasoning
-34B Model: Slowest, highest quality (requires 32GB+ RAM)
+70B Model: Excellent reasoning, comprehensive answers
+Quantization: q5_K_M balances quality and performance
+RAM Usage: ~45GB during inference
 ```
 
 ## 15.7 Troubleshooting
@@ -748,7 +748,7 @@ launchctl load ~/Library/LaunchAgents/com.ollama.server.plist
 ### Slow Responses
 
 **Normal:**
-- 10-30 seconds for typical queries (Code Llama 7B)
+- 15-45 seconds for typical queries (Llama 3.3 70B)
 - Longer for complex analysis or code generation
 
 **If Unusually Slow:**
@@ -779,9 +779,9 @@ curl -s http://192.168.1.7:11434/api/tags | jq -r '.models[].name'
 ssh Admin@192.168.1.7
 
 # Pull model again
-ollama pull codellama:7b
+ollama pull llama3.3:70b-instruct-q5_K_M
 
-# Takes 10-20 minutes (4GB download)
+# Takes 30-60 minutes (~40GB download)
 ```
 
 ### Command Not Found
@@ -808,22 +808,22 @@ ls -la /usr/local/bin/ai-*
 **Quick Queries:**
 - Command: `ask-ai "question"`
 - Use for: Simple questions, command syntax
-- Response time: 10-20 seconds
+- Response time: 15-30 seconds
 
 **Security Analysis:**
 - Command: `ai-analyze-wazuh [count]`
 - Use for: Security alert triage
-- Response time: 20-40 seconds
+- Response time: 30-60 seconds
 
 **Log Analysis:**
 - Command: `ai-analyze-logs [file] [lines]`
 - Use for: Log file investigation
-- Response time: 15-30 seconds
+- Response time: 20-45 seconds
 
 **Troubleshooting:**
 - Command: `ai-troubleshoot "problem"`
 - Use for: Diagnostic guidance
-- Response time: 15-30 seconds
+- Response time: 20-45 seconds
 
 **Web Interface:**
 - Access: http://192.168.1.7 (from Mac Mini)
@@ -831,8 +831,8 @@ ls -la /usr/local/bin/ai-*
 - Features: Workspaces, history, copy-paste
 
 **AI Server:**
-- Location: Mac Mini M4 (192.168.1.7)
-- Model: Code Llama 7B
+- Location: Mac Mini M4 Pro (192.168.1.7)
+- Model: Llama 3.3 70B Instruct (q5_K_M)
 - Service: Ollama (port 11434)
 - Network: Air-gapped (local only)
 
@@ -869,7 +869,7 @@ The AI provides recommendations; you decide and execute!
 - Documentation: /home/dshannon/Documents/Claude/Interactive AI/
 
 **Note on Development:**
-This system uses Code Llama running locally. During Phase I development,
+This system uses Llama 3.3 70B Instruct running locally. During Phase I development,
 Claude Code (an internet-connected AI from Anthropic) was used as a
 development tool but is not part of the production system due to
 compliance requirements. See Chapter 2 for details on development tools.

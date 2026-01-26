@@ -6,9 +6,9 @@
 
 **CyberHygiene Production Network User Manual**
 ```
-Version: 1.0.1
-Release Date: January 1, 2026
-Status: Phase I Complete (Corrected AI Documentation)
+Version: 1.0.2
+Release Date: January 26, 2026
+Status: Phase I Complete (Updated Software Versions & AI Model)
 Author: Donald Shannon
 Development Assistant: Claude Code (Anthropic - development tool only)
 
@@ -70,6 +70,53 @@ Build metadata:
 ```
 
 ## F.2 Version History
+
+### Version 1.0.2 (January 26, 2026)
+
+**Software Version Updates & AI Model Upgrade**
+```
+Release Date: January 26, 2026
+Git Tag: v1.0.2
+Author: AI Assistant (Claude Code)
+
+Change Type: PATCH - Version Updates and AI Model Documentation
+
+Major Updates:
+  1. AI Model: Updated from Code Llama 7B to Llama 3.3 70B Instruct
+     - Mac Mini M4 Pro with 64GB RAM (upgraded from 16GB)
+     - Model: llama3.3:70b-instruct-q5_K_M
+     - Improved response quality and reasoning capabilities
+
+  2. Software Bill of Materials (SBOM) Updates:
+     - Rocky Linux: 9.6 → 9.7
+     - Kernel: 5.14.0-611.16.1 → 5.14.0-611.24.1
+     - Wazuh: 4.8.0 → 4.9.2
+     - Graylog: 5.2.3 → 6.1.3
+     - Grafana: 10.2.3 → 11.4.0
+     - ClamAV: 1.3.0 → 1.4.3
+     - Suricata: 7.0.2 → 7.0.7
+     - MongoDB: 6.0.13 → 7.0.15
+     - YARA: 4.5.0 → 4.5.2
+     - FreeIPA: 4.11.0 → 4.11.1
+
+  3. POA&M Updated for 2026 Maintenance Period
+
+Files Updated:
+  ✓ Software_Bill_of_Materials.md (v2.0 → v2.1)
+  ✓ POAM_CyberInABox_2025.md (v3.0 → v4.0)
+  ✓ Chapter 15: AI Assistant - Updated for Llama 3.3 70B
+  ✓ Chapter 35: Software Inventory - All version numbers
+  ✓ TABLE_OF_CONTENTS.md - Updated version and chapter title
+  ✓ Appendix F: Version History - This entry
+
+Impact: Medium
+  Documentation now accurately reflects current system state.
+  All version numbers synchronized with SBOM.
+
+Backward Compatibility: Full
+```
+
+---
 
 ### Version 1.0.1 (January 1, 2026)
 
@@ -727,8 +774,8 @@ Major Enhancements:
 
 **Version History Quick Reference:**
 
-**Current Version: 1.0.0**
-- Release Date: December 31, 2025
+**Current Version: 1.0.2**
+- Release Date: January 26, 2026
 - Status: Phase I Complete
 - Total Chapters: 43
 - Total Appendices: 6
@@ -771,6 +818,6 @@ Major Enhancements:
 - Repository: /home/dshannon/Documents/
 - Git: https://github.com/dshannon65/cyberh
 
-**Last Updated: December 31, 2025**
-**Document Version: 1.0.0**
+**Last Updated: January 26, 2026**
+**Document Version: 1.0.2**
 **Author: Donald Shannon**

@@ -9,7 +9,7 @@
 #### Tier 1: Self-Service Resources
 - This User Manual
 - Online documentation portal
-- AI Assistant (Code Llama)
+- AI Assistant (Llama 3.3 70B)
 - Quick Reference Card (Chapter 5)
 - FAQ database
 
