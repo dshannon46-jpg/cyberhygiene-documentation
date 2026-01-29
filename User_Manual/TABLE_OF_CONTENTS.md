@@ -1,7 +1,7 @@
 # CyberHygiene Production Network
 ## User Manual - Complete Table of Contents
 
-**Version 1.0.2 | January 2026**
+**Version 1.0.3 | January 2026**
 
 ---
 
@@ -121,10 +121,16 @@
 - 15.5 Security and Compliance
 - 15.6 Best Practices
 - 15.7 Troubleshooting
+- 15.8 SysAdmin Agent Dashboard *(NEW - January 2026)*
+- 15.9 Code Assistant (Terminal AI Integration) *(NEW - January 2026)*
+- 15.10 AI Integration Summary
 
 ---
 
 ## PART IV: DASHBOARDS & MONITORING
+
+> **Note:** For the AI-assisted **SysAdmin Agent Dashboard** (https://dc1.cyberinabox.net/sysadmin/),
+> including the Code Assistant feature, see **Chapter 15.8-15.10** in Part III.
 
 ### Chapter 16: Overview Dashboard (CPM)
 - 16.1 CPM Dashboard Access

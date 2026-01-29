@@ -873,3 +873,432 @@ This system uses Llama 3.3 70B Instruct running locally. During Phase I developm
 Claude Code (an internet-connected AI from Anthropic) was used as a
 development tool but is not part of the production system due to
 compliance requirements. See Chapter 2 for details on development tools.
+
+---
+
+## 15.8 SysAdmin Agent Dashboard
+
+### Overview
+
+The **SysAdmin Agent Dashboard** is a web-based AI-assisted administration interface that provides Claude Code-like functionality entirely on the local network. It integrates with the Llama 3.3 70B model to provide intelligent system administration assistance.
+
+**Access URL:** `https://dc1.cyberinabox.net/sysadmin/`
+
+**Key Features:**
+- Web-based interface (no terminal required)
+- AI-powered system monitoring
+- Security alerts and analysis
+- Compliance scanning (NIST 800-171)
+- Human-in-the-loop approval workflow
+- Full audit logging
+- No internet dependency
+
+### Dashboard Sections
+
+**Quick Actions:**
+```
+Monitoring:
+  - Check Server Health (CPU, memory, disk, uptime)
+  - View Recent Logs
+  - List Running Services
+  - Check Disk Usage
+  - System Update Status
+
+Security:
+  - Wazuh Alerts
+  - Suricata IDS Alerts
+  - YARA Malware Status
+  - Run YARA Scan (requires approval)
+  - Security Services Status
+  - Graylog Logs
+  - Prometheus Metrics
+  - USB Access Control
+
+Compliance:
+  - Compliance Status
+  - Scan DC1 Server (requires approval)
+  - Scan Workstations (requires approval)
+  - View Reports
+
+Maintenance (all require approval):
+  - Apply Security Updates
+  - Full System Update
+  - Backup to NAS
+  - Restart Service
+```
+
+**Dashboard Links:**
+Quick access to other management interfaces:
+- FreeIPA Admin
+- Wazuh SIEM
+- Graylog Logs
+- Grafana Metrics
+- Prometheus
+- Policy Index
+- NextCloud
+
+### AI Assistant Chat
+
+The dashboard includes an AI chat interface powered by the local Llama 3.3 70B:
+
+```
+You: What are the most common Wazuh alerts today?
+
+AI: Based on the recent alerts, here are the most common:
+    1. SSH Authentication failures (12 occurrences)
+    2. File integrity changes (8 occurrences)
+    3. Sudo command execution (6 occurrences)
+
+    The SSH failures are from IP 203.0.113.45. Consider blocking...
+```
+
+**USB Control via Chat:**
+```
+You: usb status
+AI: [Shows connected USB devices and their status]
+
+You: enable usb 5
+AI: [Requests approval to allow USB device ID 5]
+
+You: block all usb
+AI: [Blocks all USB storage devices]
+```
+
+### Approval Workflow
+
+High-risk operations require explicit approval:
+
+```
+⚠️ APPROVAL REQUIRED
+
+Context: Apply security updates (dnf update --security)
+
+Command to execute:
+  sudo dnf update --security -y
+
+This action requires your explicit approval before execution.
+
+[✅ Approve & Execute]  [❌ Cancel]
+```
+
+**Actions Requiring Approval:**
+- Service restarts (systemctl start/stop/restart)
+- Package updates (dnf install/update/remove)
+- System reboots
+- Firewall changes
+- Compliance scans
+- USB device changes
+- File edits (Code Assistant)
+
+### Audit Logging
+
+All dashboard actions are logged:
+
+**Log Location:** `/data/ai-workspace/sysadmin-agent/logs/agent_audit.log`
+
+**Log Format:**
+```json
+{
+  "timestamp": "2026-01-29T13:45:23.456789",
+  "event_type": "TILE_CLICKED",
+  "details": "Tile: wazuh_alerts",
+  "user": "admin"
+}
+```
+
+**Event Types:**
+- `TILE_CLICKED` - Dashboard button clicked
+- `USER_QUERY` - Chat message sent
+- `COMMAND_EXECUTED` - Low-risk command run
+- `APPROVED_COMMAND_EXECUTED` - High-risk command approved and run
+- `CODE_ASSISTANT_QUERY` - Code question asked
+- `CODE_ASSISTANT_APPROVED` - File edit or command approved
+- `CODE_ASSISTANT_REJECTED` - Action rejected by user
+
+---
+
+## 15.9 Code Assistant (Terminal AI Integration)
+
+### Overview
+
+The **Code Assistant** is a Claude Code-like feature within the SysAdmin Agent Dashboard. It allows the AI to:
+
+- Answer questions about code and configuration files
+- Browse and view files in allowed directories
+- Analyze log output with AI interpretation
+- Edit files directly (with human approval)
+
+**Access:** Expand "🖥️ Code Assistant (Terminal AI Integration)" in the dashboard
+
+**NIST 800-171 Compliance:**
+- ✅ All file modifications require human approval
+- ✅ All actions logged to audit trail
+- ✅ Restricted to allowed directories only
+- ✅ No internet connectivity required
+- ✅ Human-in-the-loop for all changes
+
+### Code Assistant Tabs
+
+#### Tab 1: Ask About Code
+
+**Purpose:** Ask questions about code or configurations (read-only)
+
+**Approval Required:** No (queries are logged but don't modify anything)
+
+**Usage:**
+1. Select files for context (optional)
+2. Type your question
+3. Click "Ask AI"
+
+**Example:**
+```
+Selected Files: /data/ai-workspace/sysadmin-agent/app.py
+
+Question: How does the approval workflow work in this file?
+
+AI Response:
+The approval workflow is implemented through session state variables:
+1. `st.session_state.pending_command` stores the command awaiting approval
+2. `st.session_state.show_approval_dialog` triggers the approval UI
+3. When approved, `execute_approved_command()` runs the command
+4. All actions are logged via `log_audit_event()`
+...
+```
+
+#### Tab 2: Browse Files
+
+**Purpose:** Navigate and view files in allowed directories
+
+**Approval Required:** No (read-only operations)
+
+**Allowed Directories:**
+```
+/data/ai-workspace       - AI workspace and dashboard
+/etc/fapolicyd           - Application whitelisting config
+/etc/usbguard            - USB security config
+/etc/yara                - YARA malware rules
+/etc/httpd/conf.d        - Apache configuration
+/var/www                 - Web content
+/opt/aider-api           - Aider API service
+/home                    - User home directories
+/root                    - Root home directory
+```
+
+**Features:**
+- Navigate directories
+- View file contents
+- Select files for AI context
+- Quick access buttons for common directories
+
+#### Tab 3: Analyze Logs
+
+**Purpose:** Execute whitelisted commands and get AI analysis
+
+**Approval Required:** Yes (executes commands)
+
+**Available Analysis Types:**
+```
+wazuh_alerts       - Analyze Wazuh security alerts
+secure_logs        - Analyze authentication logs
+audit_logs         - Analyze audit logs
+system_messages    - Analyze system messages for errors
+apache_errors      - Analyze Apache error logs
+journal_errors     - Analyze recent journal errors
+top_processes      - Analyze top processes
+disk_usage         - Analyze disk usage
+memory_usage       - Analyze memory usage
+failed_logins      - Analyze failed login attempts
+ipa_status         - Analyze FreeIPA status
+firewall_status    - Analyze firewall configuration
+```
+
+**Workflow:**
+1. Select analysis type
+2. Enter what AI should look for
+3. Click "Analyze"
+4. **Approve** the command execution
+5. View results and AI interpretation
+
+**Example:**
+```
+Analysis Type: wazuh_alerts
+AI Prompt: Look for any critical security issues or patterns
+
+[Approve] clicked
+
+Command Output:
+[Wazuh alert data...]
+
+AI Analysis:
+Based on the alerts, I found:
+1. Multiple failed SSH attempts from 203.0.113.15 (potential brute force)
+2. File integrity change in /etc/shadow (password change)
+3. Elevated privilege usage by user jsmith
+
+Recommendations:
+- Consider blocking IP 203.0.113.15
+- Verify the password change was authorized
+- Review jsmith's sudo activity
+```
+
+#### Tab 4: Edit Files
+
+**Purpose:** Have AI edit files based on instructions
+
+**Approval Required:** Yes (ALL file modifications require approval)
+
+**Workflow:**
+1. Select files to edit (from Browse tab)
+2. Enter edit instructions
+3. Click "Request Edit"
+4. **Review and Approve** the changes
+5. AI applies the edits
+
+**Example:**
+```
+Selected Files: /data/ai-workspace/sysadmin-agent/config/config.py
+
+Edit Instruction: Add a new dashboard tile for SSL certificate monitoring
+
+⚠️ APPROVAL REQUIRED FOR CODE ASSISTANT ACTION
+
+File Edit Request
+
+Files to modify:
+- /data/ai-workspace/sysadmin-agent/config/config.py
+
+Edit instruction: Add a new dashboard tile for SSL certificate monitoring
+
+⚠️ This will modify the above files!
+
+[✅ Approve]  [❌ Reject]
+```
+
+### Security Features
+
+**Restricted Directories:**
+Files outside allowed directories cannot be accessed:
+```
+Error: Path not allowed: /etc/shadow
+```
+
+**Allowed File Extensions:**
+```
+.py, .sh, .bash, .yml, .yaml, .json, .conf, .cfg,
+.md, .txt, .html, .css, .js, .xml, .ini, .rules,
+.service, .timer, .socket, .yar, .yara
+```
+
+**Audit Trail:**
+Every Code Assistant action is logged:
+```
+CODE_ASSISTANT_QUERY - All questions asked
+CODE_ASSISTANT_FILE_READ - File views
+CODE_ASSISTANT_APPROVED - Approved actions
+CODE_ASSISTANT_REJECTED - Rejected actions
+CODE_ASSISTANT_EDIT_COMPLETE - Successful edits
+```
+
+### Best Practices
+
+**For Asking Questions:**
+- Be specific about what you want to know
+- Include relevant files in context
+- Reference specific line numbers or functions
+
+**For Log Analysis:**
+- Start with broad analysis prompts
+- Narrow down based on initial findings
+- Review command output before AI analysis
+
+**For File Edits:**
+- Always review the edit instruction carefully
+- Start with small, focused changes
+- Test changes after approval
+- Keep backups of critical files
+
+### Troubleshooting
+
+**"Aider API Offline" Error:**
+```bash
+# Check service status
+sudo systemctl status aider-api
+
+# Start if stopped
+sudo systemctl start aider-api
+
+# View logs
+journalctl -u aider-api -n 50
+```
+
+**File Not in Allowed Directory:**
+```
+Only directories in the whitelist can be accessed.
+Contact administrator to add new directories if needed.
+```
+
+**Edit Fails:**
+```
+Check:
+1. File exists and is writable
+2. File extension is in allowed list
+3. Aider API is running
+4. AI server (192.168.1.7) is accessible
+```
+
+---
+
+## 15.10 AI Integration Summary
+
+### Available AI Interfaces
+
+| Interface | Access | Best For |
+|-----------|--------|----------|
+| **SysAdmin Dashboard** | https://dc1.cyberinabox.net/sysadmin/ | Web-based administration, monitoring |
+| **Code Assistant** | Dashboard → Code Assistant | File editing, code questions |
+| **Interactive CLI** | `llama` or `ai` | Complex terminal conversations |
+| **Quick Query** | `ask-ai "question"` | One-off questions |
+| **Wazuh Analysis** | `ai-analyze-wazuh` | Security alert triage |
+| **Log Analysis** | `ai-analyze-logs` | Log file investigation |
+| **Troubleshooting** | `ai-troubleshoot` | Problem diagnosis |
+
+### Compliance Summary
+
+All AI interfaces maintain NIST 800-171 compliance:
+
+```
+✅ No CUI data sent to external servers (air-gapped)
+✅ Human-in-the-loop for all system changes
+✅ Full audit trail of all actions
+✅ Least privilege (restricted directories/commands)
+✅ No internet dependency
+✅ Local model (Llama 3.3 70B on 192.168.1.7)
+```
+
+### Quick Reference
+
+**Dashboard URL:** `https://dc1.cyberinabox.net/sysadmin/`
+
+**Services:**
+```bash
+# SysAdmin Dashboard
+systemctl status sysadmin-agent
+
+# Aider API (Code Assistant backend)
+systemctl status aider-api
+
+# AI Model Server
+curl http://192.168.1.7:11434/api/tags
+```
+
+**Logs:**
+```bash
+# Dashboard audit log
+/data/ai-workspace/sysadmin-agent/logs/agent_audit.log
+
+# Dashboard service log
+journalctl -u sysadmin-agent -f
+
+# Aider API log
+journalctl -u aider-api -f
+```
