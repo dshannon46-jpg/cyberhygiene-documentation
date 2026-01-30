@@ -4,6 +4,21 @@
 **Status:** Phase I Complete - Documentation Consolidated
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ff69b4?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/dshannon46-jpg)
+
+## ⚠️ Disclaimer
+
+**ACADEMIC RESEARCH PROJECT** - This repository contains documentation and configurations from an academic research project demonstrating NIST SP 800-171 technical control implementation using open-source tools.
+
+**NOT COMPLIANCE CERTIFICATION** - OpenSCAP scan results and technical configurations validate control implementation but do not constitute CMMC certification, third-party assessment, or legal compliance advice. Organizations must pursue formal assessment through authorized C3PAOs.
+
+**NO WARRANTY** - This documentation is provided "as-is" without warranty of any kind. The author makes no representations regarding accuracy, completeness, or suitability for any purpose. Use at your own risk. See [LICENSE](LICENSE) for full terms.
+
+**PROFESSIONAL GUIDANCE REQUIRED** - Implementation requires cybersecurity expertise. This is not a substitute for professional assessment, qualified legal counsel, or C3PAO evaluation.
+
+**NO CONSULTING SERVICES** - The author does not provide cybersecurity consulting services. This project is an academic exercise demonstrating what is achievable using AI-assisted administration and open-source tools.
+
+---
+
 ## Document Organization
 
 ### Primary Documents (Root Level)
