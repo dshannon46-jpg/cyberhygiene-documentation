@@ -1,0 +1,162 @@
+# IronKey Transfer Instructions
+**File:** CyberHygiene_Recovery_Image_2025-12-18.tar.gz
+**Size:** 9.7MB (compressed from 19MB)
+**SHA256:** 7304e6c704bc1a7131374dd19ece98e7fdb5710aa24c57948011b5b77e2af433
+**Created:** December 19, 2025
+
+---
+
+## Step 1: Unlock IronKey Vault Privacy 50
+
+### On Windows:
+1. Connect IronKey USB drive to Windows computer
+2. Wait for virtual CD-ROM to mount
+3. Open the IronKey drive and run "IronKey.exe"
+4. Enter your IronKey PIN/password
+5. The encrypted partition will unlock and appear as a new drive
+
+### On macOS:
+1. Connect IronKey USB drive to Mac
+2. Wait for virtual CD-ROM to mount
+3. Open the IronKey volume and run "IronKey.app"
+4. Enter your IronKey PIN/password
+5. The encrypted partition will unlock and mount
+
+### On Linux (if supported):
+1. May require unlocking on Windows/Mac first
+2. Then reconnect to Linux - partition should remain unlocked
+
+---
+
+## Step 2: Transfer Recovery Image to IronKey
+
+### Option A: Copy Archive Directly
+```bash
+# Verify IronKey encrypted partition is mounted
+df -h | grep -i iron
+
+# Copy the archive
+cp CyberHygiene_Recovery_Image_2025-12-18.tar.gz /media/IronKey/
+
+# Verify checksum
+cd /media/IronKey/
+sha256sum -c ~/CyberHygiene_Recovery_Image_2025-12-18.tar.gz.sha256
+```
+
+### Option B: Extract to IronKey
+```bash
+# Create recovery directory on IronKey
+mkdir -p /media/IronKey/recovery-image
+
+# Extract archive to IronKey
+tar xzf ~/CyberHygiene_Recovery_Image_2025-12-18.tar.gz -C /media/IronKey/
+
+# Verify extraction
+ls -la /media/IronKey/recovery-image/
+```
+
+---
+
+## Step 3: Verify Transfer
+
+### Check Files:
+- README_RECOVERY.md (recovery documentation)
+- RECOVERY_PROCEDURES.md (step-by-step procedures)
+- ipa-data-2025-12-18-13-52-07/ (FreeIPA backup)
+- cacert.p12 (CA certificate)
+- system-config/ (system configurations)
+- documentation/ (project docs)
+
+### Verify Integrity:
+```bash
+cd /media/IronKey/recovery-image/
+sha256sum -c MANIFEST.sha256
+```
+
+All files should show "OK"
+
+---
+
+## Step 4: Secure Storage
+
+1. **Safely Eject IronKey:**
+   - Sync filesystem: `sync`
+   - Unmount: `umount /media/IronKey`
+   - Lock IronKey via software interface
+   - Physically remove USB drive
+
+2. **Store Securely:**
+   - Place IronKey in locked safe or secure facility
+   - Document storage location in security log
+   - Limit access to authorized administrators only
+   - Consider creating duplicate for offsite storage
+
+3. **Security Classification:**
+   - **CONTROLLED UNCLASSIFIED INFORMATION (CUI)**
+   - Contains: Passwords, encryption keys, certificates
+   - Access: Authorized personnel only
+   - Tracking: Maintain access log per AC-3
+
+---
+
+## Recovery Image Contents
+
+**Critical Data:**
+- FreeIPA complete backup (domain controller, LDAP, Kerberos, CA)
+- System configuration (/etc, network, storage)
+- CA certificates and encryption keys
+- Project documentation (SSP, POA&M)
+- SSL certificates
+- RAID array LUKS key
+
+**Documentation:**
+- Complete recovery procedures
+- System specifications
+- Password/key inventory
+- NIST 800-171 compliance mapping
+
+**Recovery Time Objectives:**
+- Emergency FreeIPA recovery: 2-4 hours
+- Full system recovery: 4-8 hours
+- Bare metal rebuild: 8-12 hours
+
+---
+
+## FIPS Compliance Notes
+
+- Recovery image created while system in FIPS 140-2 mode
+- IronKey VP50 provides FIPS 140-2 Level 3 hardware encryption
+- All procedures maintain FIPS compliance during restoration
+- Satisfies NIST 800-171 controls: CP-9, CP-10, SC-28, AU-9
+
+---
+
+## Annual Testing Requirement
+
+Per NIST 800-171 CP-4, this recovery must be tested annually:
+- Verify IronKey is accessible and unlocked
+- Validate backup integrity (checksums)
+- Test partial recovery on non-production system
+- Update procedures as needed
+- Document test results
+
+**Next Test Due:** December 2026
+
+---
+
+## Emergency Contact
+
+**System Administrator:** Donald Shannon
+**Email:** donald.shannon@cyberinabox.net
+**Organization:** The Contract Coach
+
+**Support Resources:**
+- FreeIPA: https://www.freeipa.org/
+- Rocky Linux: https://docs.rockylinux.org/
+- IronKey Support: https://www.kingston.com/support
+
+---
+
+**CLASSIFICATION:** CONTROLLED UNCLASSIFIED INFORMATION (CUI)
+**DISTRIBUTION:** Authorized System Administrators Only
+**Date:** December 19, 2025

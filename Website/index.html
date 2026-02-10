@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The CyberHygiene Project - A Research Reference Implementation for NIST 800-171 Compliance Study">
+    <meta name="keywords" content="NIST 800-171, CMMC, cybersecurity, small business, DIB, FCI, CUI, compliance, research">
+    <title>The CyberHygiene Project | Research Reference Implementation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Important Notice Banner -->
+    <div style="background: linear-gradient(135deg, #f8f4e8 0%, #f5f0e0 100%); padding: 15px 30px; border-bottom: 2px solid #d4a574;">
+        <div class="container">
+            <p style="margin: 0; color: #5d4e37; font-size: 1em; text-align: center; line-height: 1.6;">
+                <strong>Research Reference Implementation</strong> — This project demonstrates technical control configuration for educational purposes. OpenSCAP scan results do not constitute CMMC certification or operational compliance. <a href="#risks-limitations" style="color: #8b6914; text-decoration: underline;">See limitations.</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>The CyberHygiene Project</h1>
+                <p class="tagline">A Research Reference Implementation for Compliance Study</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#risks-limitations">Risks</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#compliance">Compliance Status</a></li>
+                <li><a href="#management">Management</a></li>
+                <li><a href="#ai-infrastructure">AI System</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#results">Observations</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section - Reframed -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Exploring Affordable Compliance Infrastructure</h2>
+            <h3>A Research Project in Open-Source Security Tools</h3>
+            <p class="hero-subtitle">Helping Very Small Businesses meet FAR/DFARS cybersecurity requirements using cost-effective open-source tools</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">110</span>
+                    <span class="stat-label">Controls Addressed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">14</span>
+                    <span class="stat-label">Control Families</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">1750</span>
+                    <span class="stat-label">Software Packages</span>
+                </div>
+            </div>
+            <p style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 15px;">Technical configuration documented. Operational compliance requires expertise, policies, and third-party assessment.</p>
+        </div>
+    </section>
+
+    <!-- Important Context Box -->
+    <section style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 25px 30px; margin: 0;">
+        <div class="container">
+            <h3 style="margin: 0 0 15px 0; color: #856404;">Understanding This Project</h3>
+            <p style="margin: 0; color: #856404; font-size: 1.05em; line-height: 1.7;">
+                The CyberHygiene Project is an <strong>academic research initiative</strong> exploring whether technical infrastructure for NIST 800-171 compliance can be built affordably using open-source tools.
+                This website documents a <strong>reference implementation</strong> for educational purposes. It is <strong>not</strong> a product, service, or turnkey solution.
+                Successful real-world compliance requires cybersecurity expertise, documented policies and procedures, operational security programs, and formal assessment by an authorized C3PAO.
+                <strong>The author does not provide cybersecurity consulting services.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- Open Source Section - Reframed -->
+    <section style="background: linear-gradient(135deg, #24292e 0%, #586069 100%); padding: 40px 20px;">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: white; font-size: 2em; margin-bottom: 15px;">Open Source Documentation</h2>
+            <p style="color: white; font-size: 1.1em; margin-bottom: 20px; opacity: 0.95;">Configuration guides, policies, and documentation shared for educational purposes.<br><strong style="color: #ffc107;">Provided "as-is" without warranty. Implementation requires cybersecurity expertise.</strong></p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="https://github.com/The-CyberHygiene-Project/cyberhygiene-documentation" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 25px; background: white; color: #24292e; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                    <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    View Documentation on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section - Reframed -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About The Project</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>The Research Question</h3>
+                    <p>Very Small Businesses (VSBs) in the Defense Industrial Base face significant compliance cost barriers that can make government contracting impractical.</p>
+                    <p>This research project explores whether the <em>technical infrastructure</em> for compliance can be built more affordably using open-source tools and commodity hardware.</p>
+                    <p><strong>Important:</strong> Demonstrating that technical controls <em>can</em> be configured is different from demonstrating that an organization <em>is</em> compliant. The latter requires operational maturity, documented policies, trained personnel, and third-party validation.</p>
+                </div>
+                <div class="column">
+                    <h3>What This Project Is</h3>
+                    <ul>
+                        <li>An academic research initiative</li>
+                        <li>A reference implementation for study</li>
+                        <li>A proof-of-concept for technical feasibility</li>
+                        <li>Educational documentation for the community</li>
+                        <li>A starting point for informed discussions</li>
+                    </ul>
+                    <h3>What This Project Is NOT</h3>
+                    <ul>
+                        <li>A certified or validated compliant system</li>
+                        <li>A turnkey deployable solution</li>
+                        <li>A substitute for professional cybersecurity services</li>
+                        <li>A guarantee of CMMC certification</li>
+                        <li>A consulting service or product for sale</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); padding: 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
+                <h3 style="color: white; font-size: 1.6em; margin-bottom: 15px;">Future Direction</h3>
+                <p style="color: white; font-size: 1.1em; max-width: 800px; margin: 0 auto; line-height: 1.7; opacity: 0.95;">
+                    The project explores whether, through collaboration with qualified cybersecurity professionals and strategic partners, reference implementations like this could eventually evolve into more accessible compliance pathways—while maintaining the expertise requirements that genuine security demands.
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Project Timeline</h3>
+                <ul class="timeline">
+                    <li><strong>2023-2024:</strong> Initial research and feasibility study published in NCMA Journal</li>
+                    <li><strong>September 2025:</strong> Project initiated with Rocky Linux 9.7 deployment</li>
+                    <li><strong>October 2025:</strong> Core infrastructure completed; OpenSCAP CUI profile scans passing</li>
+                    <li><strong>November 2025:</strong> Email server deployed, additional services configured</li>
+                    <li><strong>December 2025:</strong> AI infrastructure added; monitoring expanded to 6 systems</li>
+                    <li><strong>January 2026:</strong> Documentation completed; preparing for Nexus 2026 presentation</li>
+                    <li><strong>February 8-10, 2026:</strong> Project presentation at NCMA Nexus, Atlanta GA</li>
+                    <li><strong>Current Status:</strong> Initial design and construction complete; testing and validation await</li>
+                    <li><strong>Next:</strong> Turnover to strategic partner</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">System Architecture</h2>
+
+            <div class="architecture-overview">
+                <h3>Reference Implementation Overview</h3>
+                <p>This architecture demonstrates one approach to building infrastructure for handling Federal Contract Information (FCI) and Controlled Unclassified Information (CUI). Many valid alternative architectures exist.</p>
+                <p style="margin-top: 15px;">Installation scripts to replicate this reference build are available on <a href="https://github.com/The-CyberHygiene-Project/cyberhygiene-documentation" target="_blank" style="color: #667eea; text-decoration: underline;">GitHub</a>.</p>
+            </div>
+
+            <div class="three-column">
+                <div class="card">
+                    <h4>Network Infrastructure</h4>
+                    <ul>
+                        <li>pfSense firewall/router</li>
+                        <li>Managed network switch</li>
+                        <li>Segmented VLANs</li>
+                        <li>IDS/IPS (Suricata)</li>
+                        <li>DNS filtering (Cloudflare)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Domain Controller</h4>
+                    <ul>
+                        <li>Rocky Linux 9.7 (RHEL-compatible)</li>
+                        <li>FreeIPA (Identity Management)</li>
+                        <li>Kerberos authentication</li>
+                        <li>LDAP directory services</li>
+                        <li>Integrated Certificate Authority</li>
+                        <li>Email server (Postfix/Dovecot)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Security & Monitoring Platform</h4>
+                    <ul>
+                        <li>Wazuh SIEM/XDR</li>
+                        <li>File Integrity Monitoring</li>
+                        <li>Vulnerability scanning</li>
+                        <li>YARA malware detection</li>
+                        <li>VirusTotal integration</li>
+                        <li>Automated security updates</li>
+                        <li>Prometheus + Grafana monitoring</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Design Principles</h3>
+                <div class="two-column">
+                    <div>
+                        <h4>Security-Focused Configuration</h4>
+                        <ul>
+                            <li>FIPS 140-2 cryptographic mode enabled</li>
+                            <li>Full-disk encryption (LUKS2)</li>
+                            <li>SELinux enforcing mode</li>
+                            <li>Layered security architecture</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Cost Considerations</h4>
+                        <ul>
+                            <li>Enterprise open-source software (no licensing fees)</li>
+                            <li>Commercial off-the-shelf hardware</li>
+                            <li>Significant expertise/labor required</li>
+                            <li>Ongoing maintenance commitment needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compliance Section - Significantly Revised -->
+    <section id="compliance" class="section">
+        <div class="container">
+            <h2 class="section-title">Compliance Status</h2>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; margin-bottom: 30px; border-radius: 4px;">
+                <p style="margin: 0; color: #856404; font-size: 1.05em;">
+                    <strong>Important Context:</strong> The status indicators below reflect <em>technical control configuration</em> as validated by OpenSCAP automated scanning. They do not represent operational maturity, policy implementation, or third-party assessment results. Automated scans are a starting point, not a finish line.
+                </p>
+            </div>
+
+            <div class="compliance-grid">
+                <div class="compliance-card">
+                    <h3>NIST SP 800-171 Rev 2</h3>
+                    <div class="compliance-status">110/110</div>
+                    <p>Technical Controls Configured*</p>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;">*OpenSCAP CUI profile scan passing as of January 2026. Validates technical configuration only.</p>
+                </div>
+                <div class="compliance-card">
+                    <h3>DFARS 252.204-7012</h3>
+                    <div class="compliance-status">Addressed</div>
+                    <p>Technical safeguarding controls configured; incident response procedures documented</p>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;">Full compliance requires operational implementation and testing.</p>
+                </div>
+                <div class="compliance-card">
+                    <h3>CMMC Level 2</h3>
+                    <div class="compliance-status" style="font-size: 1.2em;">Not Assessed</div>
+                    <p>Technical controls deployed; <strong>no C3PAO assessment conducted</strong></p>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;">CMMC certification requires formal third-party assessment.</p>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <h3>NIST 800-171 Control Families Addressed</h3>
+                <p style="color: #666; margin-bottom: 15px;">Technical configurations have been applied for each control family. Operational effectiveness varies and has not been independently validated.</p>
+                <div class="controls-grid">
+                    <div class="control-item">Access Control (AC)</div>
+                    <div class="control-item">Awareness & Training (AT)</div>
+                    <div class="control-item">Audit & Accountability (AU)</div>
+                    <div class="control-item">Configuration Management (CM)</div>
+                    <div class="control-item">Identification & Authentication (IA)</div>
+                    <div class="control-item">Incident Response (IR)</div>
+                    <div class="control-item">Maintenance (MA)</div>
+                    <div class="control-item">Media Protection (MP)</div>
+                    <div class="control-item">Personnel Security (PS)</div>
+                    <div class="control-item">Physical Protection (PE)</div>
+                    <div class="control-item">Risk Assessment (RA)</div>
+                    <div class="control-item">Security Assessment (CA)</div>
+                    <div class="control-item">System & Comm Protection (SC)</div>
+                    <div class="control-item">System & Info Integrity (SI)</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Ongoing Compliance Activities</h3>
+                <p>Maintaining compliance requires continuous effort:</p>
+                <ul>
+                    <li>Automated security patching (dnf-automatic)</li>
+                    <li>Periodic OpenSCAP compliance scans</li>
+                    <li>Vulnerability assessment (Wazuh) - <em>requires regular human review</em></li>
+                    <li>File integrity monitoring - <em>requires alert investigation</em></li>
+                    <li>Audit log review - <em>requires dedicated time commitment</em></li>
+                    <li>Encrypted backups - <em>requires periodic restore testing</em></li>
+                </ul>
+                <p style="margin-top: 15px; color: #856404;"><strong>Note:</strong> Automated tools generate data. Without human analysis and response, they provide limited security value.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Management Tools Section -->
+    <section id="management" class="section">
+        <div class="container">
+            <h2 class="section-title">Operational Management Tools</h2>
+
+            <div class="management-intro">
+                <p>Custom dashboards and tracking systems developed for this reference implementation. These tools support compliance monitoring but do not replace the expertise needed to interpret and act on the information they present.</p>
+            </div>
+
+            <div class="two-column">
+                <div class="card management-card">
+                    <h3>CPM System Dashboard</h3>
+                    <p class="card-subtitle">Centralized Compliance & Performance Monitoring</p>
+
+                    <h4>Capabilities</h4>
+                    <ul>
+                        <li>System health status aggregation</li>
+                        <li>Security alert summary (Wazuh, FIM, IDS/IPS)</li>
+                        <li>Service availability monitoring</li>
+                        <li>Storage and backup status</li>
+                        <li>Links to security tools and logs</li>
+                    </ul>
+
+                </div>
+
+                <div class="card management-card">
+                    <h3>Cybersecurity Policy Index</h3>
+                    <p class="card-subtitle">Requirements Traceability & Evidence Management</p>
+
+                    <h4>Capabilities</h4>
+                    <ul>
+                        <li>NIST 800-171 requirements indexed</li>
+                        <li>Policy documents linked to controls</li>
+                        <li>Implementation evidence references</li>
+                        <li>Configuration baseline documentation</li>
+                        <li>Status tracking and review dates</li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; border-radius: 12px; margin: 30px 0;">
+                <h3 style="color: white; font-size: 1.6em; margin-bottom: 15px; text-align: center;">Workstation Monitoring</h3>
+                <p style="color: white; font-size: 1.05em; margin-bottom: 20px; text-align: center; opacity: 0.95;">Prometheus and Node Exporter deployed across systems with TLS encryption</p>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 8px;">
+                    <div class="two-column">
+                        <div>
+                            <h4 style="color: #059669; margin-bottom: 10px;">Configuration</h4>
+                            <ul>
+                                <li>6 systems monitored</li>
+                                <li>TLS 1.2+ encryption for metrics transport</li>
+                                <li>144+ metrics per system</li>
+                                <li>Cross-platform (Rocky Linux + macOS)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: #059669; margin-bottom: 10px;">Capabilities</h4>
+                            <ul>
+                                <li>System health metrics collection</li>
+                                <li>Historical trend data (15-day retention)</li>
+                                <li>Grafana dashboard visualization</li>
+                                <li>Alerting configuration available</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Tool Perspective</h3>
+                <p>These dashboards were built to support this research project. They demonstrate that custom compliance tools can be developed without expensive commercial platforms. However:</p>
+                <ul>
+                    <li>Tools are only as valuable as the expertise of those using them</li>
+                    <li>Dashboards present data; humans must analyze and respond</li>
+                    <li>Automation reduces some effort but doesn't eliminate the need for qualified personnel</li>
+                    <li>Commercial tools may provide better support, updates, and integration for production environments</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Infrastructure Section - Revised -->
+    <section id="ai-infrastructure" class="section">
+        <div class="container">
+            <h2 class="section-title">AI-Assisted System Administration</h2>
+
+            <div class="management-intro">
+                <p><strong>January 2026:</strong> AI infrastructure added using Llama 3.3 70B Instruct on Mac Mini M4 Pro. The SysAdmin Agent Dashboard provides natural language system administration capabilities. <strong>Important:</strong> AI tools assist but do not replace cybersecurity expertise. See "AI Competency Paradox" in <a href="#risks-limitations">Risks</a>.</p>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <img src="SysAdmin_Agent_Dashboard.png" alt="SysAdmin Agent Dashboard" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); border: 3px solid #2c3e50;">
+                <p style="margin-top: 15px; color: #666; font-style: italic;">SysAdmin Agent Dashboard - AI assistance for system administration tasks</p>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>Implementation Details</h3>
+                    <ul>
+                        <li><strong>AI Model:</strong> Llama 3.3 70B Instruct (locally hosted)</li>
+                        <li><strong>Hardware:</strong> Mac Mini M4 Pro, 64GB RAM</li>
+                        <li><strong>Network:</strong> Internal only, TLS-encrypted (port 11443)</li>
+                        <li><strong>Backend:</strong> Flask API with command whitelist</li>
+                        <li><strong>Security:</strong> Human approval required for system changes</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Capabilities & Limitations</h3>
+                    <ul>
+                        <li><strong>Can:</strong> Analyze logs, suggest troubleshooting steps, answer questions</li>
+                        <li><strong>Can:</strong> Execute whitelisted read-only commands</li>
+                        <li><strong>Cannot:</strong> Replace security expertise or judgment</li>
+                        <li><strong>Cannot:</strong> Guarantee correct or secure recommendations</li>
+                        <li><strong>Requires:</strong> Human review of all suggestions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                <h4 style="color: #856404; margin-bottom: 10px;">AI Competency Paradox</h4>
+                <p style="margin: 0; color: #856404; line-height: 1.7;">
+                    AI tools can accelerate work for those who already understand what they're doing. For those who don't, AI can produce convincing-looking results that contain subtle errors or security gaps.
+                    <strong>AI assistance does not substitute for foundational cybersecurity knowledge.</strong> If you cannot evaluate whether an AI suggestion is correct, you should not implement it.
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Why Local AI?</h3>
+                <p>Running AI locally on the internal network provides:</p>
+                <ul>
+                    <li><strong>Data Control:</strong> Queries and responses stay within the environment</li>
+                    <li><strong>No External Dependencies:</strong> Functions without internet connectivity</li>
+                    <li><strong>Cost Structure:</strong> One-time hardware cost vs. ongoing API fees</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Trade-offs:</strong> Local models may be less capable than cloud APIs; requires hardware investment; model updates require manual intervention.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section - Updated -->
+    <section id="technology" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Technology Stack</h2>
+
+            <div class="tech-intro">
+                <p>All software components are enterprise-grade, open-source solutions with zero licensing costs. Automated installation scripts and AI-assisted administration tools are included to reduce implementation complexity, though some additional expertise through a managed service partner may be required for production deployments.</p>
+            </div>
+
+            <div class="tech-categories">
+                <div class="tech-category">
+                    <h3>Server (Domain Controller)</h3>
+                    <p style="color: #666; font-size: 0.95em; margin-bottom: 15px;">Can leverage existing hardware or inexpensive commercial systems</p>
+                    <ul>
+                        <li>64-bit x86 processor (Intel/AMD)</li>
+                        <li>32GB RAM minimum</li>
+                        <li>500GB SSD (boot/OS)</li>
+                        <li>1TB+ storage (data/backups)</li>
+                    </ul>
+                </div>
+                <div class="tech-category">
+                    <h3>AI Server (Optional)</h3>
+                    <p style="color: #666; font-size: 0.95em; margin-bottom: 15px;">Enables AI-assisted administration features</p>
+                    <ul>
+                        <li>Apple Silicon or NVIDIA GPU</li>
+                        <li>64GB unified/system memory</li>
+                        <li>256GB+ storage</li>
+                        <li>Internal network connection</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tech-categories">
+                <div class="tech-category">
+                    <h3>Operating System & Core</h3>
+                    <ul>
+                        <li><strong>Rocky Linux 9.7</strong> - RHEL-compatible, enterprise support available</li>
+                        <li><strong>FIPS 140-2 Mode</strong> - Cryptographically validated modules</li>
+                        <li><strong>SELinux</strong> - Mandatory access control</li>
+                        <li><strong>OpenSCAP</strong> - Compliance scanning and validation</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Identity & Access Management</h3>
+                    <ul>
+                        <li><strong>FreeIPA</strong> - Centralized identity management</li>
+                        <li><strong>MIT Kerberos</strong> - Strong authentication</li>
+                        <li><strong>389 Directory Server</strong> - LDAP directory</li>
+                        <li><strong>Dogtag PKI</strong> - Certificate authority</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Security Monitoring</h3>
+                    <ul>
+                        <li><strong>Wazuh 4.14.2</strong> - SIEM, XDR, FIM, vulnerability detection</li>
+                        <li><strong>Prometheus 2.48.1</strong> - Metrics collection</li>
+                        <li><strong>Node Exporter 1.7.0</strong> - System metrics</li>
+                        <li><strong>Grafana</strong> - Visualization</li>
+                        <li><strong>Suricata</strong> - Network IDS/IPS</li>
+                        <li><strong>YARA</strong> - Malware pattern detection</li>
+                        <li><strong>Auditd</strong> - Audit logging</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Infrastructure Services</h3>
+                    <ul>
+                        <li><strong>Postfix</strong> - SMTP mail transfer agent</li>
+                        <li><strong>Dovecot</strong> - IMAP/POP3 mail server</li>
+                        <li><strong>Apache HTTP Server</strong> - Web services</li>
+                        <li><strong>ReaR</strong> - Disaster recovery and backup</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category">
+                    <h3>Storage & Encryption</h3>
+                    <ul>
+                        <li><strong>LUKS2</strong> - Full-disk encryption (AES-256)</li>
+                        <li><strong>LVM</strong> - Logical volume management</li>
+                        <li><strong>XFS/ext4</strong> - Enterprise filesystems</li>
+                        <li><strong>Automated Backups</strong> - Encrypted backup scripts</li>
+                    </ul>
+                </div>
+
+                <div class="tech-category">
+                    <h3>AI Infrastructure</h3>
+                    <ul>
+                        <li><strong>Ollama</strong> - Local AI model server</li>
+                        <li><strong>Llama 3.3 70B Instruct</strong> - AI language model</li>
+                        <li><strong>Flask API</strong> - Command execution backend</li>
+                        <li><strong>Python 3.9</strong> - Runtime environment</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: #666; margin-top: 30px;">Exact hardware and the complete Software Bill of Materials (SBOM) are available in the <a href="https://github.com/The-CyberHygiene-Project/cyberhygiene-documentation" target="_blank" style="color: #667eea; text-decoration: underline;">GitHub repository</a>.</p>
+        </div>
+    </section>
+
+    <!-- Results Section - Reframed as Observations -->
+    <section id="results" class="section">
+        <div class="container">
+            <h2 class="section-title">Project Observations</h2>
+
+            <div class="results-summary">
+                <h3>What We Observed</h3>
+                <p>After several months of development (October 2025 - January 2026), we documented the following observations about building this reference implementation:</p>
+            </div>
+
+            <div class="three-column">
+                <div class="card">
+                    <h4>Technical Observations</h4>
+                    <ul>
+                        <li>Core services configured and operational</li>
+                        <li>OpenSCAP CUI profile scans passing</li>
+                        <li>Automated patching and backups functional</li>
+                        <li>Monitoring infrastructure collecting data</li>
+                        <li>No security incidents during development period</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;"><em>Note: Development environment with limited exposure. Production environments face different threat profiles.</em></p>
+                </div>
+                <div class="card">
+                    <h4>Effort Required</h4>
+                    <ul>
+                        <li>Significant Linux administration expertise needed</li>
+                        <li>Extensive troubleshooting for FIPS compatibility</li>
+                        <li>Documentation creation was time-intensive</li>
+                        <li>Ongoing maintenance requires regular attention</li>
+                        <li>Learning curve for security tool interpretation</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;"><em>This was not a quick or simple project.</em></p>
+                </div>
+                <div class="card">
+                    <h4>Cost Factors</h4>
+                    <ul>
+                        <li>Hardware: ~$5,000-6,000 (server + AI system)</li>
+                        <li>Software licensing: $0</li>
+                        <li>Labor: Substantial (not quantified)</li>
+                        <li>Expertise: Required significant prior knowledge</li>
+                        <li>Ongoing: Estimated 5-10+ hrs/month maintenance</li>
+                    </ul>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 10px;"><em>Labor and expertise costs may exceed hardware savings for many organizations.</em></p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Lessons Observed</h3>
+                <ul>
+                    <li><strong>Open-source tools are capable:</strong> Modern open-source security tools can implement required technical controls</li>
+                    <li><strong>FIPS compliance adds complexity:</strong> Numerous compatibility issues with FIPS 140-2 mode drove selection of alternate tools and configurations</li>
+                    <li><strong>Documentation is substantial work:</strong> Templates and examples are available on <a href="https://github.com/The-CyberHygiene-Project/cyberhygiene-documentation" target="_blank" style="color: #667eea;">GitHub</a>, and AI tools can help tailor them to expedite implementation</li>
+                    <li><strong>Tools generate data, not security:</strong> AI tools included in the reference system pre-process monitoring data, but human analysis and response remain essential</li>
+                    <li><strong>AI accelerates but doesn't replace expertise:</strong> Claude and AI-assisted development played a huge role in building this system, but human involvement remained essential to direct, review, and validate the effort</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- RISKS SECTION -->
+    <section id="risks-limitations" class="section" style="background: linear-gradient(135deg, #4a5568 0%, #5a6778 100%); padding: 60px 20px;">
+        <div class="container">
+            <h2 style="text-align: center; color: white; font-size: 2.5em; margin-bottom: 15px;">Risks</h2>
+            <p style="text-align: center; color: white; font-size: 1.2em; margin-bottom: 40px; opacity: 0.95;">Important considerations for anyone exploring similar implementations</p>
+            <div style="background: white; border-radius: 12px; padding: 40px; max-width: 800px; margin: 0 auto;">
+                <ul style="color: #555; line-height: 2.2; font-size: 1.1em; margin: 0; padding-left: 25px;">
+                    <li><strong>Checkbox vs. Defense-in-Depth</strong> — Compliance requires integrated security, not just installed tools</li>
+                    <li><strong>Configuration vs. Operation</strong> — Deploying tools is not the same as running a security program</li>
+                    <li><strong>Technical vs. Administrative Controls</strong> — Automated scans address only technical configurations</li>
+                    <li><strong>Static Scans vs. Dynamic Security</strong> — Passing scans today doesn't ensure security tomorrow</li>
+                    <li><strong>AI Competency Paradox</strong> — AI amplifies both competence and incompetence</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase II Section - Reframed -->
+    <section class="section" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 60px 20px;">
+        <div class="container">
+            <h2 style="text-align: center; color: white; font-size: 2.2em; margin-bottom: 20px;">Phase II: Exploring Deployment Automation</h2>
+            <p style="text-align: center; color: white; font-size: 1.1em; margin-bottom: 40px; opacity: 0.95;">Investigating whether deployment complexity can be reduced through automation</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto;">
+                <div style="background: white; border-radius: 12px; padding: 30px;">
+                    <h3 style="color: #28a745; margin-bottom: 15px;">Research Direction</h3>
+                    <p style="color: #555; line-height: 1.6;">Phase II explores whether scripted deployment can reduce the technical barrier while maintaining security.</p>
+                    <ul style="color: #555; line-height: 1.8; margin-top: 15px;">
+                        <li>Portable demonstration system for educational presentations (Q1 2026)</li>
+                        <li>Testing and assessment of reference implementation (Q2 - Q3 2026)</li>
+                    </ul>
+                </div>
+
+                <div style="background: white; border-radius: 12px; padding: 30px;">
+                    <h3 style="color: #28a745; margin-bottom: 15px;">Important Caveats</h3>
+                    <ul style="color: #555; line-height: 1.8;">
+                        <li>Automation reduces deployment time, not expertise requirements</li>
+                        <li>Scripted deployment still requires understanding to operate securely</li>
+                        <li>Professional guidance recommended for production use</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Policy Documentation Section -->
+    <section class="section" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 60px 20px;">
+        <div class="container">
+            <h2 style="text-align: center; color: white; font-size: 2.2em; margin-bottom: 20px;">Compliance Documentation</h2>
+            <p style="text-align: center; color: white; font-size: 1.1em; margin-bottom: 40px; opacity: 0.95;">Policy framework and documentation developed for this reference implementation</p>
+
+            <div style="max-width: 700px; margin: 0 auto;">
+                <div style="background: white; border-radius: 12px; padding: 40px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px; font-size: 1.6em; text-align: center;">Documentation Package</h3>
+                    <p style="color: #666; margin-bottom: 25px; line-height: 1.6; text-align: center;">Example documentation created for research purposes. Actual compliance requires policies tailored to your organization and actually implemented in practice.</p>
+
+                    <ul style="color: #555; margin-bottom: 30px; line-height: 2;">
+                        <li>Policy documents covering NIST control families</li>
+                        <li>NIST 800-171 control mapping examples</li>
+                        <li>System Security Plan (SSP) template</li>
+                        <li>Technical configuration documentation</li>
+                        <li>Software Bill of Materials (SBOM)</li>
+                        <li>Plan of Action & Milestones (POA&M) tracking</li>
+                    </ul>
+
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; text-align: center;">
+                        <p style="margin: 0; color: #856404; font-size: 0.95em;">
+                            <strong>Note:</strong> Documentation templates are starting points. Effective policies must reflect your actual operations and be actively followed by personnel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Request Information Section -->
+    <section id="request-info" class="section">
+        <div class="container">
+            <h2 class="section-title">Request Information</h2>
+
+            <div class="management-intro">
+                <p>Questions about the CyberHygiene Project research, the Nexus 2026 presentation, or general inquiries about the approach documented here? Contact us using the form below.</p>
+                <p style="margin-top: 15px; color: #666;"><strong>Please note:</strong> The author does not provide cybersecurity consulting services. This is an academic research project shared for educational purposes.</p>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="form-status" style="display: none; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;"></div>
+
+            <div style="max-width: 700px; margin: 0 auto;">
+                <form action="contact-handler.php" method="POST" style="background: #f8f9fa; padding: 40px; border-radius: 12px;">
+
+                    <!-- Honeypot field -->
+                    <input type="text" name="website" style="display: none;" tabindex="-1" autocomplete="off">
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label for="name" style="display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50;">Name *</label>
+                            <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em;">
+                        </div>
+                        <div>
+                            <label for="email" style="display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50;">Email *</label>
+                            <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label for="organization" style="display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50;">Organization</label>
+                            <input type="text" id="organization" name="organization" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em;">
+                        </div>
+                        <div>
+                            <label for="interest" style="display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50;">Inquiry Type</label>
+                            <select id="interest" name="interest" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; background: white;">
+                                <option value="General Information">General Information</option>
+                                <option value="Research Questions">Research Questions</option>
+                                <option value="Nexus Presentation">Nexus 2026 Presentation</option>
+                                <option value="Technical Questions">Technical Questions</option>
+                                <option value="Partnership/Collaboration">Partnership or Collaboration</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label for="message" style="display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50;">Message *</label>
+                        <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1em; resize: vertical; font-family: inherit;" placeholder="Your question or comment..."></textarea>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button type="submit" style="padding: 15px 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer;">
+                            Send Message
+                        </button>
+                    </div>
+
+                    <p style="text-align: center; margin-top: 20px; color: #888; font-size: 0.9em;">
+                        * Required fields. Your information will not be shared with third parties.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const statusDiv = document.getElementById('form-status');
+
+        if (status === 'success') {
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = '#d4edda';
+            statusDiv.style.color = '#155724';
+            statusDiv.style.border = '1px solid #c3e6cb';
+            statusDiv.innerHTML = '<strong>Thank you!</strong> Your message has been sent.';
+            document.getElementById('request-info').scrollIntoView({behavior: 'smooth'});
+        } else if (status === 'error') {
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = '#f8d7da';
+            statusDiv.style.color = '#721c24';
+            statusDiv.style.border = '1px solid #f5c6cb';
+            statusDiv.innerHTML = '<strong>Error:</strong> There was a problem sending your message. Please try again.';
+            document.getElementById('request-info').scrollIntoView({behavior: 'smooth'});
+        }
+    });
+    </script>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">About The Contract Coach</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Business Overview</h3>
+                    <p><strong>The Contract Coach</strong> (Donald E. Shannon LLC) is a contract management and project management consulting firm specializing in federal government contracts.</p>
+
+                    <h4>Focus Area</h4>
+                    <p>Emerging small businesses seeking to acquire government contracts and develop compliant business systems.</p>
+
+                    <h4>Core Services</h4>
+                    <ul>
+                        <li>Project Management</li>
+                        <li>Proposal Management</li>
+                        <li>Contract Management</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #666;"><em>Note: The Contract Coach does not provide cybersecurity consulting services. The CyberHygiene Project is an independent academic research initiative.</em></p>
+                </div>
+
+                <div class="column">
+                    <h3>Professional Credentials</h3>
+                    <ul>
+                        <li><strong>PMP</strong> - Project Management Professional (PMI)</li>
+                        <li><strong>CFCM</strong> - Certified Federal Contract Manager (NCMA)</li>
+                        <li><strong>CPCM</strong> - Certified Professional Contract Manager (NCMA)</li>
+                        <li><strong>CCT</strong> - Certified Cost Technician (AACEI)</li>
+                        <li><strong>DML</strong> - Demonstrated Master Logistician (SOLE)</li>
+                        <li><strong>Security:</strong> Active DoD Top-Secret Clearance</li>
+                    </ul>
+
+                    <h4>Recognition</h4>
+                    <p>2021 NCMA Outstanding Fellow Award</p>
+
+                    <h4>Identifiers</h4>
+                    <p><strong>CAGE Code:</strong> 5QHR9<br>
+                    <strong>DUNS:</strong> 832123793</p>
+                </div>
+            </div>
+
+            <div class="contact-box">
+                <h3>Contact Information</h3>
+                <div class="contact-grid">
+                    <div>
+                        <h4>Business</h4>
+                        <p><strong>The Contract Coach</strong><br>
+                        Donald E. Shannon LLC</p>
+                    </div>
+                    <div>
+                        <h4>Email</h4>
+                        <p><a href="mailto:Don@Contract-coach.com">Don@Contract-coach.com</a></p>
+                    </div>
+                    <div>
+                        <h4>Website</h4>
+                        <p><a href="http://contract-coach.com" target="_blank">contract-coach.com</a></p>
+                    </div>
+                    <div>
+                        <h4>Phone</h4>
+                        <p>505.259.8485</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Project Background</h3>
+                <p>The CyberHygiene Project has been presented to:</p>
+                <ul>
+                    <li><strong>National Contract Management Association (NCMA)</strong> - National leadership briefed</li>
+                    <li><strong>National Apex Accelerator Alliance (NAPEX)</strong> - Project presented to national leadership</li>
+                    <li>Published research in NCMA Journal of Contract Management (2024)</li>
+                    <li>Companion whitepaper prepared for Nexus 2026</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>The CyberHygiene Project</h4>
+                    <p>A research reference implementation exploring affordable approaches to NIST 800-171 technical control configuration.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#risks-limitations"><strong>Risks</strong></a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#compliance">Compliance Status</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Standards Referenced</h4>
+                    <ul>
+                        <li>NIST SP 800-171 Rev 2</li>
+                        <li>DFARS 252.204-7012</li>
+                        <li>FAR 52.204-21</li>
+                        <li>CMMC Level 2</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Donald E. Shannon LLC dba The Contract Coach. All rights reserved.</p>
+                <p class="disclaimer"><strong>DISCLAIMER:</strong> This website documents an academic research project and reference implementation. OpenSCAP scan results demonstrate technical control configuration at specific points in time but do not constitute CMMC certification, third-party validation, operational security effectiveness, or legal compliance. Implementation complexity, labor costs, expertise requirements, and results will vary significantly based on organizational size, existing capabilities, and specific requirements. This system is not a substitute for professional cybersecurity assessment, C3PAO evaluation, or qualified legal counsel. <strong>The author does not provide cybersecurity consulting services.</strong> Organizations should engage qualified professionals before attempting compliance implementations.</p>
+                <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.85em; opacity: 0.8;">
+                    Documentation and website development assisted by
+                    <a href="https://claude.ai" target="_blank" style="color: #d4a574; text-decoration: none;">Claude</a>
+                    by
+                    <a href="https://anthropic.com" target="_blank" style="color: #d4a574; text-decoration: none;">Anthropic</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

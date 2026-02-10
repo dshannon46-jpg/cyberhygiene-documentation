@@ -1,0 +1,27 @@
+[Unit]
+Description=CPM System Status Dashboard - Flask Web Application with Ollama Integration
+After=network.target httpd.service sudo-proxy.service
+Wants=sudo-proxy.service
+
+[Service]
+Type=simple
+User=apache
+Group=apache
+WorkingDirectory=/opt/cpm-dashboard
+Environment="PATH=/usr/local/bin:/usr/bin"
+Environment="PYTHONUNBUFFERED=1"
+# Run with eventlet for WebSocket support
+ExecStart=/bin/bash /opt/cpm-dashboard/run-dashboard.sh
+Restart=always
+RestartSec=5
+TimeoutStartSec=30
+TimeoutStopSec=30
+
+# Security hardening
+PrivateTmp=true
+NoNewPrivileges=false
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

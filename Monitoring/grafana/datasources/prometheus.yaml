@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: https://dc1.cyberinabox.net:9091
+    isDefault: false
+    editable: true
+    uid: df8llkvhg7m68a
+    jsonData:
+      httpMethod: POST
+      timeInterval: 15s
+      tlsSkipVerify: true
+      tlsAuth: false
+      tlsAuthWithCACert: false

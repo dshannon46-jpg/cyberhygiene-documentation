@@ -1,0 +1,38 @@
+# Python virtual environments
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+._*
+*.webloc
+.AppleDouble
+.LSOverride
+
+# Keys and secrets
+*.key
+*.p12
+*.pem
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Logs
+*.log
+logs/
+
+# Node
+node_modules/

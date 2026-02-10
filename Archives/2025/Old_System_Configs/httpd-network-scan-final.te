@@ -1,0 +1,30 @@
+
+module httpd-network-scan-final 1.0;
+
+require {
+	type sssd_conf_t;
+	type httpd_t;
+	type shadow_t;
+	class capability { audit_write sys_resource };
+	class netlink_audit_socket nlmsg_relay;
+	class file { getattr open read };
+}
+
+#============= httpd_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t self:capability sys_resource;
+
+#!!!! This avc can be allowed using the boolean 'httpd_mod_auth_pam'
+allow httpd_t self:capability audit_write;
+
+#!!!! This avc can be allowed using the boolean 'httpd_mod_auth_pam'
+allow httpd_t self:netlink_audit_socket nlmsg_relay;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t shadow_t:file read;
+allow httpd_t shadow_t:file { getattr open };
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t sssd_conf_t:file { open read };
+allow httpd_t sssd_conf_t:file getattr;

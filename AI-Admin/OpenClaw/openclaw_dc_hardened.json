@@ -1,0 +1,282 @@
+{
+  // =============================================================
+  // OpenClaw — Hardened Configuration for Domain Controller
+  // Target: NIST-aligned, air-gapped local AI, sudo-gated admin
+  // Version: 1.1 — adds native defense-in-depth layer
+  //   (exec approvals + Lobster + Citadel Guard)
+  // =============================================================
+  // NOTE: This is a JSON5-style annotated reference. OpenClaw's
+  // actual parser may require standard JSON — strip comments
+  // before deploying. Alternatively, use the YAML equivalent in
+  // openclaw.yaml which natively supports comments.
+  // =============================================================
+
+  // ---------------------------------------------------------
+  // GATEWAY — Network surface minimization
+  // Mitigates: §3.1 (bind/auth), §3.4 (channel disable)
+  // ---------------------------------------------------------
+  "gateway": {
+    "mode": "local",
+    "bind": "loopback",          // CRITICAL: never lan, tailnet, or custom
+    "port": 18789,
+    "auth": {
+      "mode": "token",
+      // Replace with a 256-bit+ cryptographically generated token.
+      // Generate with: openssl rand -hex 32
+      "token": "REPLACE_WITH_GENERATED_TOKEN"
+    },
+    // Disable the Control UI entirely — no browser-based admin surface.
+    // Operator interaction goes through the sudo approval proxy only.
+    "controlUi": {
+      "enabled": false
+    },
+    // No reverse proxy in this architecture — omit trustedProxies.
+    // If one is added later, configure explicitly.
+    "trustedProxies": []
+  },
+
+  // ---------------------------------------------------------
+  // DISCOVERY — Eliminate all network broadcasting
+  // Mitigates: §3.1 (mDNS/Bonjour info disclosure)
+  // Also set env var: OPENCLAW_DISABLE_BONJOUR=1
+  // ---------------------------------------------------------
+  // (mDNS is controlled via env var, not config block.
+  //  See launch/systemd unit file for OPENCLAW_DISABLE_BONJOUR=1)
+
+  // ---------------------------------------------------------
+  // CHANNELS — Disable every inbound messaging surface
+  // Mitigates: §3.4 (attack surface elimination)
+  // A DC admin tool has zero need for WhatsApp, Telegram, etc.
+  // ---------------------------------------------------------
+  "channels": {
+    "whatsapp": { "enabled": false },
+    "telegram": { "enabled": false },
+    "discord":  { "enabled": false },
+    "slack":    { "enabled": false },
+    "signal":   { "enabled": false },
+    "imessage": { "enabled": false },
+    "googlechat": { "enabled": false },
+    "msteams":  { "enabled": false },
+    "matrix":   { "enabled": false },
+    "webchat":  { "enabled": false }
+  },
+
+  // ---------------------------------------------------------
+  // AGENTS — Tool policy and sandbox enforcement
+  // Mitigates: §3.2 (allow/deny), §3.3 (sandbox/container)
+  // ---------------------------------------------------------
+  "agents": {
+    "defaults": {
+      // Tool policy — whitelist ONLY what is needed for log review.
+      // All execution must go through the external sudo proxy.
+      "tools": {
+        "allowlist": [
+          "read"              // Read log files (mounted read-only)
+        ],
+        "denylist": [
+          "write",            // No file writes
+          "edit",             // No file edits
+          "apply_patch",      // No patching
+          "exec",             // CRITICAL: no direct shell execution
+          "process",          // CRITICAL: no process spawning
+          "browser",          // No browser access
+          "canvas",           // No canvas
+          "cron",             // No scheduled jobs
+          "nodes",            // No node communication
+          "discord",          // No Discord actions
+          "gateway",          // No gateway manipulation
+          "web_search",       // No outbound web (air-gapped anyway)
+          "web_fetch"         // No outbound fetch
+        ],
+
+        // ---------------------------------------------------------
+        // EXEC APPROVALS — Native defense-in-depth layer (Layer 1)
+        // Enforced on the execution host (gateway). Provides
+        // allowlist gating and operator prompts for any command
+        // that somehow reaches the exec path. This does NOT replace
+        // the external sudo proxy (see §2.3) — it is a redundant
+        // catch inside the agent process that hardens against
+        // accidental or prompt-injection-driven command execution.
+        //
+        // IMPORTANT: Verify that PR #3357 (fix for issue #2402) is
+        // present in your build. Pre-fix versions did not block
+        // execution pending approval.
+        //
+        // security: "allowlist" — only commands on the per-agent
+        //   allowlist may run; everything else is denied or prompted.
+        // ask: "on-miss" — prompt operator for any command not on
+        //   the allowlist. Combined with askFallback: "deny", this
+        //   means unknown commands fail closed.
+        // askFallback: "deny" — if the approval UI is unreachable,
+        //   the command is denied (fail-closed).
+        // autoAllowSkills: false — do NOT auto-allow skill CLIs.
+        //   Every binary must be explicitly listed.
+        // allowlist: empty for this deployment. No commands should
+        //   reach exec directly — all go through the sudo proxy.
+        //   If a specific read-only diagnostic binary is needed in
+        //   the future, add it here with its full path.
+        // forwardTo: route approval prompts to the SOC channel for
+        //   out-of-band review. Operator approves via /approve.
+        // ---------------------------------------------------------
+        "exec": {
+          "security": "allowlist",
+          "ask": "on-miss",
+          "askFallback": "deny",
+          "autoAllowSkills": false,
+          "allowlist": [],
+          "forwardTo": "REPLACE_WITH_SOC_CHANNEL_ID"
+        }
+      },
+
+      // Sandbox configuration — Docker isolation
+      "sandbox": {
+        "enabled": true,
+        "scope": "all",       // Sandbox ALL sessions, not just non-main
+        "docker": {
+          // Use a minimal, hardened base image.
+          // Build your own from debian:bookworm-slim with:
+          //   - non-root user (UID 1000)
+          //   - read-only root filesystem
+          //   - no shell (no /bin/sh or /bin/bash)
+          //   - only the log-reading binaries needed (cat, grep, tail)
+          "image": "openclaw-dc-readonly:latest",
+          "network": "none",  // CRITICAL: no network from sandbox
+                              // (Ollama calls go through the proxy, not here)
+          "user": "1000:1000" // Non-root
+          // Volume mounts are defined externally in docker-compose.yml
+          // See companion file: openclaw_dc_compose.yml
+          // Only read-only bind mounts to specific log directories.
+        }
+      },
+
+      // DM and group access — fully locked down
+      "session": {
+        "dmScope": "disabled"
+      }
+    }
+  },
+
+  // ---------------------------------------------------------
+  // PLUGINS — Explicit allowlist with native defense-in-depth
+  // Mitigates: supply chain risk on extensions
+  //
+  // Two plugins are allowlisted as part of the native
+  // defense-in-depth layer (see §2.4 in the Hardening Guide):
+  //
+  //   lobster  — Workflow shell with approval gates. Structures
+  //              log-review → propose → approve sequences as
+  //              deterministic, resumable pipelines. Approval
+  //              checkpoints are enforced by the Lobster runtime,
+  //              not the agent. Provides an audit-friendly
+  //              alternative to free-form exec calls.
+  //
+  //   citadel-guard — Tool-result sanitizer. Scans all tool
+  //              outputs (including log content) for prompt
+  //              injection patterns before they reach the model.
+  //              Addresses the §8.1 gap (adversarial content in
+  //              ingested security logs). Multi-layer detection:
+  //              heuristic + ML + semantic similarity.
+  //              NOTE: Disable the HTTP API path
+  //              (/v1/chat/completions) — it bypasses hooks.
+  //
+  // Any additional plugin requires an explicit entry here AND
+  // a corresponding change to this document.
+  // ---------------------------------------------------------
+  "plugins": {
+    "allow": [
+      "lobster",
+      "citadel-guard"
+    ]
+  },
+
+  // ---------------------------------------------------------
+  // LOBSTER — Workflow + approval gate configuration
+  // Mitigates: unstructured command proposals, missing audit trail
+  //
+  // Lobster pipelines are defined as JSON/YAML specs alongside
+  // the agent workspace (see SKILL.md or lobster docs). This
+  // block controls runtime safety policy.
+  //
+  // timeoutMs: 300000 — 5-minute hard timeout per pipeline step.
+  //   Prevents runaway or hung workflows.
+  // outputCap: 50000 — max bytes of output per step. Prevents
+  //   exfiltration via oversized pipeline outputs.
+  // sandbox: true — each pipeline step runs inside the agent
+  //   sandbox (inherits docker config above).
+  // approvalRequired: true — any step flagged as a side effect
+  //   (send, restart, modify) requires an explicit approval
+  //   checkpoint before proceeding.
+  // ---------------------------------------------------------
+  "lobster": {
+    "timeoutMs": 300000,
+    "outputCap": 50000,
+    "sandbox": true,
+    "approvalRequired": true
+  },
+
+  // ---------------------------------------------------------
+  // CITADEL GUARD — Prompt injection defense configuration
+  // Mitigates: §8.1 (prompt injection via log content)
+  //
+  // hooks: after_tool_call scans tool outputs asynchronously
+  //   before they reach the model context. tool_result_persist
+  //   performs synchronous sanitization on persisted results.
+  // sensitivity: "high" — flag anything that resembles directive
+  //   syntax, imperative mood targeting an AI, or known injection
+  //   patterns. False-positive rate is acceptable at this
+  //   sensitivity for a DC deployment.
+  // action: "sanitize_and_flag" — strip adversarial content and
+  //   surface a warning to the operator. Do not silently pass.
+  // httpApi: false — CRITICAL: the HTTP API bypasses hooks
+  //   entirely. Disable it; all interaction goes through the
+  //   agent tool path.
+  // ---------------------------------------------------------
+  "citadel-guard": {
+    "hooks": ["after_tool_call", "tool_result_persist"],
+    "sensitivity": "high",
+    "action": "sanitize_and_flag",
+    "httpApi": false
+  },
+
+  // ---------------------------------------------------------
+  // LOGGING — Redact sensitive data; capture everything else
+  // Mitigates: §6 (audit trail), credential leakage prevention
+  // ---------------------------------------------------------
+  "logging": {
+    "redactSensitive": "tools",  // Redact tool outputs that may contain
+                                 // secrets (tokens, passwords, keys)
+    "level": "debug",            // Capture maximum detail for audit
+    "retention": {
+      // Log retention is enforced by Graylog policy, not OpenClaw.
+      // OpenClaw local logs should be as short-lived as possible.
+      "localDays": 1             // Flush to Graylog sidecar daily
+    }
+  },
+
+  // ---------------------------------------------------------
+  // MODEL — Local Ollama endpoint configuration
+  // The model itself is configured here; TLS/auth on the Ollama
+  // side is configured in Ollama's own config (external to this file).
+  // ---------------------------------------------------------
+  "agent": {
+    "model": "ollama/YOUR_70B_MODEL_NAME",
+    // Ollama API endpoint on the segmented VLAN.
+    // TLS and API key auth are enforced at the Ollama side.
+    "modelOptions": {
+      "baseUrl": "https://OLLAMA_VLAN_IP:11434/v1",
+      // API key is loaded from a secrets file, not hardcoded here.
+      // Reference: openclaw reads from env or a referenced secrets path.
+      "headers": {
+        "Authorization": "Bearer ${OLLAMA_API_KEY}"
+      }
+    }
+  },
+
+  // ---------------------------------------------------------
+  // SECURITY AUDIT — Run regularly
+  // openclaw security audit --deep
+  // openclaw security audit --fix
+  // ---------------------------------------------------------
+  // No config block needed — this is a CLI operation.
+  // Schedule via the sudo proxy or a separate cron on the host.
+}

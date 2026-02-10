@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Contract Coach - Cybersecurity Policy Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .header .date {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .classification {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 0.9em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .intro h2 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #1e3c72;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .policy-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .policy-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .policy-card .policy-id {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .policy-card h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .policy-card .description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .policy-card .families {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .policy-card .families .label {
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .policy-card .families .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .policy-card .badge {
+            background: #764ba2;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .policy-card .meta {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .policy-card .meta span {
+            margin-right: 15px;
+        }
+
+        .policy-card .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .policy-card .btn {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .policy-card .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .policy-card .btn-primary:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .support-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .support-card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .support-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .support-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .support-card li:before {
+            content: "📄";
+            position: absolute;
+            left: 0;
+        }
+
+        .support-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .support-card a:hover {
+            text-decoration: underline;
+        }
+
+        .quick-start {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .quick-start h2 {
+            color: white;
+            border: none;
+            margin-bottom: 15px;
+        }
+
+        .quick-start p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quick-start .btn-light {
+            background: white;
+            color: #28a745;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .quick-start .btn-light:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            background: #1e3c72;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer .contact {
+            margin-bottom: 15px;
+        }
+
+        .footer .contact-item {
+            display: inline-block;
+            margin: 0 20px;
+        }
+
+        .footer .copyright {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-complete {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-draft {
+            background: #ffc107;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .policy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Cybersecurity Policy Index</h1>
+            <div class="subtitle">The Contract Coach</div>
+            <div class="subtitle">CyberHygiene Production Network (CPN)</div>
+            <div class="date">Last Updated: December 02, 2025</div>
+        </div>
+
+        <div class="classification">
+            CONFIDENTIAL BUSINESS INFORMATION
+        </div>
+        <div style="background: #6c757d; color: white; padding: 8px 10px; text-align: center; font-size: 0.85em; font-style: italic;">
+            Upon submission to U.S. Government agencies, this document shall be marked and protected as Controlled Unclassified Information (CUI) per 32 CFR Part 2002.
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h2>📋 Policy Documentation Package</h2>
+                <p>This comprehensive policy package supports NIST SP 800-171 Rev 2 compliance and CMMC Level 2 certification. All policies have been customized for The Contract Coach's solopreneur business model and CyberHygiene Production Network environment.</p>
+                <p><strong>Owner/ISSO:</strong> Donald E. Shannon | <strong>Domain:</strong> cyberinabox.net | <strong>System Classification:</strong> CONFIDENTIAL BUSINESS INFORMATION</p>
+                <p style="font-size: 0.9em; margin-top: 5px; color: #666;"><em>Note: Owner/ISSO holds active Top Secret (TS) personnel security clearance, exceeding CUI access screening requirements per 32 CFR Part 2002. System processes CUI only.</em></p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number">8</div>
+                    <div class="label">Core Policy Documents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">12</div>
+                    <div class="label">NIST Control Families</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">60+</div>
+                    <div class="label">Individual Controls</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">+100</div>
+                    <div class="label">Est. SPRS Points</div>
+                </div>
+            </div>
+
+            <div class="quick-start">
+                <h2>🚀 Quick Start - Begin Here</h2>
+                <p>New to these policies? Start with the Policy Review and Approval Checklist. This comprehensive guide walks you through reviewing, approving, and implementing all policies in a systematic 4-6 hour process.</p>
+                <a href="Policy_Review_and_Approval_Checklist.docx" class="btn-light">📖 Open Implementation Checklist</a>
+            </div>
+
+            <div class="section">
+                <h2>📚 Core Policy Documents</h2>
+                <p style="margin-bottom: 20px; color: #666;">Click on any policy to open the full document. Each policy includes detailed procedures, command examples, and compliance mapping.</p>
+
+                <div class="policy-grid">
+                    <!-- Incident Response Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-IRP-001</span>
+                        <h3>Incident Response Policy and Procedures</h3>
+                        <div class="description">
+                            Comprehensive incident detection, response, containment, eradication, and recovery procedures. Includes integration with Wazuh SIEM, FreeIPA, and Suricata IDS. Covers DoD 72-hour reporting requirements.
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">IR-1</span>
+                                <span class="badge">IR-2</span>
+                                <span class="badge">IR-3</span>
+                                <span class="badge">IR-4</span>
+                                <span class="badge">IR-5</span>
+                                <span class="badge">IR-6</span>
+                                <span class="badge">IR-7</span>
+                                <span class="badge">IR-8</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 19KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Incident_Response_Policy_and_Procedures.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Risk Management Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-RA-001</span>
+                        <h3>Risk Management Policy and Procedures</h3>
+                        <div class="description">
+                            Complete risk assessment framework with vulnerability management, supply chain risk assessment, and continuous monitoring. Includes Wazuh and OpenSCAP integration with defined remediation timelines.
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">RA-1</span>
+                                <span class="badge">RA-2</span>
+                                <span class="badge">RA-3</span>
+                                <span class="badge">RA-5</span>
+                                <span class="badge">RA-6</span>
+                                <span class="badge">RA-7</span>
+                                <span class="badge">RA-8</span>
+                                <span class="badge">RA-9</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 25KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Risk_Management_Policy_and_Procedures.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Personnel Security Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-PS-001</span>
+                        <h3>Personnel Security Policy</h3>
+                        <div class="description">
+                            Personnel lifecycle management from onboarding to termination. Includes contractor vetting procedures, FreeIPA account provisioning, quarterly access reviews, and personnel security clearance documentation (Owner holds TS clearance exceeding CUI requirements).
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">PS-1</span>
+                                <span class="badge">PS-2</span>
+                                <span class="badge">PS-3</span>
+                                <span class="badge">PS-4</span>
+                                <span class="badge">PS-5</span>
+                                <span class="badge">PS-6</span>
+                                <span class="badge">PS-7</span>
+                                <span class="badge">PS-8</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 24KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Personnel_Security_Policy.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Physical and Media Protection Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-PE-MP-001</span>
+                        <h3>Physical and Media Protection Policy</h3>
+                        <div class="description">
+                            Combined PE and MP families coverage. Home office physical security, locking server rack, LUKS encryption for all CUI media, media sanitization procedures, and environmental controls (UPS, HVAC, fire).
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">PE-1 to PE-20</span>
+                                <span class="badge">MP-1 to MP-8</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 22KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Physical_and_Media_Protection_Policy.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- System and Information Integrity Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-SI-001</span>
+                        <h3>System and Information Integrity Policy</h3>
+                        <div class="description">
+                            Flaw remediation with automated patching, malware protection (ClamAV), continuous monitoring (Wazuh SIEM), file integrity monitoring, security functionality verification with OpenSCAP, and vulnerability management.
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">SI-1</span>
+                                <span class="badge">SI-2</span>
+                                <span class="badge">SI-3</span>
+                                <span class="badge">SI-4</span>
+                                <span class="badge">SI-5</span>
+                                <span class="badge">SI-6</span>
+                                <span class="badge">SI-7</span>
+                                <span class="badge">SI-10 to SI-12</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 21KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="System_and_Information_Integrity_Policy.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Acceptable Use Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-AUP-001</span>
+                        <h3>Acceptable Use Policy</h3>
+                        <div class="description">
+                            Comprehensive user responsibilities, prohibited activities, CUI marking requirements, password policy integration with FreeIPA, incident reporting procedures, and user acknowledgment form template.
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">AC-1</span>
+                                <span class="badge">PS-6</span>
+                                <span class="badge">PL-4</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 21KB</span>
+                            <span>⏱️ ~20 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Acceptable_Use_Policy.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Audit & Accountability Policy -->
+                    <div class="policy-card">
+                        <span class="policy-id">TCC-AU-001</span>
+                        <h3>Audit & Accountability Policy</h3>
+                        <div class="description">
+                            Comprehensive audit event logging, monitoring, review, and retention procedures. Documents existing auditd configuration (OSPP v42 rules), Wazuh SIEM integration, log analysis procedures, and compliance verification. Covers all AU controls (AU-1 through AU-12).
+                        </div>
+                        <div class="families">
+                            <span class="label">NIST Families:</span>
+                            <div class="badges">
+                                <span class="badge">AU-1</span>
+                                <span class="badge">AU-2</span>
+                                <span class="badge">AU-3</span>
+                                <span class="badge">AU-4 to AU-12</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 24KB</span>
+                            <span>⏱️ ~25 min read</span>
+                            <span>✅ Complete (11/17/2025)</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Audit_and_Accountability_Policy.docx" class="btn btn-primary">📖 Open Policy</a>
+                        </div>
+                    </div>
+
+                    <!-- Policy Documentation Summary -->
+                    <div class="policy-card">
+                        <span class="policy-id">SUMMARY</span>
+                        <h3>Policy Documentation Summary</h3>
+                        <div class="description">
+                            Executive overview of all policies, SPRS score impact assessment, CMMC readiness guidance, implementation roadmap, and recommendations for additional policies. Essential starting point for understanding the complete package.
+                        </div>
+                        <div class="families">
+                            <span class="label">Purpose:</span>
+                            <div class="badges">
+                                <span class="badge">Overview</span>
+                                <span class="badge">Implementation Guide</span>
+                                <span class="badge">Compliance Assessment</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 22KB</span>
+                            <span>⏱️ ~30 min read</span>
+                            <span>✅ Complete</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Policy_Documentation_Summary.docx" class="btn btn-primary">📖 Open Summary</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📋 System Security Plan (SSP)</h2>
+                <p style="margin-bottom: 20px; color: #666;">The authoritative security documentation for the CyberHygiene Production Network.</p>
+
+                <div class="policy-grid">
+                    <!-- SSP v1.4 - Current Version -->
+                    <div class="policy-card" style="border: 3px solid #1e3c72;">
+                        <span class="policy-id" style="background: #1e3c72;">SSP v1.4</span>
+                        <span class="status-badge status-complete">✅ CURRENT</span>
+                        <h3>System Security Plan (Version 1.4)</h3>
+                        <div class="description">
+                            Complete unified SSP document with full system architecture, technical implementation details, all 14 control family implementations, integrated policy framework, unified POA&M (28 items), network diagrams, and system configuration. Includes all Version 1.4 policy integrations (IR, RA, PS, PE, MP, SI, AUP) with 98% implementation status.
+                        </div>
+                        <div class="families">
+                            <span class="label">Contains:</span>
+                            <div class="badges">
+                                <span class="badge">System Architecture</span>
+                                <span class="badge">14 Control Families</span>
+                                <span class="badge">Policy Framework</span>
+                                <span class="badge">Unified POA&M</span>
+                                <span class="badge">Network Diagrams</span>
+                                <span class="badge">Authorization</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 39KB</span>
+                            <span>📅 Version 1.5: December 2, 2025</span>
+                            <span>✅ 99% Implementation</span>
+                        </div>
+                        <div class="actions">
+                            <a href="System_Security_Plan_v1.5.docx" class="btn btn-primary">📖 Open SSP v1.5</a>
+                        </div>
+                    </div>
+
+                    <!-- Unified POA&M -->
+                    <div class="policy-card" style="border: 2px solid #e74c3c;">
+                        <span class="policy-id" style="background: #e74c3c;">POA&M v2.2</span>
+                        <span class="status-badge status-complete">✅ CURRENT</span>
+                        <h3>Plan of Action & Milestones</h3>
+                        <div class="description">
+                            Comprehensive tracking of all security weaknesses and remediation plans. Includes 30 items organized into 4 sections: Completed (24), In Progress (2), On Track (4), Planned (0). Recent completions: Graylog centralized logging (POA&M-037), System verification (POA&M-036), NextCloud file sharing (POA&M-001), SSL certificate (POA&M-010), Email server (POA&M-002).
+                        </div>
+                        <div class="families">
+                            <span class="label">Status:</span>
+                            <div class="badges">
+                                <span class="badge">80% Complete</span>
+                                <span class="badge">30 Total Items</span>
+                                <span class="badge">0 High Priority</span>
+                                <span class="badge">6 Medium Priority</span>
+                            </div>
+                        </div>
+                        <div class="meta">
+                            <span>📄 17KB</span>
+                            <span>📅 Updated: December 02, 2025</span>
+                            <span>📊 80% Complete (24/30)</span>
+                        </div>
+                        <div class="actions">
+                            <a href="Unified_POAM.md" class="btn btn-primary">📖 Open POA&M</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #e7f3ff; border-left: 4px solid #1e3c72; padding: 15px; margin-top: 20px; border-radius: 4px;">
+                    <strong>📌 SSP Version 1.5 Highlights:</strong>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li><strong>Unified Document:</strong> Single comprehensive SSP with all policies integrated</li>
+                        <li><strong>Policy Framework:</strong> All 8 core policies (IR, RA, PS, PE, MP, SI, AUP, AU) fully referenced</li>
+                        <li><strong>POA&M Tracking:</strong> 30 items with 80% completion rate (v2.2 - Updated 12/02/2025)</li>
+                        <li><strong>Implementation Status:</strong> 99% complete, ready for authorization</li>
+                        <li><strong>SPRS Impact:</strong> Estimated +90 to +110 points from policy implementation</li>
+                        <li><strong>Recent Achievements:</strong> Graylog centralized logging deployed (POA&M-037), Email server operational, NextCloud deployed, VirusTotal integrated, SSL certificate installed</li>
+                        <li><strong>Technical Documentation:</strong> <a href="System_Security_Technical_Overview.md">System Security Technical Overview</a> and <a href="Software_Bill_of_Materials.md">Software Bill of Materials</a> available</li>
+                    </ul>
+                    <strong>Version History:</strong> v1.0 (Oct 26) → v1.1 (Oct 28) → v1.2 (Oct 31) → v1.3 (Oct 31) → v1.4 (Nov 2) → <strong>v1.5 (Dec 2, 2025 - Current)</strong>
+                </div>
+            </div>
+
+            <!-- Quick Access Links -->
+            <div style="margin-top: 30px; margin-bottom: 30px; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                <h2 style="margin-bottom: 20px; color: white; font-size: 1.6em; border: none;">🚀 Quick Access - Key System Resources</h2>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                    <a href="http://dc1.cyberinabox.net:9000" target="_blank" style="display: inline-block; padding: 15px 30px; background: #f39c12; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 1.1em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)';">
+                        🔍 Graylog Centralized Logging
+                    </a>
+                    <a href="System_Status_Dashboard.html" target="_blank" style="display: inline-block; padding: 15px 30px; background: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 1.1em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)';">
+                        🖥️ System Status Dashboard
+                    </a>
+                    <a href="file:///home/dshannon/Documents/Claude/Artifacts/System_Security_Technical_Overview.md" target="_blank" style="display: inline-block; padding: 15px 30px; background: #9b59b6; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 1.1em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)';">
+                        🛡️ System Security Technical Overview
+                    </a>
+                    <a href="file:///home/dshannon/Documents/Claude/Artifacts/Software_Bill_of_Materials.md" target="_blank" style="display: inline-block; padding: 15px 30px; background: #16a085; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 1.1em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)';">
+                        📦 Software Bill of Materials (SBOM)
+                    </a>
+                    <a href="file:///home/dshannon/Documents/Claude/Artifacts/Document_Classification_Marking_Guide.md" target="_blank" style="display: inline-block; padding: 15px 30px; background: #c0392b; color: white; text-decoration: none; border-radius: 5px; font-weight: 600; font-size: 1.1em; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)';">
+                        🏷️ Document Classification Guide
+                    </a>
+                </div>
+                <p style="margin-top: 20px; color: white; font-size: 0.95em; opacity: 0.9;">
+                    <strong>🎯 Quick Tip:</strong> Access Graylog for centralized log search, view technical documentation, and understand document marking requirements
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>📚 Supporting Documents</h2>
+                <p style="margin-bottom: 20px; color: #666;">Additional compliance and operational documentation.</p>
+
+                <div class="policy-grid">
+                    <div class="support-card">
+                        <h3>Implementation & Compliance</h3>
+                        <ul>
+                            <li><a href="Policy_Review_and_Approval_Checklist.docx">Policy Review and Approval Checklist</a> - Step-by-step implementation guide (4-6 hours)</li>
+                            <li><a href="SPRS_Update_Guide.docx">SPRS Update Guide</a> - ⭐ NEW: Detailed SPRS assessment update instructions with control mapping</li>
+                            <li><a href="Evidence_Package_Summary.docx">Evidence Package Summary</a> - ⭐ NEW: Complete CMMC Level 2 evidence package</li>
+                            <li><a href="Control_to_Policy_Quick_Reference.docx">Control-to-Policy Quick Reference</a> - ⭐ NEW: All 110 controls mapped to policies</li>
+                            <li><a href="Backup_Procedures.docx">Backup Procedures</a> - Daily and weekly backup procedures with ReaR</li>
+                            <li><a href="Configuration_Management_Baseline.docx">Configuration Management Baseline</a> - System baseline and change control</li>
+                            <li><a href="Incident_Response_Plan.docx">Incident Response Plan</a> - Detailed IR planning document</li>
+                        </ul>
+                    </div>
+
+                    <div class="support-card">
+                        <h3>Checklists & Controls</h3>
+                        <ul>
+                            <li><a href="Physical_Security_Controls.docx">Physical Security Controls</a> - Physical protection measures</li>
+                            <li><a href="Quarterly_SSP_Review_Checklist.docx">Quarterly SSP Review Checklist</a> - SSP maintenance tasks</li>
+                            <li><a href="Samba_FIPS_Testing_Checklist.docx">Samba FIPS Testing Checklist</a> - FIPS compliance verification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Quick Access by Compliance Need</h2>
+
+                <div class="policy-grid">
+                    <div class="support-card">
+                        <h3>🚨 Incident Response</h3>
+                        <p style="margin-bottom: 10px;"><strong>Need to respond to a security incident?</strong></p>
+                        <ul>
+                            <li><a href="Incident_Response_Policy_and_Procedures.docx">Incident Response Policy</a> - Complete procedures</li>
+                            <li><a href="Incident_Response_Plan.docx">Incident Response Plan</a> - Planning document</li>
+                        </ul>
+                        <p style="margin-top: 10px; color: #dc3545; font-weight: bold;">⏰ Report CUI incidents to DoD within 72 hours</p>
+                    </div>
+
+                    <div class="support-card">
+                        <h3>👤 Onboarding Contractors</h3>
+                        <p style="margin-bottom: 10px;"><strong>Need to grant access to a contractor?</strong></p>
+                        <ul>
+                            <li><a href="Personnel_Security_Policy.docx">Personnel Security Policy</a> - See Procedure 1: Contractor Onboarding</li>
+                            <li><a href="Acceptable_Use_Policy.docx">Acceptable Use Policy</a> - Provide to contractor, obtain signed acknowledgment</li>
+                        </ul>
+                    </div>
+
+                    <div class="support-card">
+                        <h3>🔍 CMMC Assessment Prep</h3>
+                        <p style="margin-bottom: 10px;"><strong>Preparing for CMMC assessment?</strong></p>
+                        <ul>
+                            <li><a href="Policy_Documentation_Summary.docx">Policy Documentation Summary</a> - Assessment readiness checklist</li>
+                            <li>All 6 core policies - Evidence of institutionalized practices</li>
+                            <li><a href="Quarterly_SSP_Review_Checklist.docx">Quarterly SSP Review</a> - Maintenance evidence</li>
+                        </ul>
+                    </div>
+
+                    <div class="support-card">
+                        <h3>📊 SPRS Score Update</h3>
+                        <p style="margin-bottom: 10px;"><strong>Updating your SPRS score?</strong></p>
+                        <ul>
+                            <li><a href="SPRS_Update_Guide.docx">SPRS Update Guide</a> - Detailed instructions with control-to-policy mapping</li>
+                            <li><a href="Policy_Documentation_Summary.docx">Policy Documentation Summary</a> - See SPRS Score Impact section</li>
+                            <li><a href="Evidence_Package_Summary.docx">Evidence Package Summary</a> - Complete CMMC Level 2 evidence</li>
+                            <li>Use policies as evidence to change status from "Planned" to "Implemented"</li>
+                        </ul>
+                        <p style="margin-top: 10px; color: #28a745; font-weight: bold;">📈 Estimated impact: +90 to +110 points</p>
+                    </div>
+
+                    <div class="support-card">
+                        <h3>📋 System Security Plan</h3>
+                        <p style="margin-bottom: 10px;"><strong>Need your complete SSP documentation?</strong></p>
+                        <ul>
+                            <li><a href="System_Security_Plan_v1.5.docx">System Security Plan v1.5</a> - Complete unified SSP (Updated 12/02/2025)</li>
+                            <li><a href="Unified_POAM.md">Unified POA&M v2.2</a> - 30 items tracked (80% complete - Updated 12/02/2025)</li>
+                            <li><a href="System_Security_Technical_Overview.md">System Security Technical Overview</a> - Comprehensive technical guide</li>
+                            <li><a href="Software_Bill_of_Materials.md">Software Bill of Materials</a> - Complete software inventory</li>
+                            <li>All 8 core policies integrated (IR, RA, PS, PE, MP, SI, AUP, AU)</li>
+                            <li>99% complete implementation with authorization recommendation</li>
+                            <li>Recent completions: Graylog centralized logging, Email server, NextCloud, SSL certificate, system verification</li>
+                        </ul>
+                        <p style="margin-top: 10px; color: #1e3c72; font-weight: bold;">📅 Version 1.5: December 2, 2025 (Current)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📋 Policy Review Schedule</h2>
+                <div class="support-card">
+                    <h3>Upcoming Reviews and Activities</h3>
+                    <ul>
+                        <li><strong>Quarterly (Jan, Apr, Jul, Oct):</strong>
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                <li>Access review (Personnel Security Policy)</li>
+                                <li>OpenSCAP compliance scan (Risk Management Policy)</li>
+                                <li>Wazuh dashboard review (System Integrity Policy)</li>
+                                <li>Facility security inspection (Physical Security Policy)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Annual (November 2026):</strong>
+                            <ul style="margin-left: 20px; margin-top: 5px;">
+                                <li>Review and update all 7 policy documents</li>
+                                <li>Conduct risk assessment (Q1 2026)</li>
+                                <li>Conduct IR tabletop exercise (Q2 2026)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔐 Security & Classification</h2>
+                <div class="support-card">
+                    <h3>Document Handling Requirements</h3>
+                    <p><strong>Classification:</strong> Controlled Unclassified Information (CUI)</p>
+                    <p><strong>Storage Location:</strong> <code>/backup/personnel-security/policies/</code> (encrypted partition)</p>
+                    <p><strong>Access Control:</strong> ISSO access only (file permissions 600)</p>
+                    <p><strong>Backup:</strong> Included in daily backup procedures</p>
+                    <p><strong>Retention:</strong> Retain for 3 years minimum (CMMC evidence)</p>
+                    <p><strong>Distribution:</strong> Owner/Principal + authorized contractors (with signed acknowledgment)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="contact">
+                <div class="contact-item">
+                    <strong>ISSO/Owner:</strong> Donald E. Shannon
+                </div>
+                <div class="contact-item">
+                    <strong>Email:</strong> Don@contractcoach.com
+                </div>
+                <div class="contact-item">
+                    <strong>Phone:</strong> 505.259.8485
+                </div>
+            </div>
+            <div class="copyright">
+                The Contract Coach - CyberHygiene Production Network<br>
+                Policy Index Last Updated: December 02, 2025<br>
+                NIST SP 800-171 Rev 2 | CMMC Level 2 | FIPS 140-2 | POA&M: 80% Complete (24/30 items)
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+
+module httpd-sudo-nmap 1.0;
+
+require {
+	type sssd_conf_t;
+	type httpd_t;
+	class capability sys_resource;
+	class file read;
+}
+
+#============= httpd_t ==============
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     httpd_run_stickshift, httpd_setrlimit
+allow httpd_t self:capability sys_resource;
+allow httpd_t sssd_conf_t:file read;

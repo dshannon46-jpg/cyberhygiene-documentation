@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberHygiene AI Admin Assistant</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .status-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .status-card h3 {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .status-card .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: #3498db;
+            color: white;
+        }
+
+        .message.agent .message-content {
+            background: white;
+            color: #2c3e50;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .message.system .message-content {
+            background: #ffe6d5;
+            color: #856404;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        .message-time {
+            font-size: 0.75em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .thinking {
+            text-align: center;
+            padding: 10px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .thinking::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #ddd;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 24px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #messageInput:focus {
+            border-color: #3498db;
+        }
+
+        #sendButton {
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #sendButton:hover {
+            background: #2980b9;
+        }
+
+        #sendButton:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .quick-commands {
+            margin-top: 15px;
+        }
+
+        .quick-commands h3 {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .command-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.85em;
+        }
+
+        .command-btn:hover {
+            background: #d5dbdb;
+        }
+
+        .connection-status {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .connection-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .connection-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>System Status</h2>
+            <div id="connectionStatus" class="connection-status disconnected">
+                Connecting...
+            </div>
+
+            <div class="status-card">
+                <h3>CPU Usage</h3>
+                <div class="value" id="cpuUsage">--</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Memory</h3>
+                <div class="value" id="memoryUsage">--</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Disk</h3>
+                <div class="value" id="diskUsage">--</div>
+            </div>
+
+            <div class="status-card">
+                <h3>Uptime</h3>
+                <div class="value" id="uptime">--</div>
+            </div>
+
+            <div class="quick-commands">
+                <h3>Quick Commands</h3>
+                <button class="command-btn" onclick="sendQuickCommand('Show system status')">
+                    📊 System Status
+                </button>
+                <button class="command-btn" onclick="sendQuickCommand('Check FreeIPA status')">
+                    🔐 FreeIPA Status
+                </button>
+                <button class="command-btn" onclick="sendQuickCommand('Check Wazuh status')">
+                    🛡️ Wazuh Status
+                </button>
+                <button class="command-btn" onclick="sendQuickCommand('Show disk usage')">
+                    💾 Disk Usage
+                </button>
+                <button class="command-btn" onclick="sendQuickCommand('Check for system updates')">
+                    🔄 Check Updates
+                </button>
+                <button class="command-btn" onclick="sendQuickCommand('Show recent security logs')">
+                    📄 Security Logs
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>🤖 CyberHygiene AI Admin Assistant</h1>
+                <p>NIST 800-171 Compliant System Administration • CodeLlama 34B</p>
+            </div>
+
+            <div class="messages" id="messages">
+                <div class="message system">
+                    <div class="message-content">
+                        Welcome! I'm your AI system administrator. Ask me about system status, logs, services, or troubleshooting.
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Ask about system status, logs, services..."
+                        autocomplete="off"
+                    >
+                    <button id="sendButton" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        // Socket event handlers
+        socket.on('connect', () => {
+            connectionStatus.className = 'connection-status connected';
+            connectionStatus.textContent = '✓ Connected';
+            loadSystemStatus();
+        });
+
+        socket.on('disconnect', () => {
+            connectionStatus.className = 'connection-status disconnected';
+            connectionStatus.textContent = '✗ Disconnected';
+        });
+
+        socket.on('status', (data) => {
+            addSystemMessage(data.message);
+        });
+
+        socket.on('user_message', (data) => {
+            // User message already displayed, no need to add again
+        });
+
+        socket.on('agent_thinking', () => {
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.id = 'thinking-indicator';
+            thinkingDiv.className = 'thinking';
+            thinkingDiv.textContent = 'Thinking';
+            messagesDiv.appendChild(thinkingDiv);
+            scrollToBottom();
+        });
+
+        socket.on('agent_response', (data) => {
+            removeThinking();
+            addAgentMessage(data.message);
+        });
+
+        socket.on('error', (data) => {
+            removeThinking();
+            addSystemMessage('Error: ' + data.message);
+        });
+
+        // UI functions
+        function addUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-content">${escapeHtml(message)}</div>
+                <div class="message-time">${formatTime(new Date())}</div>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addAgentMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message agent';
+
+            // Format message (preserve code blocks)
+            let formattedMessage = formatMessage(message);
+
+            messageDiv.innerHTML = `
+                <div class="message-content">${formattedMessage}</div>
+                <div class="message-time">${formatTime(new Date())}</div>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addSystemMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            messageDiv.innerHTML = `
+                <div class="message-content">${escapeHtml(message)}</div>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function removeThinking() {
+            const thinking = document.getElementById('thinking-indicator');
+            if (thinking) {
+                thinking.remove();
+            }
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            addUserMessage(message);
+            socket.emit('chat_message', { message: message });
+            messageInput.value = '';
+            messageInput.focus();
+        }
+
+        function sendQuickCommand(command) {
+            messageInput.value = command;
+            sendMessage();
+        }
+
+        function scrollToBottom() {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMessage(text) {
+            // Simple formatting: preserve newlines and code blocks
+            text = escapeHtml(text);
+
+            // Convert code blocks
+            text = text.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+
+            // Convert newlines to <br>
+            text = text.replace(/\n/g, '<br>');
+
+            return text;
+        }
+
+        // Load system status
+        function loadSystemStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const data = result.data;
+                        document.getElementById('cpuUsage').textContent = data.cpu.percent + '%';
+                        document.getElementById('memoryUsage').textContent = data.memory.percent + '%';
+                        document.getElementById('diskUsage').textContent = data.disk.percent + '%';
+                        document.getElementById('uptime').textContent = data.uptime_hours + 'h';
+                    }
+                })
+                .catch(err => console.error('Error loading status:', err));
+        }
+
+        // Enter key to send
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Refresh status every 30 seconds
+        setInterval(loadSystemStatus, 30000);
+    </script>
+</body>
+</html>

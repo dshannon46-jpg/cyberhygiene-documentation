@@ -1,0 +1,1032 @@
+Yes, both of these variances can be automated in Rocky Linux/RHEL installations using **Kickstart** files, which are the standard automation method for RHEL-based distributions.
+
+## Automation Approach
+
+### 1. FIPS Mode Enablement
+
+For FIPS mode, you have two options:
+
+**Option A: Set during installation (preferred)**
+Add to your Kickstart file:
+```yaml
+# Enable FIPS mode during installation
+%addon com_redhat_kdump --disable
+%end
+
+# FIPS mode - add to bootloader configuration
+bootloader --location=mbr --append="fips=1"
+```
+
+**Option B: Kernel command line in Kickstart**
+```yaml
+# In the bootloader line
+bootloader --location=mbr --boot-drive=sda --append="fips=1"
+```
+
+**Note:** The correct syntax is `fips=1` (lowercase), not `FIPS=1`. The installer will configure FIPS mode during installation rather than requiring manual interruption.
+
+### 2. Custom NIST-Compliant Partitioning
+
+The Kickstart file supports detailed partition schemes. Here's an example for NIST 800-171 compliant partitioning with encryption:
+
+```yaml
+# Clear existing partitions
+clearpart --all --initlabel --drives=sda
+
+# Create encrypted partitions
+part /boot --fstype=ext4 --size=1024 --ondisk=sda
+part /boot/efi --fstype=efi --size=600 --ondisk=sda  # If UEFI
+part pv.01 --size=1 --grow --ondisk=sda --encrypted --passphrase="YourStrongPassphrase"
+
+# LVM on encrypted physical volume
+volgroup vg_system pv.01
+
+# NIST-recommended segregated partitions
+logvol /              --fstype=xfs  --name=lv_root     --vgname=vg_system --size=10240
+logvol /home          --fstype=xfs  --name=lv_home     --vgname=vg_system --size=5120
+logvol /tmp           --fstype=xfs  --name=lv_tmp      --vgname=vg_system --size=5120 --fsoptions="nodev,nosuid,noexec"
+logvol /var           --fstype=xfs  --name=lv_var      --vgname=vg_system --size=10240
+logvol /var/log       --fstype=xfs  --name=lv_var_log  --vgname=vg_system --size=10240
+logvol /var/log/audit --fstype=xfs  --name=lv_audit    --vgname=vg_system --size=5120
+logvol /var/tmp       --fstype=xfs  --name=lv_var_tmp  --vgname=vg_system --size=5120 --fsoptions="nodev,nosuid,noexec"
+logvol swap           --fstype=swap --name=lv_swap     --vgname=vg_system --size=8192
+```
+
+## Complete Kickstart Example
+
+Here's a minimal but complete example combining both requirements:
+
+```yaml
+#version=RHEL9
+# System authorization information
+auth --enableshadow --passalgo=sha512
+
+# Use graphical/text install
+text
+
+# Run the Setup Agent on first boot
+firstboot --enable
+
+# Keyboard layouts
+keyboard --vckeymap=us --xlayouts='us'
+
+# System language
+lang en_US.UTF-8
+
+# Network information
+network --bootproto=dhcp --device=eth0 --onboot=yes --ipv6=auto
+
+# Root password (encrypted)
+rootpw --iscrypted $6$rounds=10000$YourHashHere
+
+# System timezone
+timezone America/New_York --utc
+
+# Bootloader with FIPS enabled
+bootloader --location=mbr --boot-drive=sda --append="fips=1"
+
+# Partition clearing information
+clearpart --all --initlabel --drives=sda
+
+# Disk partitioning with NIST-compliant layout
+part /boot --fstype=xfs --size=1024 --ondisk=sda
+part pv.01 --size=1 --grow --ondisk=sda --encrypted --luks-version=luks2 --passphrase="YourStrongPassphrase"
+
+volgroup vg_system pv.01
+
+logvol /              --fstype=xfs  --name=lv_root     --vgname=vg_system --size=10240
+logvol /home          --fstype=xfs  --name=lv_home     --vgname=vg_system --size=5120
+logvol /tmp           --fstype=xfs  --name=lv_tmp      --vgname=vg_system --size=5120 --fsoptions="nodev,nosuid,noexec"
+logvol /var           --fstype=xfs  --name=lv_var      --vgname=vg_system --size=10240
+logvol /var/log       --fstype=xfs  --name=lv_var_log  --vgname=vg_system --size=10240
+logvol /var/log/audit --fstype=xfs  --name=lv_audit    --vgname=vg_system --size=5120
+logvol /var/tmp       --fstype=xfs  --name=lv_var_tmp  --vgname=vg_system --size=5120 --fsoptions="nodev,nosuid,noexec"
+logvol swap           --fstype=swap --name=lv_swap     --vgname=vg_system --size=8192
+
+# Package selection
+%packages
+@^minimal-environment
+aide
+openscap
+openscap-scanner
+scap-security-guide
+%end
+
+# Post-installation script
+%post --log=/root/ks-post.log
+# Additional FIPS validation
+fips-mode-setup --check
+%end
+
+reboot
+```
+
+## Integrating with Installation Media
+
+### Method 1: Boot Parameter (Simplest)
+Add to boot command:
+```
+inst.ks=hd:LABEL=ROCKY-9:/ks.cfg
+```
+
+### Method 2: Embed in ISO
+1. Extract ISO contents
+2. Place `ks.cfg` in root of ISO
+3. Modify `isolinux/isolinux.cfg` or `EFI/BOOT/grub.cfg`:
+```
+append initrd=initrd.img inst.ks=cdrom:/ks.cfg
+```
+4. Rebuild ISO
+
+### Method 3: Network-based
+```
+append initrd=initrd.img inst.ks=http://your-server/ks.cfg
+```
+
+## Important Considerations
+
+1. **LUKS Passphrase Management**: The `--passphrase` in plaintext is a security risk. Consider:
+   - Using `--escrowcert` with Tang/Clevis for automated unlock
+   - Network-based key management
+   - Manual passphrase entry (remove `--passphrase` parameter)
+
+2. **FIPS Post-Install Validation**:
+```bash
+%post
+fips-mode-setup --enable
+fips-mode-setup --check
+%end
+```
+
+3. **Partition Sizes**: Adjust based on your needs. The example uses MB values.
+
+4. **Testing**: Always test in a VM first with the exact hardware configuration.
+
+## Answer to Your Question
+
+**Yes, both variances can be combined into a single Kickstart file** that fully automates the installation without manual intervention. The Kickstart file handles both FIPS enablement and NIST-compliant partitioning, and can be embedded directly on the installation media or referenced via network/USB.
+
+Would you like help creating a custom Kickstart file for your specific NIST requirements or assistance with rebuilding the ISO to include it?
+
+## Yes, You Can Do This - With Important Caveats
+
+### Technical Feasibility: ✅ Absolutely Possible
+
+You can create a customized Rocky Linux ISO with embedded Kickstart and store it in a Git repository. The workflow would be:
+
+1. **Download official Rocky Linux ISO**
+2. **Extract and customize** with your Kickstart file
+3. **Rebuild ISO** with modified boot parameters
+4. **Store in Git repository** (or provide build scripts)
+5. **Users download and burn to USB**
+6. **Automated installation** proceeds with FIPS + NIST partitioning
+
+### Licensing Considerations
+
+#### Rocky Linux: ✅ **Fully Permissible**
+
+Rocky Linux is **completely open source** and freely redistributable:
+
+- **License**: Rocky Linux uses permissive licenses (GPL, BSD, MIT, etc.)
+- **Redistribution**: Explicitly allowed and encouraged
+- **Modifications**: You can modify and redistribute modified versions
+- **Trademarks**: You can use Rocky Linux trademarks for unmodified distributions
+- **No restrictions**: Unlike RHEL, there are no subscription or redistribution limitations
+
+**Bottom line**: You can absolutely create, modify, and redistribute Rocky Linux ISOs with your customizations, including storing them in public Git repositories.
+
+#### RHEL: ⚠️ **Complicated, Generally Not Recommended**
+
+Red Hat Enterprise Linux has more restrictive terms:
+
+- **Subscription required**: RHEL requires active subscriptions
+- **Source code**: Available under GPL, redistribution of source is fine
+- **Binary redistribution**: Technically allowed under GPL, but...
+- **Subscription terms**: RHEL subscription agreement prohibits redistribution of binaries to non-subscribers
+- **Trademark restrictions**: Cannot use "Red Hat" or "RHEL" trademarks on modified versions
+- **Practical issues**: Updates, support, and repository access require subscriptions
+
+**Bottom line**: While GPL allows binary redistribution technically, RHEL's subscription model makes this impractical and potentially violates subscription terms.
+
+## Recommended Approach for Your Use Case
+
+### Option 1: Store Kickstart File Only (Best Practice)
+
+Instead of storing the full ISO (which can be 8-10 GB), store just the build artifacts:
+
+```
+your-repo/
+├── README.md
+├── ks.cfg                    # Your Kickstart file
+├── build-iso.sh              # Script to customize ISO
+├── partition-layout.txt      # Documentation
+└── post-install/
+    ├── hardening.sh
+    └── fips-validate.sh
+```
+
+**Users would**:
+1. Download official Rocky Linux ISO (from Rocky's mirrors)
+2. Clone your repository
+3. Run your `build-iso.sh` script to create customized ISO
+4. Burn and deploy
+
+**Advantages**:
+- Git-friendly (small file sizes)
+- Always uses latest upstream Rocky ISO
+- No redistribution concerns
+- Clear provenance of base image
+- Easy to audit and review
+
+### Option 2: Store Complete ISO (Acceptable for Rocky Linux)
+
+If you want the convenience of a ready-to-use ISO:
+
+```bash
+# Git LFS is recommended for large binaries
+git lfs install
+git lfs track "*.iso"
+
+# Repository structure
+your-repo/
+├── README.md
+├── rocky-9-nist-fips-YYYYMMDD.iso  # Your customized ISO
+├── checksum.sha256
+├── ks.cfg                          # Kickstart source
+└── docs/
+    ├── BUILD.md                    # How you built it
+    └── INSTALL.md                  # Installation instructions
+```
+
+**Important**: 
+- Use **Git LFS** (Large File Storage) for ISO files
+- Include checksums for verification
+- Document the build process
+- Tag releases with dates
+- Consider hosting ISOs outside Git (GitHub Releases, CDN, etc.)
+
+### Option 3: Provide Build Instructions + Automation (Recommended)
+
+Create a fully automated build pipeline:
+
+```bash
+#!/bin/bash
+# build-nist-rocky.sh
+
+set -e
+
+ROCKY_VERSION="9.3"
+ROCKY_ISO_URL="https://download.rockylinux.org/pub/rocky/${ROCKY_VERSION}/isos/x86_64/Rocky-${ROCKY_VERSION}-x86_64-minimal.iso"
+ROCKY_ISO="Rocky-${ROCKY_VERSION}-x86_64-minimal.iso"
+OUTPUT_ISO="Rocky-${ROCKY_VERSION}-NIST-FIPS-$(date +%Y%m%d).iso"
+
+echo "Downloading official Rocky Linux ISO..."
+wget -nc "${ROCKY_ISO_URL}"
+
+echo "Verifying checksum..."
+# Add checksum verification here
+
+echo "Extracting ISO..."
+mkdir -p iso_extract
+sudo mount -o loop "${ROCKY_ISO}" /mnt
+sudo cp -r /mnt/* iso_extract/
+sudo umount /mnt
+
+echo "Customizing ISO..."
+# Copy Kickstart file
+cp ks.cfg iso_extract/
+
+# Modify isolinux.cfg
+sudo sed -i 's|append initrd=initrd.img|append initrd=initrd.img inst.ks=cdrom:/ks.cfg|' \
+    iso_extract/isolinux/isolinux.cfg
+
+# Modify UEFI grub config
+sudo sed -i 's|linuxefi /images/pxeboot/vmlinuz|linuxefi /images/pxeboot/vmlinuz inst.ks=cdrom:/ks.cfg|' \
+    iso_extract/EFI/BOOT/grub.cfg
+
+echo "Rebuilding ISO..."
+sudo genisoimage -U -r -v -T -J -joliet-long \
+    -V "ROCKY-NIST-FIPS" \
+    -volset "Rocky Linux ${ROCKY_VERSION} NIST FIPS" \
+    -A "Rocky Linux ${ROCKY_VERSION} NIST FIPS" \
+    -b isolinux/isolinux.bin \
+    -c isolinux/boot.cat \
+    -no-emul-boot \
+    -boot-load-size 4 \
+    -boot-info-table \
+    -eltorito-alt-boot \
+    -e images/efiboot.img \
+    -no-emul-boot \
+    -o "${OUTPUT_ISO}" \
+    iso_extract
+
+echo "Making ISO bootable..."
+sudo isohybrid --uefi "${OUTPUT_ISO}"
+
+echo "Generating checksum..."
+sha256sum "${OUTPUT_ISO}" > "${OUTPUT_ISO}.sha256"
+
+echo "Build complete: ${OUTPUT_ISO}"
+echo "Checksum: $(cat ${OUTPUT_ISO}.sha256)"
+```
+
+## Security Considerations
+
+### The "Replace Me" Root Password Issue
+
+Your instinct to use a placeholder password is correct for **development/testing**, but presents risks:
+
+**Option A: Placeholder in Kickstart (Testing Only)**
+```yaml
+# In ks.cfg
+rootpw --plaintext ChangeMe123!
+
+%post
+echo "WARNING: DEFAULT ROOT PASSWORD - CHANGE IMMEDIATELY" > /etc/motd
+%end
+```
+
+**Option B: Force Password Change on First Login**
+```yaml
+rootpw --plaintext ChangeMe123!
+
+%post
+# Expire root password immediately
+passwd -e root
+
+# Or lock root and require SSH key
+passwd -l root
+%end
+```
+
+**Option C: No Root Password - SSH Key Only (Recommended for Production)**
+```yaml
+# Lock root password
+rootpw --lock
+
+%post
+# Create admin user with sudo
+useradd -m -G wheel admin
+
+# Install SSH keys (example)
+mkdir -p /home/admin/.ssh
+cat << 'EOF' > /home/admin/.ssh/authorized_keys
+ssh-rsa AAAAB3... your-key-here
+EOF
+chmod 700 /home/admin/.ssh
+chmod 600 /home/admin/.ssh/authorized_keys
+chown -R admin:admin /home/admin/.ssh
+
+# Ensure sudo works without password for wheel group (temporarily)
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/wheel
+%end
+```
+
+**Option D: Interactive Password Prompt**
+```yaml
+# Omit rootpw line entirely - installer will prompt
+# rootpw --lock
+
+# Users must set password during installation
+```
+
+**Option E: Generate Random Password, Display on Console**
+```yaml
+%post
+# Generate random password
+ROOTPW=$(openssl rand -base64 32)
+echo "root:${ROOTPW}" | chpasswd
+
+# Display on console and save to file
+echo "========================================" > /dev/console
+echo "TEMPORARY ROOT PASSWORD: ${ROOTPW}" > /dev/console
+echo "CHANGE IMMEDIATELY AFTER LOGIN" > /dev/console
+echo "========================================" > /dev/console
+
+# Also save to root-readable file
+echo "${ROOTPW}" > /root/.initial_password
+chmod 600 /root/.initial_password
+
+# Force password change on first login
+passwd -e root
+%end
+```
+
+## Recommended Repository Structure
+
+```
+rocky-nist-baseline/
+├── README.md                   # Overview, usage instructions
+├── LICENSE                     # MIT or Apache 2.0
+├── SECURITY.md                 # Security considerations
+├── ks/
+│   ├── ks-base.cfg            # Base Kickstart
+│   ├── ks-fips.cfg            # FIPS-enabled variant
+│   └── ks-nist-800-171.cfg    # Full NIST 800-171 compliant
+├── scripts/
+│   ├── build-iso.sh           # ISO builder
+│   ├── verify-iso.sh          # Checksum verification
+│   └── burn-usb.sh            # USB creation helper
+├── post-install/
+│   ├── hardening.sh           # Post-install hardening
+│   ├── oscap-scan.sh          # OpenSCAP validation
+│   └── aide-init.sh           # File integrity setup
+├── docs/
+│   ├── PARTITION_LAYOUT.md    # Explain NIST partitioning
+│   ├── FIPS_MODE.md           # FIPS configuration details
+│   └── CUSTOMIZATION.md       # How to modify for specific needs
+└── tests/
+    └── test-vm-install.sh     # Automated testing in VM
+```
+
+## License Recommendation
+
+Add a clear license file:
+
+```markdown
+# License
+
+This repository contains configuration files and scripts for creating
+a NIST 800-171 compliant Rocky Linux installation.
+
+## Rocky Linux
+Rocky Linux is an open-source enterprise operating system designed to be
+100% bug-for-bug compatible with Red Hat Enterprise Linux. It is governed
+by the Rocky Enterprise Software Foundation.
+
+- License: Various open source licenses (GPL, BSD, MIT, etc.)
+- Redistribution: Fully permitted
+- Source: https://rockylinux.org/
+
+## This Repository
+The Kickstart files, scripts, and documentation in this repository are
+licensed under the MIT License.
+
+Copyright (c) 2026 [Your Name/Organization]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+[Full MIT License text]
+```
+
+## Final Recommendation
+
+**For your use case (NIST 800-171 / CyberHygiene Project context)**:
+
+1. ✅ **Use Rocky Linux** (not RHEL) - fully redistributable
+2. ✅ **Store Kickstart + build scripts** in Git (not full ISO)
+3. ✅ **Automate ISO building** from official Rocky sources
+4. ✅ **Use SSH key authentication** instead of default password
+5. ✅ **Document everything** for security auditors
+6. ✅ **Tag releases** with version and build date
+7. ✅ **Provide checksums** for verification
+8. ✅ **Test in VM** before burning to USB
+
+This approach is:
+- Fully compliant with open source licenses
+- Git-friendly (small repository size)
+- Auditable and transparent
+- Secure (no hardcoded passwords in public repos)
+- Maintainable (easy to update when Rocky releases new versions)
+
+Would you like help creating the specific Kickstart file for your NIST 800-171 requirements, or setting up the repository structure?
+
+**Yes, exactly correct.**
+
+## Simple Answer
+
+✅ **Rocky Linux redistribution is fully permissible** - no caveats, no restrictions, no concerns.
+
+You can:
+- ✅ Modify Rocky Linux ISOs
+- ✅ Redistribute them publicly (Git, website, USB, etc.)
+- ✅ Store complete ISOs in repositories
+- ✅ Use Rocky Linux trademarks (for unmodified or clearly-labeled modified versions)
+- ✅ Share with anyone, anywhere
+- ✅ Charge for media/support if you want (though you're not)
+- ✅ Use in commercial or government environments
+
+## Why Rocky Linux is Different from RHEL
+
+| Aspect | RHEL | Rocky Linux |
+|--------|------|-------------|
+| **License** | GPL (source) + Subscription (binaries) | Fully open source |
+| **Redistribution** | Technically legal, practically restricted by subscription terms | Explicitly encouraged |
+| **Cost** | Subscription required ($349-$1,299/year per system) | Free |
+| **ISO Distribution** | Download requires Red Hat account | Public, anonymous download |
+| **Modified Versions** | Cannot use RHEL trademarks | Can use Rocky name with proper attribution |
+| **Commercial Use** | Requires subscription | Free for any use |
+| **Repository Access** | Requires active subscription | Public, free access |
+
+## Rocky Linux's Explicit Position
+
+From Rocky Linux's own documentation and mission:
+
+> *"Rocky Linux is a community enterprise operating system designed to be 100% bug-for-bug compatible with Red Hat Enterprise Linux... Rocky Linux is **freely redistributable** and there are no restrictions on its use."*
+
+The Rocky Enterprise Software Foundation (RESF) **wants** people to:
+- Redistribute Rocky Linux
+- Create custom spins
+- Build derivative works
+- Share it freely
+
+This is the entire point of the project's existence.
+
+## Your Specific Use Case
+
+For your CyberHygiene Project with NIST 800-171 compliance:
+
+**You can absolutely:**
+
+1. Create a customized Rocky Linux ISO with:
+   - Embedded Kickstart for FIPS mode
+   - NIST-compliant partitioning
+   - Pre-configured security baseline
+   - Your documentation
+
+2. Store it in a public Git repository (GitHub, GitLab, etc.)
+
+3. Share it publicly as:
+   - "Rocky Linux 9 - NIST 800-171 Baseline"
+   - "Rocky Linux 9 - CyberHygiene Edition"
+   - Any similar descriptive name
+
+4. Distribute via:
+   - Direct download
+   - Git LFS
+   - GitHub Releases
+   - Your website
+   - USB drives
+   - Any method you choose
+
+5. Document that it's based on Rocky Linux with attribution
+
+**No permission needed. No license concerns. No legal issues.**
+
+## The Only Restrictions (Minimal)
+
+Rocky Linux only asks for:
+
+1. **Trademark Attribution**: If you call it "Rocky Linux," acknowledge it's Rocky Linux. If you heavily modify it, you might call it "Based on Rocky Linux" to avoid confusion.
+
+2. **License Compliance**: Maintain the open-source licenses of included packages (GPL, BSD, etc.) - which just means not claiming you wrote Linux kernel code, etc.
+
+3. **No Warranty Claims**: Don't claim official Rocky Linux support unless you're actually affiliated with RESF.
+
+That's it. Those are formalities that you'd naturally follow anyway.
+
+## Contrast with RHEL (Why I Mentioned Caveats)
+
+I mentioned RHEL caveats because:
+
+1. Many people confuse Rocky Linux with RHEL
+2. Some organizations start with RHEL thinking it's "more official"
+3. RHEL's subscription model creates real legal/practical barriers to redistribution
+4. The CentOS → Rocky transition left some confusion
+
+But since you're asking specifically about **Rocky Linux** - those caveats don't apply to you.
+
+## Bottom Line for Your Question
+
+**Your original question**: 
+> "Could the revised ISO then be stored as a bootable image with a 'replace me' type root password in a Git repository such that another could download and burn the iso to a Boot USB and install a baseline (standardized) image? Would doing so be contrary to the OpenSource license from RHEL or Rocky?"
+
+**Direct answer**:
+- **Rocky Linux**: ✅ Yes, absolutely permissible. Do it.
+- **RHEL**: ❌ No, would violate subscription terms (but irrelevant if you use Rocky)
+
+Since you're working on an **open-source, community-benefit project** (CyberHygiene for VSBs in federal contracting), Rocky Linux is the **perfect** choice. It aligns perfectly with your mission.
+
+The Rocky Linux community would likely **applaud** your work creating a NIST-compliant baseline for small businesses.
+
+---
+
+**Do you need any help setting up the repository structure or creating the customized Rocky Linux ISO?**
+
+# Git LFS (Large File Storage) Explained
+
+## What It Is
+
+**Git LFS** is an extension to Git that handles large files more efficiently. Instead of storing large binary files directly in your Git repository, LFS stores **pointers** in Git and keeps the actual files on a separate LFS server.
+
+## The Problem It Solves
+
+### Without LFS (Standard Git):
+
+```
+your-repo/
+├── README.md                    # 5 KB
+├── script.sh                    # 2 KB
+└── rocky-linux.iso              # 8 GB  ← Problem!
+```
+
+**Issues with large files in regular Git:**
+
+1. **Repository bloat** - Every version of the 8 GB ISO is stored in `.git/` history forever
+2. **Slow clones** - Users download entire history of all large files
+3. **Slow operations** - `git status`, `git log` slow down
+4. **Storage waste** - If you update the ISO 10 times, you store 80 GB in repo history
+5. **GitHub/GitLab limits** - Most platforms limit individual files to 100 MB
+
+**Example scenario:**
+```bash
+# Initial commit
+git add rocky-v9.0.iso    # 8 GB
+git commit -m "Initial"
+
+# Update ISO
+git add rocky-v9.1.iso    # 8 GB more
+git commit -m "Update"
+
+# Update again  
+git add rocky-v9.2.iso    # 8 GB more
+
+# Now your .git/ folder is 24 GB!
+# Clone downloads all 24 GB even though you only need the latest 8 GB
+```
+
+### With LFS:
+
+```
+your-repo/
+├── README.md                    # 5 KB (in Git)
+├── script.sh                    # 2 KB (in Git)  
+└── rocky-linux.iso              # 132 bytes pointer (in Git)
+                                 # 8 GB actual file (on LFS server)
+```
+
+**What Git actually stores:**
+```
+version https://git-lfs.github.com/spec/v1
+oid sha256:4d7a214614ab2935c943f9e0ff69d22eadbb8f32b1258daaa5e2ca24d17e2393
+size 8589934592
+```
+
+That's it - just a tiny pointer file!
+
+## How It Works
+
+### Architecture:
+
+```
+┌─────────────────┐
+│   Your Repo     │
+│   (Pointers)    │  ← Small, fast
+└────────┬────────┘
+         │
+         │ git push/pull
+         ▼
+┌─────────────────┐
+│   Git Server    │
+│  (GitHub, etc)  │  ← Stores pointers + metadata
+└────────┬────────┘
+         │
+         │ LFS protocol
+         ▼
+┌─────────────────┐
+│   LFS Server    │
+│ (Actual files)  │  ← Stores 8 GB ISOs
+└─────────────────┘
+```
+
+**Workflow:**
+
+1. **You commit**: Git LFS replaces large file with pointer, uploads actual file to LFS server
+2. **You push**: Git pushes pointer to Git server, LFS pushes file to LFS server
+3. **Someone clones**: Git downloads pointers, LFS downloads only the current version of large files
+4. **Someone checks out old version**: LFS downloads that version's large files on demand
+
+## Installation & Usage
+
+### 1. Install Git LFS
+
+```bash
+# macOS
+brew install git-lfs
+
+# Ubuntu/Debian
+sudo apt-get install git-lfs
+
+# RHEL/Rocky
+sudo dnf install git-lfs
+
+# Windows
+# Download from https://git-lfs.github.com/
+
+# Initialize (one-time per user)
+git lfs install
+```
+
+### 2. Track Large File Types
+
+```bash
+# In your repository
+cd your-repo/
+
+# Track all .iso files
+git lfs track "*.iso"
+
+# Track specific file
+git lfs track "rocky-linux-9.3.iso"
+
+# Track all files in a directory
+git lfs track "isos/*"
+
+# This creates/updates .gitattributes
+cat .gitattributes
+# *.iso filter=lfs diff=lfs merge=lfs -text
+```
+
+**Important**: Commit `.gitattributes` first!
+
+```bash
+git add .gitattributes
+git commit -m "Configure LFS for ISO files"
+```
+
+### 3. Use Git Normally
+
+```bash
+# Add large file - LFS handles it automatically
+git add rocky-linux-9.3.iso
+
+# Commit - pointer stored in Git, file uploaded to LFS
+git commit -m "Add Rocky Linux 9.3 ISO"
+
+# Push - both pointer and file uploaded
+git push origin main
+```
+
+### 4. Clone Repository
+
+```bash
+# Other users clone normally
+git clone https://github.com/youruser/your-repo.git
+
+# LFS files automatically downloaded
+# Only current version downloaded, not full history
+```
+
+## Practical Example for Your Use Case
+
+### Repository Setup:
+
+```bash
+# Initialize your Rocky Linux baseline repo
+mkdir rocky-nist-baseline
+cd rocky-nist-baseline
+git init
+
+# Install and configure LFS
+git lfs install
+git lfs track "*.iso"
+git lfs track "*.img"
+
+# Commit LFS configuration
+git add .gitattributes
+git commit -m "Configure LFS for ISO and IMG files"
+
+# Create your structure
+mkdir -p isos ks scripts docs
+
+# Add your Kickstart file (regular Git - it's small)
+cat > ks/ks-nist-800-171.cfg << 'EOF'
+# Your Kickstart content
+EOF
+
+git add ks/ks-nist-800-171.cfg
+git commit -m "Add NIST 800-171 Kickstart file"
+
+# Build your customized ISO
+./scripts/build-iso.sh
+# Creates: isos/rocky-9.3-nist-fips-20260206.iso (8 GB)
+
+# Add the ISO - LFS handles it automatically
+git add isos/rocky-9.3-nist-fips-20260206.iso
+git commit -m "Add Rocky 9.3 NIST FIPS baseline ISO"
+
+# Push everything
+git push origin main
+```
+
+### What Gets Stored Where:
+
+**In Git repository:**
+```
+.gitattributes                      # 50 bytes
+ks/ks-nist-800-171.cfg             # 5 KB
+scripts/build-iso.sh               # 3 KB
+README.md                          # 10 KB
+isos/rocky-9.3-nist-fips.iso       # 132 bytes (pointer)
+```
+**Total in Git: ~20 KB**
+
+**On LFS server:**
+```
+isos/rocky-9.3-nist-fips.iso       # 8 GB (actual file)
+```
+
+## Checking LFS Status
+
+```bash
+# See which files are tracked by LFS
+git lfs ls-files
+
+# See LFS file info
+git lfs ls-files -s
+# 4d7a214614 * isos/rocky-9.3-nist-fips-20260206.iso
+
+# Check LFS storage usage
+git lfs env
+```
+
+## Advantages for Your Project
+
+### 1. **Version Control for ISOs**
+```bash
+# Update your ISO
+./scripts/build-iso.sh  # Creates new version
+git add isos/rocky-9.3-nist-fips-20260215.iso
+git commit -m "Update ISO: Added AIDE configuration"
+
+# Users can get specific version
+git checkout v1.0  # Gets Feb 6 ISO
+git checkout v1.1  # Gets Feb 15 ISO
+```
+
+### 2. **Reasonable Clone Times**
+```bash
+# Without LFS: Downloads 8 GB × every version
+git clone your-repo  # 40 GB, takes hours
+
+# With LFS: Downloads only current version
+git clone your-repo  # 8 GB, reasonable time
+```
+
+### 3. **GitHub/GitLab Compatibility**
+- GitHub allows LFS files up to **2 GB per file** (free tier)
+- GitHub LFS storage: **1 GB free**, then **$5/month per 50 GB**
+- GitLab allows LFS files up to **5 GB per file** (free tier)
+- GitLab LFS storage: **10 GB free**, then varies by plan
+
+### 4. **Bandwidth Savings**
+Users only download large files they actually checkout:
+```bash
+# Clone but don't download LFS files yet
+GIT_LFS_SKIP_SMUDGE=1 git clone your-repo
+
+# Download specific version when needed
+git lfs pull -I isos/rocky-9.3-nist-fips-v1.0.iso
+```
+
+## Limitations & Considerations
+
+### 1. **Storage Costs**
+
+**GitHub (example for 8 GB ISO):**
+- Free tier: 1 GB LFS storage, 1 GB/month bandwidth
+- Your 8 GB ISO needs: **$5/month** (for 50 GB storage pack)
+- Each download uses bandwidth (charged after 1 GB/month free)
+
+**GitLab:**
+- Free tier: 10 GB LFS storage
+- Your 8 GB ISO: **Free** on GitLab!
+
+### 2. **LFS Not Distributed**
+
+Unlike regular Git (distributed), LFS requires server:
+```bash
+# Regular Git - works offline
+git log
+git diff
+git checkout old-branch
+
+# LFS - requires server connection
+git lfs pull  # Needs network
+```
+
+### 3. **File Size Limits**
+
+Check your platform:
+- **GitHub**: 2 GB per file (LFS), 100 MB without LFS
+- **GitLab**: 5 GB per file (LFS)
+- **Bitbucket**: 2 GB per file (LFS)
+
+Your Rocky Linux ISO (~8-10 GB) **exceeds** GitHub's per-file limit!
+
+## Alternatives for Very Large Files (>2 GB)
+
+### Option 1: Split ISO (Not Recommended)
+```bash
+# Split 8 GB ISO into 2 GB chunks
+split -b 2G rocky.iso rocky.iso.part
+
+# Track parts with LFS
+git lfs track "*.part*"
+```
+**Downside**: Users must reassemble before use.
+
+### Option 2: GitHub Releases (Recommended for Large ISOs)
+```bash
+# Don't store ISO in Git at all
+# Instead, attach to GitHub Releases
+
+# Tag your release
+git tag -a v1.0 -m "Rocky 9.3 NIST baseline - Feb 2026"
+git push origin v1.0
+
+# Upload ISO via GitHub web interface or CLI
+gh release create v1.0 \
+  --title "Rocky 9.3 NIST FIPS Baseline v1.0" \
+  --notes "NIST 800-171 compliant baseline with FIPS enabled" \
+  isos/rocky-9.3-nist-fips-20260206.iso
+```
+
+**Advantages:**
+- No file size limit (GitHub Releases allows 2 GB+ files)
+- No LFS storage costs
+- Direct download URLs
+- Still version controlled (via tags)
+
+### Option 3: External Hosting + Checksums
+```bash
+# Store ISO on external service
+# - Your own web server
+# - AWS S3
+# - DigitalOcean Spaces
+# - CloudFlare R2
+
+# Store checksum and download script in Git
+cat > isos/DOWNLOAD.md << 'EOF'
+# Rocky 9.3 NIST Baseline ISOs
+
+## v1.0 (2026-02-06)
+- Download: https://your-cdn.com/rocky-9.3-nist-fips-20260206.iso
+- SHA256: 4d7a214614ab2935c943f9e0ff69d22eadbb8f32b1258daaa5e2ca24d17e2393
+- Size: 8.1 GB
+EOF
+
+cat > scripts/download-iso.sh << 'EOF'
+#!/bin/bash
+wget https://your-cdn.com/rocky-9.3-nist-fips-20260206.iso
+sha256sum -c isos/checksums.txt
+EOF
+```
+
+## Recommendation for Your Project
+
+Given your specific needs (Rocky Linux ISO, ~8-10 GB):
+
+### **Best Approach: Hybrid Strategy**
+
+```
+rocky-nist-baseline/
+├── .gitattributes          # LFS config (just in case)
+├── README.md               # In Git
+├── ks/                     
+│   └── ks-nist.cfg        # In Git (small)
+├── scripts/
+│   ├── build-iso.sh       # In Git (small)
+│   └── download-iso.sh    # In Git - downloads from releases
+├── docs/                   # In Git
+└── isos/
+    ├── .gitkeep           # In Git
+    ├── checksums.txt      # In Git (checksums for verification)
+    └── DOWNLOAD.md        # In Git (points to GitHub Releases)
+```
+
+**ISO Distribution via GitHub Releases:**
+1. Build ISO locally
+2. Create Git tag: `git tag v1.0`
+3. Push tag: `git push origin v1.0`
+4. Upload ISO to GitHub Release (web UI or `gh` CLI)
+5. Users download from Releases page
+
+**Why this is better:**
+- ✅ No LFS costs
+- ✅ No file size limits
+- ✅ Fast clones
+- ✅ Direct download URLs
+- ✅ Version controlled via tags
+- ✅ Checksums in Git for verification
+
+## Summary
+
+**Git LFS** is great for large files **under 2 GB**. For your 8+ GB Rocky Linux ISO:
+
+- **Don't use**: Regular Git (will bloat repo)
+- **Can use**: Git LFS on GitLab (10 GB free tier)
+- **Can't use**: Git LFS on GitHub (2 GB per-file limit)
+- **Best option**: GitHub Releases or external hosting with checksums in Git
+
+**Quick decision matrix:**
+
+| ISO Size | Best Solution |
+|----------|---------------|
+| < 100 MB | Regular Git |
+| 100 MB - 2 GB | Git LFS (GitHub) |
+| 2 GB - 5 GB | Git LFS (GitLab) or GitHub Releases |
+| > 5 GB | GitHub Releases or external hosting |
+
+Your 8-10 GB ISO → **GitHub Releases** is the winner.
+
+Does this clarify Git LFS for you? Would you like help setting up the GitHub Releases workflow?

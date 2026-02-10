@@ -1,0 +1,126 @@
+{
+  "dashboard": {
+    "title": "Suricata IDS/IPS Security Monitoring",
+    "tags": ["security", "ids", "ips", "suricata", "network"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 0,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 0},
+        "type": "stat",
+        "title": "Total Packets Processed",
+        "targets": [{
+          "expr": "suricata_decoder_pkts",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 0},
+        "type": "stat",
+        "title": "Total Alerts",
+        "targets": [{
+          "expr": "suricata_detect_alert",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 0},
+        "type": "stat",
+        "title": "TLS Flows",
+        "targets": [{
+          "expr": "suricata_app_layer_flow_tls",
+          "refId": "A"
+        }],
+        "options": {
+          "graphMode": "area",
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 9, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Packet Processing Rate",
+        "targets": [{
+          "expr": "rate(suricata_decoder_pkts[5m])",
+          "legendFormat": "Packets/sec",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "short", "label": "packets/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 9, "w": 12, "x": 12, "y": 8},
+        "type": "graph",
+        "title": "Alert Rate",
+        "targets": [{
+          "expr": "rate(suricata_detect_alert[5m])",
+          "legendFormat": "Alerts/sec",
+          "refId": "A"
+        }],
+        "yaxes": [
+          {"format": "short", "label": "alerts/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "gridPos": {"h": 9, "w": 12, "x": 0, "y": 17},
+        "type": "graph",
+        "title": "Protocol Distribution",
+        "targets": [
+          {"expr": "suricata_app_layer_flow_http", "legendFormat": "HTTP", "refId": "A"},
+          {"expr": "suricata_app_layer_flow_tls", "legendFormat": "TLS", "refId": "B"},
+          {"expr": "suricata_app_layer_flow_dns_udp", "legendFormat": "DNS", "refId": "C"},
+          {"expr": "suricata_app_layer_flow_ssh", "legendFormat": "SSH", "refId": "D"}
+        ]
+      },
+      {
+        "id": 7,
+        "gridPos": {"h": 9, "w": 12, "x": 12, "y": 17},
+        "type": "graph",
+        "title": "Flow States",
+        "targets": [
+          {"expr": "suricata_flow_end_state_established", "legendFormat": "Established", "refId": "A"},
+          {"expr": "suricata_flow_end_state_closed", "legendFormat": "Closed", "refId": "B"},
+          {"expr": "suricata_flow_end_state_new", "legendFormat": "New", "refId": "C"}
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}

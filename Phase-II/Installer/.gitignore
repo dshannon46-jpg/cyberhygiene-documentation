@@ -1,0 +1,108 @@
+# CyberHygiene Phase II Installer - Git Ignore
+# Prevents sensitive files from being committed to repository
+
+# ==========================================
+# CRITICAL: NEVER COMMIT THESE FILES
+# ==========================================
+
+# Customer-specific installation data
+installation_info.md
+install_vars.sh
+
+# Generated credentials and passwords
+CREDENTIALS_*.txt
+*_passwords*.txt
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Backup encryption keys
+backup-encryption-key*.txt
+*encryption*key*.txt
+
+# SSL Certificates (customer-provided)
+customer_ssl_certs/
+*.crt
+*.csr
+
+# ==========================================
+# LOGS AND RUNTIME DATA
+# ==========================================
+
+# Installation logs
+logs/
+*.log
+
+# Backup directories
+backups/
+backup_*.tar.gz*
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+tmp/
+
+# ==========================================
+# GENERATED FILES
+# ==========================================
+
+# FreeIPA installation files
+freeipa_installation_*.log
+
+# Verification reports
+VERIFICATION_REPORT_*.txt
+
+# System state snapshots
+system_snapshot_*.txt
+
+# ==========================================
+# SENSITIVE DIRECTORIES
+# ==========================================
+
+# Any directory that might contain customer data
+/customer_data/
+/client_configs/
+
+# Test installations
+/test_install/
+
+# ==========================================
+# DEVELOPMENT FILES
+# ==========================================
+
+# Editor files
+*~
+*.swp
+*.swo
+.*.sw?
+.vscode/
+.idea/
+*.sublime-*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+
+# ==========================================
+# SAFE TO COMMIT (explicitly allowed)
+# ==========================================
+
+# These templates are safe (no actual data)
+!installation_info_template.md
+!README.md
+!*.sh
+
+# Documentation
+!docs/
+!*.md
+
+# Scripts (no sensitive data in scripts themselves)
+!scripts/
+!master_install.sh

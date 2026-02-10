@@ -1,0 +1,91 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'cyberinabox-monitor'
+    environment: 'production'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+    static_configs:
+      - targets: ['dc1.cyberinabox.net:9091']
+        labels:
+          instance: 'dc1-prometheus'
+
+  - job_name: 'server-dc1'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+    static_configs:
+      - targets: ['dc1.cyberinabox.net:9100']
+        labels:
+          hostname: 'dc1.cyberinabox.net'
+          role: 'server'
+
+  - job_name: 'workstation-engineering'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+      server_name: engineering.cyberinabox.net
+    static_configs:
+      - targets: ['192.168.1.104:9100']
+        labels:
+          hostname: 'engineering'
+          department: 'engineering'
+
+  - job_name: 'workstation-accounting'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+      server_name: accounting.cyberinabox.net
+    static_configs:
+      - targets: ['192.168.1.113:9100']
+        labels:
+          hostname: 'accounting'
+          department: 'accounting'
+
+  - job_name: 'workstation-labrat'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+      server_name: labrat.cyberinabox.net
+    static_configs:
+      - targets: ['192.168.1.115:9100']
+        labels:
+          hostname: 'labrat'
+          department: 'lab'
+
+  - job_name: 'workstation-ai'
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/certs/ca-bundle.crt
+      insecure_skip_verify: false
+      server_name: ai.cyberinabox.net
+    static_configs:
+      - targets: ['192.168.1.7:9100']
+        labels:
+          hostname: 'ai'
+          department: 'ai'
+          os: 'macos'
+
+  - job_name: 'suricata'
+    static_configs:
+      - targets: ['localhost:9101']
+        labels:
+          hostname: 'dc1.cyberinabox.net'
+          service: 'suricata-ids'

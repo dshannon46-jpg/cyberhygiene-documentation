@@ -1,0 +1,10 @@
+
+module httpd-nmap-packet 1.0;
+
+require {
+	type httpd_t;
+	class packet_socket create;
+}
+
+#============= httpd_t ==============
+allow httpd_t self:packet_socket create;

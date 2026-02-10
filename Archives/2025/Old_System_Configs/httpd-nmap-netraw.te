@@ -1,0 +1,10 @@
+
+module httpd-nmap-netraw 1.0;
+
+require {
+	type httpd_t;
+	class capability net_raw;
+}
+
+#============= httpd_t ==============
+allow httpd_t self:capability net_raw;

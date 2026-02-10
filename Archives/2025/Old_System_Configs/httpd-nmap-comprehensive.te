@@ -1,0 +1,17 @@
+
+module httpd-nmap-comprehensive 1.0;
+
+require {
+	type httpd_t;
+	class packet_socket { create ioctl setopt };
+	class capability net_raw;
+}
+
+#============= httpd_t ==============
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t self:capability net_raw;
+
+#!!!! This avc is allowed in the current policy
+allow httpd_t self:packet_socket { create setopt };
+allow httpd_t self:packet_socket ioctl;

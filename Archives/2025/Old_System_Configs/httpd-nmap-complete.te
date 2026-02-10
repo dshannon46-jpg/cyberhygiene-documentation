@@ -1,0 +1,20 @@
+
+module httpd-nmap-complete 1.0;
+
+require {
+	type httpd_t;
+	class packet_socket { bind getopt ioctl map };
+	class netlink_rdma_socket { bind create getattr setopt };
+	class netlink_generic_socket { create ioctl };
+	class capability2 bpf;
+}
+
+#============= httpd_t ==============
+allow httpd_t self:capability2 bpf;
+allow httpd_t self:netlink_generic_socket { create ioctl };
+allow httpd_t self:netlink_rdma_socket { bind create getattr setopt };
+
+#!!!! This avc is allowed in the current policy
+#!!!! This av rule may have been overridden by an extended permission av rule
+allow httpd_t self:packet_socket { bind ioctl };
+allow httpd_t self:packet_socket { getopt map };
